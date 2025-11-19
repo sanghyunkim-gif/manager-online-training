@@ -52,7 +52,7 @@ export async function createChapter(
   chapterData: Partial<Chapter>
 ): Promise<AirtableRecord<Chapter>> {
   try {
-    const record = await base!(TABLES.CHAPTERS).create(chapterData as any);
+    const record: any = await base!(TABLES.CHAPTERS).create(chapterData as any);
 
     return {
       id: record.id,
@@ -73,7 +73,7 @@ export async function updateChapter(
   updates: Partial<Chapter>
 ): Promise<AirtableRecord<Chapter>> {
   try {
-    const record = await base!(TABLES.CHAPTERS).update(chapterId, updates as any);
+    const record: any = await base!(TABLES.CHAPTERS).update(chapterId, updates as any);
 
     return {
       id: record.id,
