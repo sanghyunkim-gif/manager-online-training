@@ -44,7 +44,7 @@ export async function getUserProgress(
 
       return {
         id: matchedRecord.id,
-        fields: matchedRecord.fields as UserProgress,
+        fields: matchedRecord.fields as unknown as UserProgress,
         createdTime: matchedRecord._rawJson.createdTime,
       };
     }
@@ -75,7 +75,7 @@ export async function getAllUserProgress(
 
     return matchedRecords.map((record) => ({
       id: record.id,
-      fields: record.fields as UserProgress,
+      fields: record.fields as unknown as UserProgress,
       createdTime: record._rawJson.createdTime,
     }));
   } catch (error) {
@@ -107,7 +107,7 @@ export async function createProgress(
 
     return {
       id: record.id,
-      fields: record.fields as UserProgress,
+      fields: record.fields as unknown as UserProgress,
       createdTime: record._rawJson.createdTime,
     };
   } catch (error) {
@@ -172,7 +172,7 @@ export async function createChapterHistory(
 
     return {
       id: record.id,
-      fields: record.fields as ChapterHistory,
+      fields: record.fields as unknown as ChapterHistory,
       createdTime: record._rawJson.createdTime,
     };
   } catch (error) {
