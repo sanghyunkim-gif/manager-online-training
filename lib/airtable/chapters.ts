@@ -32,7 +32,7 @@ export async function getChapterById(
   chapterId: string
 ): Promise<AirtableRecord<Chapter> | null> {
   try {
-    const record = await base(TABLES.CHAPTERS).find(chapterId);
+    const record = await base!(TABLES.CHAPTERS).find(chapterId);
 
     return {
       id: record.id,
@@ -52,7 +52,7 @@ export async function createChapter(
   chapterData: Partial<Chapter>
 ): Promise<AirtableRecord<Chapter>> {
   try {
-    const record = await base(TABLES.CHAPTERS).create(chapterData as any);
+    const record = await base!(TABLES.CHAPTERS).create(chapterData as any);
 
     return {
       id: record.id,
@@ -73,7 +73,7 @@ export async function updateChapter(
   updates: Partial<Chapter>
 ): Promise<AirtableRecord<Chapter>> {
   try {
-    const record = await base(TABLES.CHAPTERS).update(chapterId, updates as any);
+    const record = await base!(TABLES.CHAPTERS).update(chapterId, updates as any);
 
     return {
       id: record.id,
@@ -91,7 +91,7 @@ export async function updateChapter(
  */
 export async function deleteChapter(chapterId: string): Promise<boolean> {
   try {
-    await base(TABLES.CHAPTERS).destroy(chapterId);
+    await base!(TABLES.CHAPTERS).destroy(chapterId);
     return true;
   } catch (error) {
     console.error('챕터 삭제 오류:', error);
