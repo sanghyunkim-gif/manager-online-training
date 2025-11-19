@@ -180,13 +180,18 @@ export default function HomePage() {
                 disabled={loading}
               >
                 <option value="">선택해주세요</option>
-                <option value="축구에 대한 열정">축구에 대한 열정</option>
-                <option value="코칭 경험 쌓기">코칭 경험 쌓기</option>
-                <option value="아이들과 함께하는 활동">아이들과 함께하는 활동</option>
-                <option value="봉사활동">봉사활동</option>
-                <option value="경력 개발">경력 개발</option>
-                <option value="지인 추천">지인 추천</option>
-                <option value="기타">기타</option>
+                <option value="친구/지인 추천">친구/지인 추천</option>
+                <option value="SNS/광고를 보고">SNS/광고를 보고</option>
+                <option value="금전적 이유">금전적 이유</option>
+                <option value="축구/풋살에 관심이 많아서">
+                  축구/풋살에 관심이 많아서
+                </option>
+                <option value="플랩 매니저에 관심이 있어서">
+                  플랩 매니저에 관심이 있어서
+                </option>
+                <option value="새로운 경험을 해보고 싶어서">
+                  새로운 경험을 해보고 싶어서
+                </option>
               </select>
             </div>
 

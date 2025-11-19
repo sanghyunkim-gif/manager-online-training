@@ -89,14 +89,53 @@ export async function getQuestionById(
 }
 
 /**
+ * 여러 문제를 한 번에 가져오기
+ */
+export async function getQuestionsByIds(
+  questionIds: string[]
+): Promise<Record<string, AirtableRecord<Question>>> {
+  const result: Record<string, AirtableRecord<Question>> = {};
+  if (!questionIds.length) {
+    return result;
+  }
+
+  const chunkSize = 50;
+  const chunks: string[][] = [];
+  for (let i = 0; i < questionIds.length; i += chunkSize) {
+    chunks.push(questionIds.slice(i, i + chunkSize));
+  }
+
+  for (const chunk of chunks) {
+    const formula = `OR(${chunk
+      .map((id) => `RECORD_ID() = '${id}'`)
+      .join(',')})`;
+
+    const records = await base(TABLES.QUESTIONS)
+      .select({ filterByFormula: formula })
+      .all();
+
+    records.forEach((record) => {
+      result[record.id] = {
+        id: record.id,
+        fields: record.fields as Question,
+        createdTime: record._rawJson.createdTime,
+      };
+    });
+  }
+
+  return result;
+}
+
+/**
  * 문제 통계 업데이트
  */
 export async function updateQuestionStats(
   questionId: string,
-  isCorrect: boolean
+  isCorrect: boolean,
+  cachedQuestion?: AirtableRecord<Question> | null
 ): Promise<void> {
   try {
-    const question = await getQuestionById(questionId);
+    const question = cachedQuestion || (await getQuestionById(questionId));
     if (!question) return;
 
     const totalAttempts = (question.fields.Total_Attempts || 0) + 1;

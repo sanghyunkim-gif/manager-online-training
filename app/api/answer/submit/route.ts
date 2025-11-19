@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getQuestionById, updateQuestionStats } from '@/lib/airtable/questions';
+import {
+  getQuestionsByIds,
+  updateQuestionStats,
+} from '@/lib/airtable/questions';
 import {
   createQuestionAttempt,
   getChapterAttemptCount,
@@ -7,7 +10,7 @@ import {
   completeChapterHistory,
 } from '@/lib/airtable/progress';
 import { mockQuestions } from '@/lib/mock-data';
-import type { ApiResponse } from '@/types';
+import type { ApiResponse, AirtableRecord, Question } from '@/types';
 
 const USE_MOCK = process.env.USE_MOCK_DATA === 'true';
 
@@ -43,14 +46,26 @@ export async function POST(request: NextRequest) {
     const results = [];
     const incorrectQuestions = [];
 
-    for (const [questionId, userAnswer] of Object.entries(answers)) {
-      let question;
+    const statUpdateTasks: Promise<void>[] = [];
+    const attemptTasks: Promise<void>[] = [];
 
-      if (USE_MOCK) {
-        question = mockQuestions.find((q) => q.id === questionId);
-      } else {
-        question = await getQuestionById(questionId);
-      }
+    const answerEntries = Object.entries(answers);
+    let questionMap: Record<string, AirtableRecord<Question>> = {};
+
+    if (USE_MOCK) {
+      questionMap = mockQuestions.reduce<Record<string, AirtableRecord<Question>>>(
+        (acc, q) => {
+        acc[q.id] = q;
+        return acc;
+      },
+        {}
+      );
+    } else {
+      questionMap = await getQuestionsByIds(answerEntries.map(([id]) => id));
+    }
+
+    for (const [questionId, userAnswer] of answerEntries) {
+      const question = questionMap[questionId];
 
       if (!question) continue;
 
@@ -82,18 +97,23 @@ export async function POST(request: NextRequest) {
 
       if (!USE_MOCK) {
         // 문제 통계 업데이트 (실제 Airtable만)
-        await updateQuestionStats(questionId, isCorrect);
+        statUpdateTasks.push(updateQuestionStats(questionId, isCorrect, question));
 
         // 문제 풀이 기록 생성
-        console.log('Creating Question_Attempt...', { userId, questionId, chapterId, attemptNumber });
-        await createQuestionAttempt(
-          userId,
-          questionId,
-          chapterId,
-          userAnswer as '1' | '2' | '3' | '4',
-          attemptNumber
+        attemptTasks.push(
+          createQuestionAttempt(
+            userId,
+            questionId,
+            chapterId,
+            userAnswer as '1' | '2' | '3' | '4',
+            attemptNumber
+          )
         );
       }
+    }
+
+    if (!USE_MOCK) {
+      await Promise.all([...statUpdateTasks, ...attemptTasks]);
     }
 
     const allCorrect = incorrectQuestions.length === 0;
