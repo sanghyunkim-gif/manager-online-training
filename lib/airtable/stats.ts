@@ -44,10 +44,10 @@ export async function getChapterStats(): Promise<ChapterStats[]> {
     const chapters = await getActiveChapters();
 
     // Chapter_History 레코드 모두 가져오기
-    const historyRecords = await base(TABLES.CHAPTER_HISTORY).select().all();
+    const historyRecords = await base!(TABLES.CHAPTER_HISTORY).select().all();
 
     // User_Progress 레코드 모두 가져오기 (이탈률 계산용)
-    const progressRecords = await base(TABLES.USER_PROGRESS).select().all();
+    const progressRecords = await base!(TABLES.USER_PROGRESS).select().all();
 
     const stats: ChapterStats[] = [];
 
@@ -132,10 +132,10 @@ export async function getChapterStats(): Promise<ChapterStats[]> {
 export async function getQuestionStats(): Promise<QuestionStats[]> {
   try {
     // 문제 목록 가져오기 (모든 문제)
-    const questionRecords = await base(TABLES.QUESTIONS).select().all();
+    const questionRecords = await base!(TABLES.QUESTIONS).select().all();
     const questions = questionRecords.map((record) => ({
       id: record.id,
-      fields: record.fields as Question,
+      fields: record.fields as unknown as Question,
       createdTime: record._rawJson.createdTime,
     }));
 
@@ -143,7 +143,7 @@ export async function getQuestionStats(): Promise<QuestionStats[]> {
     const chapters = await getActiveChapters();
 
     // Question_Attempts 레코드 모두 가져오기
-    const attemptRecords = await base(TABLES.QUESTION_ATTEMPTS).select().all();
+    const attemptRecords = await base!(TABLES.QUESTION_ATTEMPTS).select().all();
 
     const stats: QuestionStats[] = [];
 
@@ -244,14 +244,14 @@ export async function getDropoffAnalysis(): Promise<DropoffAnalysis> {
     const chapters = await getActiveChapters();
 
     // 사용자 목록 가져오기
-    const users = await base(TABLES.USERS).select().all();
+    const users = await base!(TABLES.USERS).select().all();
     const totalUsers = users.length;
     const completedUsers = users.filter(
       (u) => u.fields.Status === 'Completed'
     ).length;
 
     // User_Progress 레코드 모두 가져오기
-    const progressRecords = await base(TABLES.USER_PROGRESS).select().all();
+    const progressRecords = await base!(TABLES.USER_PROGRESS).select().all();
 
     // 각 챕터별 이탈 사용자 수 계산
     const chapterDropoffs = chapters.map((chapter) => {
@@ -292,7 +292,7 @@ export async function getDropoffAnalysis(): Promise<DropoffAnalysis> {
 export async function getRegionStats(): Promise<RegionStats[]> {
   try {
     // 사용자 목록 가져오기
-    const users = await base(TABLES.USERS).select().all();
+    const users = await base!(TABLES.USERS).select().all();
 
     // 지역별로 그룹화
     const regionMap = new Map<string, any[]>();
