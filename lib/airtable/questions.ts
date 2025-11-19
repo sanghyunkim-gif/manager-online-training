@@ -25,7 +25,7 @@ export async function getQuestionsByChapter(
     const formula = `AND(FIND('${chapterName}', ARRAYJOIN({Chapter_Category})) > 0, {Status} = 'Active')`;
     console.log('Filter Formula:', formula);
 
-    const records = await base(TABLES.QUESTIONS)
+    const records = await base!(TABLES.QUESTIONS)
       .select({
         filterByFormula: formula,
       })
@@ -36,7 +36,7 @@ export async function getQuestionsByChapter(
       console.log('첫 번째 문제:', records[0].fields);
     } else {
       // 필터 없이 모든 문제 조회해서 디버깅
-      const allRecords = await base(TABLES.QUESTIONS).select().all();
+      const allRecords = await base!(TABLES.QUESTIONS).select().all();
       console.log('전체 문제 수:', allRecords.length);
       if (allRecords.length > 0) {
         console.log('첫 번째 문제 (필터 없음):', allRecords[0].fields);
@@ -75,11 +75,11 @@ export async function getQuestionById(
   questionId: string
 ): Promise<AirtableRecord<Question> | null> {
   try {
-    const record = await base(TABLES.QUESTIONS).find(questionId);
+    const record = await base!(TABLES.QUESTIONS).find(questionId);
 
     return {
       id: record.id,
-      fields: record.fields as Question,
+      fields: record.fields as unknown as Question,
       createdTime: record._rawJson.createdTime,
     };
   } catch (error) {
@@ -110,14 +110,14 @@ export async function getQuestionsByIds(
       .map((id) => `RECORD_ID() = '${id}'`)
       .join(',')})`;
 
-    const records = await base(TABLES.QUESTIONS)
+    const records = await base!(TABLES.QUESTIONS)
       .select({ filterByFormula: formula })
       .all();
 
     records.forEach((record) => {
       result[record.id] = {
         id: record.id,
-        fields: record.fields as Question,
+        fields: record.fields as unknown as Question,
         createdTime: record._rawJson.createdTime,
       };
     });
@@ -146,7 +146,7 @@ export async function updateQuestionStats(
       ? (question.fields.Incorrect_Count || 0) + 1
       : question.fields.Incorrect_Count || 0;
 
-    await base(TABLES.QUESTIONS).update(questionId, {
+    await base!(TABLES.QUESTIONS).update(questionId, {
       Total_Attempts: totalAttempts,
       Correct_Count: correctCount,
       Incorrect_Count: incorrectCount,
@@ -161,7 +161,7 @@ export async function updateQuestionStats(
  */
 export async function getAllQuestionsStats(): Promise<AirtableRecord<Question>[]> {
   try {
-    const records = await base(TABLES.QUESTIONS)
+    const records = await base!(TABLES.QUESTIONS)
       .select({
         filterByFormula: "{Status} = 'Active'",
         sort: [{ field: 'Total_Attempts', direction: 'desc' }],
@@ -170,7 +170,7 @@ export async function getAllQuestionsStats(): Promise<AirtableRecord<Question>[]
 
     return records.map((record) => ({
       id: record.id,
-      fields: record.fields as Question,
+      fields: record.fields as unknown as Question,
       createdTime: record._rawJson.createdTime,
     }));
   } catch (error) {
