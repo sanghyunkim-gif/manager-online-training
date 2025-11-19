@@ -16,7 +16,7 @@ export async function getActiveChapters(): Promise<AirtableRecord<Chapter>[]> {
 
     return records.map((record) => ({
       id: record.id,
-      fields: record.fields as Chapter,
+      fields: record.fields as unknown as Chapter,
       createdTime: record._rawJson.createdTime,
     }));
   } catch (error) {
@@ -36,7 +36,7 @@ export async function getChapterById(
 
     return {
       id: record.id,
-      fields: record.fields as Chapter,
+      fields: record.fields as unknown as Chapter,
       createdTime: record._rawJson.createdTime,
     };
   } catch (error) {
@@ -56,7 +56,7 @@ export async function createChapter(
 
     return {
       id: record.id,
-      fields: record.fields as Chapter,
+      fields: record.fields as unknown as Chapter,
       createdTime: record._rawJson.createdTime,
     };
   } catch (error) {
@@ -77,7 +77,7 @@ export async function updateChapter(
 
     return {
       id: record.id,
-      fields: record.fields as Chapter,
+      fields: record.fields as unknown as Chapter,
       createdTime: record._rawJson.createdTime,
     };
   } catch (error) {
