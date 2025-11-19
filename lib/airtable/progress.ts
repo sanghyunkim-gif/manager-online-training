@@ -20,7 +20,7 @@ export async function getUserProgress(
 
     // Link 필드의 Record ID로는 Airtable formula 필터링 불가능
     // 모든 레코드를 가져와서 JavaScript에서 필터링
-    const records = await base(TABLES.USER_PROGRESS).select().all();
+    const records = await base!(TABLES.USER_PROGRESS).select().all();
 
     console.log('전체 User_Progress 레코드 수:', records.length);
 
@@ -66,7 +66,7 @@ export async function getAllUserProgress(
   try {
     // Link 필드의 Record ID로는 Airtable formula 필터링 불가능
     // 모든 레코드를 가져와서 JavaScript에서 필터링
-    const records = await base(TABLES.USER_PROGRESS).select().all();
+    const records = await base!(TABLES.USER_PROGRESS).select().all();
 
     const matchedRecords = records.filter((record) => {
       const userIds = record.fields.User as string[] | undefined;
@@ -93,7 +93,7 @@ export async function createProgress(
   questionsAssigned: string[]
 ): Promise<AirtableRecord<UserProgress>> {
   try {
-    const record = await base(TABLES.USER_PROGRESS).create({
+    const record: any = await base!(TABLES.USER_PROGRESS).create({
       User: [userId],
       Chapter: [chapterId],
       Video_Watched: false,
@@ -125,7 +125,7 @@ export async function updateVideoWatchTime(
   isWatched: boolean
 ): Promise<void> {
   try {
-    await base(TABLES.USER_PROGRESS).update(progressId, {
+    await base!(TABLES.USER_PROGRESS).update(progressId, {
       Video_Watch_Time: watchTime,
       Video_Watched: isWatched,
     } as any);
@@ -142,7 +142,7 @@ export async function completeChapter(
   allCorrect: boolean
 ): Promise<void> {
   try {
-    await base(TABLES.USER_PROGRESS).update(progressId, {
+    await base!(TABLES.USER_PROGRESS).update(progressId, {
       All_Correct: allCorrect,
       Chapter_Completed: allCorrect,
     } as any);
@@ -161,7 +161,7 @@ export async function createChapterHistory(
   attemptNumber: number
 ): Promise<AirtableRecord<ChapterHistory>> {
   try {
-    const record = await base(TABLES.CHAPTER_HISTORY).create({
+    const record: any = await base!(TABLES.CHAPTER_HISTORY).create({
       User: [userId],
       Chapter: [chapterId],
       Attempt_Number: attemptNumber,
@@ -191,7 +191,7 @@ export async function completeChapterHistory(
   videoWatchTime: number
 ): Promise<void> {
   try {
-    await base(TABLES.CHAPTER_HISTORY).update(historyId, {
+    await base!(TABLES.CHAPTER_HISTORY).update(historyId, {
       End_Time: new Date().toISOString(),
       Questions_Correct: questionsCorrect,
       Questions_Total: questionsTotal,
@@ -215,7 +215,7 @@ export async function createQuestionAttempt(
   timeSpent?: number
 ): Promise<void> {
   try {
-    await base(TABLES.QUESTION_ATTEMPTS).create({
+    await base!(TABLES.QUESTION_ATTEMPTS).create({
       User: [userId],
       Question: [questionId],
       Chapter: [chapterId],
@@ -238,7 +238,7 @@ export async function getChapterAttemptCount(
   try {
     // Link 필드의 Record ID로는 Airtable formula 필터링 불가능
     // 모든 레코드를 가져와서 JavaScript에서 필터링
-    const records = await base(TABLES.CHAPTER_HISTORY).select().all();
+    const records = await base!(TABLES.CHAPTER_HISTORY).select().all();
 
     const matchedRecords = records.filter((record) => {
       const userIds = record.fields.User as string[] | undefined;
