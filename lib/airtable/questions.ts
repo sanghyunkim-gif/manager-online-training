@@ -45,7 +45,7 @@ export async function getQuestionsByChapter(
 
     return records.map((record) => ({
       id: record.id,
-      fields: record.fields as Question,
+      fields: record.fields as unknown as Question,
       createdTime: record._rawJson.createdTime,
     }));
   } catch (error) {
