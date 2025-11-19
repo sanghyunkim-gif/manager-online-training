@@ -1,0 +1,4 @@
+Name,Order,Video_URL,Video_Duration,Required_Watch_Percentage,Description,Questions_Count,Status
+매치 진행 기본 규칙,1,https://www.youtube.com/watch?v=dQw4w9WgXcQ,510,60,매치 진행 시 기본적으로 알아야 할 규칙들을 학습합니다.,5,Active
+팀 구성 및 관리,2,https://www.youtube.com/watch?v=dQw4w9WgXcQ,375,60,팀 구성과 관리 방법에 대해 학습합니다.,4,Active
+경기장 준비 사항,3,https://www.youtube.com/watch?v=dQw4w9WgXcQ,420,60,경기장 준비 체크리스트와 필수 확인 사항을 학습합니다.,4,Active
