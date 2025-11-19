@@ -80,7 +80,7 @@ export async function findUserByPhone(
   phone: string
 ): Promise<AirtableRecord<User> | null> {
   try {
-    const records = await base(TABLES.USERS)
+    const records = await base!(TABLES.USERS)
       .select({
         filterByFormula: buildPhoneMatchFormula(phone),
         maxRecords: 1,
@@ -123,7 +123,7 @@ export async function createOrGetUser(
       }
 
       const sessionToken = generateSessionToken();
-      const updated: any = await base(TABLES.USERS).update(existingUser.id, {
+      const updated: any = await base!(TABLES.USERS).update(existingUser.id, {
         Session_Token: sessionToken,
       } as any);
 
@@ -190,7 +190,7 @@ async function tryCreateUser(
   attempt: number = 1
 ): Promise<any> {
   try {
-    return await base(TABLES.USERS).create(fields as any);
+    return await base!(TABLES.USERS).create(fields as any);
   } catch (error: any) {
     const message =
       error?.error?.message ||
@@ -271,7 +271,7 @@ export async function getUserById(
   userId: string
 ): Promise<AirtableRecord<User> | null> {
   try {
-    const record = await base(TABLES.USERS).find(userId);
+    const record = await base!(TABLES.USERS).find(userId);
 
     return {
       id: record.id,
@@ -289,7 +289,7 @@ export async function updateUser(
   updates: Partial<User>
 ): Promise<AirtableRecord<User>> {
   try {
-    const record: any = await base(TABLES.USERS).update(userId, updates as any);
+    const record: any = await base!(TABLES.USERS).update(userId, updates as any);
 
     return {
       id: record.id,
@@ -304,7 +304,7 @@ export async function updateUser(
 
 export async function completeUser(userId: string): Promise<void> {
   try {
-    await base(TABLES.USERS).update(userId, {
+    await base!(TABLES.USERS).update(userId, {
       Status: 'Completed',
       Completed_At: new Date().toISOString(),
     } as any);
@@ -316,7 +316,7 @@ export async function completeUser(userId: string): Promise<void> {
 
 export async function getAllUsers(): Promise<AirtableRecord<User>[]> {
   try {
-    const records = await base(TABLES.USERS)
+    const records = await base!(TABLES.USERS)
       .select()
       .all();
 
