@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Session, AirtableRecord, Chapter } from '@/types';
 
@@ -9,7 +9,7 @@ export default function CompletePage() {
   const [session, setSession] = useState<Session | null>(null);
   const [chapters, setChapters] = useState<AirtableRecord<Chapter>[]>([]);
   const [loading, setLoading] = useState(true);
-  const [completed, setCompleted] = useState(false);
+  const completionCalledRef = useRef(false);
 
   useEffect(() => {
     const init = async () => {
@@ -32,14 +32,23 @@ export default function CompletePage() {
           setChapters(chaptersData.data);
         }
 
-        // 완료 처리 (한 번만)
-        if (!completed) {
-          await fetch('/api/complete', {
+        // 완료 처리 (한 번만 실행)
+        if (!completionCalledRef.current) {
+          completionCalledRef.current = true;
+          console.log('완료 API 호출 중...', { userId: parsedSession.userId });
+
+          const completeRes = await fetch('/api/complete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: parsedSession.userId }),
           });
-          setCompleted(true);
+
+          const completeData = await completeRes.json();
+          console.log('완료 API 응답:', completeData);
+
+          if (!completeData.success) {
+            console.error('완료 처리 실패:', completeData.error);
+          }
         }
 
         setLoading(false);
@@ -50,7 +59,7 @@ export default function CompletePage() {
     };
 
     init();
-  }, [router, completed]);
+  }, [router]);
 
   const handleClose = () => {
     localStorage.removeItem('session');
