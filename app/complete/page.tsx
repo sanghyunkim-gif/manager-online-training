@@ -31,8 +31,23 @@ export default function CompletePage() {
           setChapters(chaptersData.data);
         }
 
-        // 완료 처리는 마지막 챕터 완료 시 자동으로 처리됨
-        // 여기서는 완료 페이지만 표시
+        // 완료 페이지에 도달하면 사용자를 완료 처리
+        console.log('완료 페이지 도달 - 사용자 완료 처리 시작:', { userId: parsedSession.userId });
+
+        const completeRes = await fetch('/api/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: parsedSession.userId }),
+        });
+
+        const completeData = await completeRes.json();
+        console.log('완료 처리 응답:', completeData);
+
+        if (!completeData.success) {
+          console.error('완료 처리 실패:', completeData.error);
+        } else {
+          console.log('✅ 사용자 완료 처리 성공!');
+        }
 
         setLoading(false);
       } catch (err) {
