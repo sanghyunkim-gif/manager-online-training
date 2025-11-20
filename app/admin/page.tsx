@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { AirtableRecord, User } from '@/types';
 import type {
   ChapterStats,
@@ -12,6 +13,7 @@ import type {
 type TabType = 'users' | 'chapters' | 'questions' | 'dropoff' | 'regions';
 
 export default function AdminPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<AirtableRecord<User>[]>([]);
   const [chapterStats, setChapterStats] = useState<ChapterStats[]>([]);
   const [questionStats, setQuestionStats] = useState<QuestionStats[]>([]);
@@ -20,12 +22,46 @@ export default function AdminPage() {
   const [regionStats, setRegionStats] = useState<RegionStats[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('users');
   const [filter, setFilter] = useState<'all' | 'in_progress' | 'completed'>(
     'all'
   );
 
+  // 인증 체크
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/admin/auth/session');
+        const data = await response.json();
+
+        if (!data.authenticated) {
+          router.push('/admin/login');
+          return;
+        }
+
+        setAuthenticated(true);
+      } catch (err) {
+        console.error('인증 확인 오류:', err);
+        router.push('/admin/login');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/auth/logout', { method: 'POST' });
+      router.push('/admin/login');
+    } catch (err) {
+      console.error('로그아웃 오류:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (!authenticated) return;
+
     const fetchData = async () => {
       try {
         // 사용자 목록 가져오기
@@ -70,7 +106,7 @@ export default function AdminPage() {
     };
 
     fetchData();
-  }, []);
+  }, [authenticated]);
 
   const filteredUsers = users.filter((user) => {
     if (filter === 'all') return true;
@@ -98,13 +134,23 @@ export default function AdminPage() {
     );
   }
 
+  if (!authenticated) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">
             ⚽ 플랩풋볼 관리자 대시보드
           </h1>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition font-medium text-sm"
+          >
+            로그아웃
+          </button>
         </div>
       </div>
 
