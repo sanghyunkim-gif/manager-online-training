@@ -304,13 +304,16 @@ export default function AdminPage() {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           완료일
                         </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          작업
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {filteredUsers.length === 0 ? (
                         <tr>
                           <td
-                            colSpan={5}
+                            colSpan={6}
                             className="px-6 py-8 text-center text-gray-500"
                           >
                             사용자가 없습니다.
@@ -359,6 +362,35 @@ export default function AdminPage() {
                                     user.fields.Completed_At
                                   ).toLocaleDateString('ko-KR')
                                 : '-'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                              {user.fields.Status === 'In Progress' && (
+                                <button
+                                  onClick={async () => {
+                                    if (confirm(`${user.fields.Name} 님을 완료 처리하시겠습니까?`)) {
+                                      try {
+                                        const res = await fetch('/api/admin/users/complete', {
+                                          method: 'POST',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({ userId: user.id }),
+                                        });
+                                        const data = await res.json();
+                                        if (data.success) {
+                                          alert('완료 처리되었습니다.');
+                                          window.location.reload();
+                                        } else {
+                                          alert('오류: ' + data.error);
+                                        }
+                                      } catch (err) {
+                                        alert('완료 처리 중 오류가 발생했습니다.');
+                                      }
+                                    }
+                                  }}
+                                  className="text-blue-600 hover:text-blue-800 font-medium"
+                                >
+                                  완료 처리
+                                </button>
+                              )}
                             </td>
                           </tr>
                         ))
