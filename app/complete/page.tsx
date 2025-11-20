@@ -45,6 +45,14 @@ export default function CompletePage() {
 
         if (!completeData.success) {
           console.error('완료 처리 실패:', completeData.error);
+
+          // 모든 챕터를 완료하지 않았다면 학습 페이지로 리다이렉트
+          if (completeRes.status === 403) {
+            console.warn('⚠️  모든 챕터를 완료하지 않음 - /learn으로 리다이렉트');
+            alert('모든 챕터를 완료해야 합니다.');
+            router.push('/learn');
+            return;
+          }
         } else {
           console.log('✅ 사용자 완료 처리 성공!');
         }
