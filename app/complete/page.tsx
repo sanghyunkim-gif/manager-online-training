@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Session, AirtableRecord, Chapter } from '@/types';
 
@@ -9,7 +9,6 @@ export default function CompletePage() {
   const [session, setSession] = useState<Session | null>(null);
   const [chapters, setChapters] = useState<AirtableRecord<Chapter>[]>([]);
   const [loading, setLoading] = useState(true);
-  const completionCalledRef = useRef(false);
 
   useEffect(() => {
     const init = async () => {
@@ -32,24 +31,8 @@ export default function CompletePage() {
           setChapters(chaptersData.data);
         }
 
-        // 완료 처리 (한 번만 실행)
-        if (!completionCalledRef.current) {
-          completionCalledRef.current = true;
-          console.log('완료 API 호출 중...', { userId: parsedSession.userId });
-
-          const completeRes = await fetch('/api/complete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: parsedSession.userId }),
-          });
-
-          const completeData = await completeRes.json();
-          console.log('완료 API 응답:', completeData);
-
-          if (!completeData.success) {
-            console.error('완료 처리 실패:', completeData.error);
-          }
-        }
+        // 완료 처리는 마지막 챕터 완료 시 자동으로 처리됨
+        // 여기서는 완료 페이지만 표시
 
         setLoading(false);
       } catch (err) {
