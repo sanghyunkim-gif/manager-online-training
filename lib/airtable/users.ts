@@ -304,12 +304,16 @@ export async function updateUser(
 
 export async function completeUser(userId: string): Promise<void> {
   try {
+    console.log('사용자 완료 처리 시작:', { userId });
+
     await base!(TABLES.USERS).update(userId, {
       Status: 'Completed',
-      Completed_At: new Date().toISOString(),
     } as any);
-  } catch (error) {
+
+    console.log('✅ 사용자 완료 처리 성공:', { userId });
+  } catch (error: any) {
     console.error('사용자 완료 처리 오류:', error);
+    console.error('에러 상세:', error?.message || error);
     throw new Error('완료 처리를 할 수 없습니다.');
   }
 }
