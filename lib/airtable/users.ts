@@ -306,11 +306,14 @@ export async function completeUser(userId: string): Promise<void> {
   try {
     console.log('사용자 완료 처리 시작:', { userId });
 
+    const completedAt = new Date().toISOString();
+
     await base!(TABLES.USERS).update(userId, {
       Status: 'Completed',
+      Completed_At: completedAt,
     } as any);
 
-    console.log('✅ 사용자 완료 처리 성공:', { userId });
+    console.log('✅ 사용자 완료 처리 성공:', { userId, completedAt });
   } catch (error: any) {
     console.error('사용자 완료 처리 오류:', error);
     console.error('에러 상세:', error?.message || error);
