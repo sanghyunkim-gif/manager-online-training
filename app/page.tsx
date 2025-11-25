@@ -121,14 +121,25 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-4xl font-display font-bold leading-[1.15] text-neutral-900 sm:text-5xl lg:text-6xl">
-                현장감 넘치는{' '}
-                <span className="text-primary-500">
-                  매니저 온라인 실습
-                </span>
-                <br />
-                으로 바로 연결되세요.
-              </h1>
+              <div className="flex items-center gap-8">
+                <div className="flex-1">
+                  <h1 className="text-4xl font-display font-bold leading-[1.15] text-neutral-900 sm:text-5xl lg:text-6xl">
+                    현장감 넘치는{' '}
+                    <span className="text-primary-500">
+                      매니저 온라인 실습
+                    </span>
+                    <br />
+                    으로 바로 연결되세요.
+                  </h1>
+                </div>
+                <div className="hidden lg:block flex-shrink-0">
+                  <img
+                    src="/character.png"
+                    alt="PLAB Character"
+                    className="w-48 h-48 object-contain drop-shadow-xl"
+                  />
+                </div>
+              </div>
               <p className="max-w-2xl text-lg leading-relaxed text-neutral-600">
                 경기 전/중/후에 필요한 운영 체크리스트, 문제 해결 흐름, 커뮤니케이션 팁을 한 번에 체득하는 집중 과정입니다. 입력한 정보로 맞춤 챕터가 자동 배정됩니다.
               </p>
