@@ -162,7 +162,7 @@ export default function AdminPage() {
               <p className="text-xs uppercase tracking-[0.12em] text-emerald-200">
                 Admin Dashboard
               </p>
-              <h1 className="text-xl font-bold">플랩풋볼 매니저</h1>
+              <h1 className="text-xl font-bold">PLAB FOOTBALL 매니저</h1>
             </div>
           </div>
           <button

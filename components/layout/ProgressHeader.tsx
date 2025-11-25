@@ -36,7 +36,7 @@ export default function ProgressHeader({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-emerald-200">
             <span className="text-base">⚽</span>
-            플랩풋볼 매니저
+            PLAB FOOTBALL 매니저
           </div>
           <div className="flex items-center gap-3 text-xs text-slate-200">
             <span className="rounded-full bg-white/10 px-3 py-1 font-semibold text-emerald-100">
