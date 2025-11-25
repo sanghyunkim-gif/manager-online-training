@@ -112,7 +112,7 @@ export default function HomePage() {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-primary-300/80 font-medium">
-                PLAB FOOTBALL
+                PLABFOOTBALL
               </p>
               <p className="text-base font-bold text-slate-50">
                 Manager Online Training
@@ -317,8 +317,8 @@ export default function HomePage() {
                       <option value="축구/풋살에 관심이 많아서">
                         축구/풋살에 관심이 많아서
                       </option>
-                      <option value="PLAB 매니저에 관심이 있어서">
-                        PLAB 매니저에 관심이 있어서
+                      <option value="플랩풋볼 매니저에 관심이 있어서">
+                        플랩풋볼 매니저에 관심이 있어서
                       </option>
                       <option value="새로운 경험을 해보고 싶어서">
                         새로운 경험을 해보고 싶어서
