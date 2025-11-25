@@ -130,15 +130,13 @@ export default function ResultPage() {
 
   if (loading) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-neutral-50">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
         </div>
-        <div className="relative flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 px-10 py-8 text-center shadow-2xl backdrop-blur">
-          <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/30 border-t-emerald-300" />
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-100">
+        <div className="relative flex flex-col items-center gap-5 rounded-xl border border-neutral-200 bg-white px-12 py-10 text-center shadow-lg">
+          <div className="h-14 w-14 animate-spin rounded-full border-4 border-neutral-200 border-t-primary-500" />
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-600">
             결과 확인 중...
           </p>
         </div>
@@ -151,11 +149,9 @@ export default function ResultPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 pb-12">
+    <div className="relative min-h-screen overflow-hidden bg-neutral-50 pb-12">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
       </div>
       <ProgressHeader
         userName={session.userName}
@@ -166,29 +162,29 @@ export default function ResultPage() {
       />
 
       <div className="relative mx-auto max-w-5xl px-6 py-8">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+        <div className="rounded-xl border border-neutral-200 bg-white p-8 shadow-lg">
           {resultData.allCorrect ? (
-            <div className="text-center text-white">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 text-3xl">
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-success-50 border border-success-200 text-3xl">
                 ✅
               </div>
-              <h1 className="text-3xl font-extrabold mb-2">축하합니다!</h1>
-              <p className="text-lg text-slate-200/80 mb-8">
+              <h1 className="text-3xl font-extrabold mb-2 text-neutral-900">축하합니다!</h1>
+              <p className="text-lg text-neutral-600 mb-8">
                 {chapter.fields.Order}장을 완료했습니다.
               </p>
 
-              <div className="mb-8 inline-flex items-center gap-3 rounded-2xl border border-emerald-300/40 bg-emerald-500/10 px-6 py-4 text-emerald-50">
-                <span className="text-sm font-semibold uppercase tracking-[0.12em]">
+              <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-success-200 bg-success-50 px-6 py-4">
+                <span className="text-sm font-bold uppercase tracking-[0.12em] text-success-700">
                   정답
                 </span>
-                <span className="text-xl font-bold">
+                <span className="text-xl font-bold text-success-600">
                   {resultData.correctCount} / {resultData.totalCount}
                 </span>
               </div>
 
               <button
                 onClick={handleNext}
-                className="rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-8 py-4 text-lg font-bold text-slate-950 shadow-lg transition hover:opacity-95"
+                className="rounded-full bg-primary-500 px-8 py-4 text-lg font-bold text-white shadow-lg transition hover:bg-primary-600"
               >
                 {allChapters.findIndex((c) => c.id === chapterId) <
                 allChapters.length - 1
@@ -197,63 +193,63 @@ export default function ResultPage() {
               </button>
             </div>
           ) : (
-            <div className="text-white">
+            <div>
               <div className="text-center mb-8">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/15 text-3xl">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-amber-50 border border-amber-200 text-3xl">
                   ⚠️
                 </div>
-                <h1 className="text-3xl font-extrabold mb-2">아쉽습니다!</h1>
-                <p className="text-lg text-slate-200/80 mb-4">
+                <h1 className="text-3xl font-extrabold mb-2 text-neutral-900">아쉽습니다!</h1>
+                <p className="text-lg text-neutral-600 mb-4">
                   오답이 있습니다
                 </p>
 
-                <div className="inline-flex items-center gap-3 rounded-2xl border border-amber-300/40 bg-amber-500/10 px-6 py-4 text-amber-50">
-                  <span className="text-sm font-semibold uppercase tracking-[0.12em]">
+                <div className="inline-flex items-center gap-3 rounded-full border border-amber-200 bg-amber-50 px-6 py-4">
+                  <span className="text-sm font-bold uppercase tracking-[0.12em] text-amber-700">
                     정답
                   </span>
-                  <span className="text-xl font-bold">
+                  <span className="text-xl font-bold text-amber-600">
                     {resultData.correctCount} / {resultData.totalCount}
                   </span>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h2 className="text-xl font-bold mb-4 text-white">오답 문제</h2>
+              <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-6">
+                <h2 className="text-xl font-bold mb-4 text-neutral-900">오답 문제</h2>
 
                 <div className="space-y-6">
                   {resultData.incorrectQuestions.map((item, idx) => (
                     <div
                       key={idx}
-                      className="rounded-2xl border border-rose-300/30 bg-rose-500/10 p-6"
+                      className="rounded-lg border border-accent-200 bg-accent-50 p-6"
                     >
-                      <h3 className="font-semibold text-rose-50 mb-2">
+                      <h3 className="font-bold text-accent-700 mb-2">
                         문제 {idx + 1}
                       </h3>
-                      <p className="text-sm text-white/90 mb-4 whitespace-pre-wrap">
+                      <p className="text-sm text-neutral-900 font-medium mb-4 whitespace-pre-wrap">
                         {item.questionText}
                       </p>
 
                       <div className="space-y-2 mb-4 text-sm">
-                        <div className="flex items-start gap-2 text-rose-50">
-                          <span className="font-semibold">당신의 답변:</span>
-                          <span>
+                        <div className="flex items-start gap-2 text-accent-700">
+                          <span className="font-bold">당신의 답변:</span>
+                          <span className="font-medium">
                             {item.userAnswer}. {item.options[item.userAnswer]}
                           </span>
                         </div>
-                        <div className="flex items-start gap-2 text-emerald-100">
-                          <span className="font-semibold">정답:</span>
-                          <span>
+                        <div className="flex items-start gap-2 text-success-700">
+                          <span className="font-bold">정답:</span>
+                          <span className="font-medium">
                             {item.correctAnswer}. {item.options[item.correctAnswer]}
                           </span>
                         </div>
                       </div>
 
                       {item.explanation && (
-                        <div className="rounded-xl border border-white/10 bg-slate-900/60 p-4">
-                          <p className="text-xs font-semibold text-slate-100 mb-2">
+                        <div className="rounded-lg border border-neutral-200 bg-white p-4">
+                          <p className="text-xs font-bold text-neutral-700 mb-2">
                             💡 해설:
                           </p>
-                          <div className="prose prose-invert prose-sm max-w-none text-slate-100/90">
+                          <div className="prose prose-sm max-w-none">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {item.explanation}
                             </ReactMarkdown>
@@ -266,12 +262,12 @@ export default function ResultPage() {
               </div>
 
               <div className="mt-8 text-center">
-                <p className="text-slate-200/80 mb-6">
+                <p className="text-neutral-600 mb-6">
                   학습 자료를 다시 확인하고 문제를 재시도해주세요
                 </p>
                 <button
                   onClick={handleRetry}
-                  className="rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-8 py-4 text-lg font-bold text-slate-950 shadow-lg transition hover:opacity-95"
+                  className="rounded-full bg-primary-500 px-8 py-4 text-lg font-bold text-white shadow-lg transition hover:bg-primary-600"
                 >
                   다시 학습하기
                 </button>
