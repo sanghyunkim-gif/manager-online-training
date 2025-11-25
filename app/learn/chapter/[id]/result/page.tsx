@@ -130,10 +130,17 @@ export default function ResultPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">결과 확인 중...</p>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+        </div>
+        <div className="relative flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 px-10 py-8 text-center shadow-2xl backdrop-blur">
+          <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/30 border-t-emerald-300" />
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-100">
+            결과 확인 중...
+          </p>
         </div>
       </div>
     );
@@ -144,7 +151,12 @@ export default function ResultPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 pb-12">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+      </div>
       <ProgressHeader
         userName={session.userName}
         currentChapterOrder={chapter.fields.Order}
@@ -153,26 +165,30 @@ export default function ResultPage() {
         chapterName={`${chapter.fields.Order}장. ${chapter.fields.Name} - 결과`}
       />
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl shadow-lg p-8">
+      <div className="relative mx-auto max-w-5xl px-6 py-8">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
           {resultData.allCorrect ? (
-            // 전체 정답
-            <div className="text-center">
-              <div className="text-6xl mb-4">✅</div>
-              <h1 className="text-3xl font-bold mb-4">축하합니다!</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                {chapter.fields.Order}장을 완료했습니다
+            <div className="text-center text-white">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 text-3xl">
+                ✅
+              </div>
+              <h1 className="text-3xl font-extrabold mb-2">축하합니다!</h1>
+              <p className="text-lg text-slate-200/80 mb-8">
+                {chapter.fields.Order}장을 완료했습니다.
               </p>
 
-              <div className="bg-green-50 rounded-lg p-6 mb-8 inline-block">
-                <p className="text-lg font-semibold text-green-900">
-                  정답: {resultData.correctCount} / {resultData.totalCount}
-                </p>
+              <div className="mb-8 inline-flex items-center gap-3 rounded-2xl border border-emerald-300/40 bg-emerald-500/10 px-6 py-4 text-emerald-50">
+                <span className="text-sm font-semibold uppercase tracking-[0.12em]">
+                  정답
+                </span>
+                <span className="text-xl font-bold">
+                  {resultData.correctCount} / {resultData.totalCount}
+                </span>
               </div>
 
               <button
                 onClick={handleNext}
-                className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-lg transition"
+                className="rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-8 py-4 text-lg font-bold text-slate-950 shadow-lg transition hover:opacity-95"
               >
                 {allChapters.findIndex((c) => c.id === chapterId) <
                 allChapters.length - 1
@@ -181,63 +197,63 @@ export default function ResultPage() {
               </button>
             </div>
           ) : (
-            // 오답 있음
-            <div>
+            <div className="text-white">
               <div className="text-center mb-8">
-                <div className="text-6xl mb-4">⚠️</div>
-                <h1 className="text-3xl font-bold mb-4">아쉽습니다!</h1>
-                <p className="text-xl text-gray-600 mb-4">오답이 있습니다</p>
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/15 text-3xl">
+                  ⚠️
+                </div>
+                <h1 className="text-3xl font-extrabold mb-2">아쉽습니다!</h1>
+                <p className="text-lg text-slate-200/80 mb-4">
+                  오답이 있습니다
+                </p>
 
-                <div className="bg-yellow-50 rounded-lg p-6 inline-block">
-                  <p className="text-lg font-semibold text-yellow-900">
-                    정답: {resultData.correctCount} / {resultData.totalCount}
-                  </p>
+                <div className="inline-flex items-center gap-3 rounded-2xl border border-amber-300/40 bg-amber-500/10 px-6 py-4 text-amber-50">
+                  <span className="text-sm font-semibold uppercase tracking-[0.12em]">
+                    정답
+                  </span>
+                  <span className="text-xl font-bold">
+                    {resultData.correctCount} / {resultData.totalCount}
+                  </span>
                 </div>
               </div>
 
-              <div className="border-t border-gray-200 pt-8">
-                <h2 className="text-2xl font-bold mb-6">📌 오답 문제</h2>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                <h2 className="text-xl font-bold mb-4 text-white">오답 문제</h2>
 
                 <div className="space-y-6">
                   {resultData.incorrectQuestions.map((item, idx) => (
                     <div
                       key={idx}
-                      className="bg-red-50 border border-red-200 rounded-lg p-6"
+                      className="rounded-2xl border border-rose-300/30 bg-rose-500/10 p-6"
                     >
-                      <h3 className="font-semibold text-red-900 mb-3">
+                      <h3 className="font-semibold text-rose-50 mb-2">
                         문제 {idx + 1}
                       </h3>
-                      <p className="text-gray-800 mb-4 whitespace-pre-wrap">
+                      <p className="text-sm text-white/90 mb-4 whitespace-pre-wrap">
                         {item.questionText}
                       </p>
 
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-start gap-2">
-                          <span className="text-red-600 font-semibold">
-                            당신의 답변:
-                          </span>
-                          <span className="text-red-800">
-                            {item.userAnswer}.{' '}
-                            {item.options[item.userAnswer]}
+                      <div className="space-y-2 mb-4 text-sm">
+                        <div className="flex items-start gap-2 text-rose-50">
+                          <span className="font-semibold">당신의 답변:</span>
+                          <span>
+                            {item.userAnswer}. {item.options[item.userAnswer]}
                           </span>
                         </div>
-                        <div className="flex items-start gap-2">
-                          <span className="text-green-600 font-semibold">
-                            정답:
-                          </span>
-                          <span className="text-green-800">
-                            {item.correctAnswer}.{' '}
-                            {item.options[item.correctAnswer]}
+                        <div className="flex items-start gap-2 text-emerald-100">
+                          <span className="font-semibold">정답:</span>
+                          <span>
+                            {item.correctAnswer}. {item.options[item.correctAnswer]}
                           </span>
                         </div>
                       </div>
 
                       {item.explanation && (
-                        <div className="bg-white rounded-lg p-4">
-                          <p className="text-sm font-semibold text-gray-700 mb-2">
+                        <div className="rounded-xl border border-white/10 bg-slate-900/60 p-4">
+                          <p className="text-xs font-semibold text-slate-100 mb-2">
                             💡 해설:
                           </p>
-                          <div className="text-sm text-gray-700 prose prose-sm max-w-none">
+                          <div className="prose prose-invert prose-sm max-w-none text-slate-100/90">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {item.explanation}
                             </ReactMarkdown>
@@ -250,12 +266,12 @@ export default function ResultPage() {
               </div>
 
               <div className="mt-8 text-center">
-                <p className="text-gray-600 mb-6">
+                <p className="text-slate-200/80 mb-6">
                   학습 자료를 다시 확인하고 문제를 재시도해주세요
                 </p>
                 <button
                   onClick={handleRetry}
-                  className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-lg transition"
+                  className="rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-8 py-4 text-lg font-bold text-slate-950 shadow-lg transition hover:opacity-95"
                 >
                   다시 학습하기
                 </button>

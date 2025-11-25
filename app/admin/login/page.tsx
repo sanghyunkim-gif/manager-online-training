@@ -40,69 +40,81 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <div className="text-4xl font-bold text-gray-900 mb-2">🔐</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            관리자 로그인
-          </h1>
-          <p className="text-gray-600">관리자 계정으로 로그인해주세요</p>
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 px-6 py-10">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+      </div>
+
+      <div className="relative mx-auto flex max-w-lg flex-col items-center gap-6 rounded-3xl border border-white/10 bg-white/5 p-10 text-white shadow-2xl backdrop-blur">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-2xl">
+          🔐
+        </div>
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-[0.14em] text-emerald-200">
+            admin access
+          </p>
+          <h1 className="text-3xl font-extrabold">관리자 로그인</h1>
+          <p className="mt-2 text-slate-200/80">
+            관리자 계정으로 로그인해주세요
+          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                아이디
-              </label>
-              <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                placeholder="아이디를 입력하세요"
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                비밀번호
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                placeholder="비밀번호를 입력하세요"
-                required
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        <form onSubmit={handleSubmit} className="w-full space-y-5">
+          <div className="space-y-2">
+            <label
+              htmlFor="username"
+              className="text-sm font-semibold text-slate-100"
             >
+              아이디
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-400 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30"
+              placeholder="아이디를 입력하세요"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="password"
+              className="text-sm font-semibold text-slate-100"
+            >
+              비밀번호
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-400 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+
+          {error && (
+            <div className="rounded-2xl border border-rose-300/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-50">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-4 py-3 text-base font-bold text-slate-950 shadow-lg transition focus:ring-2 focus:ring-emerald-400 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <span className="absolute inset-0 bg-white/10 opacity-0 transition duration-300 group-hover:opacity-100" />
+            <span className="relative">
               {loading ? '로그인 중...' : '로그인'}
-            </button>
-          </form>
-        </div>
+            </span>
+          </button>
+        </form>
       </div>
     </div>
   );

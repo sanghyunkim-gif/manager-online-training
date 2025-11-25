@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-sans: 'Apple SD Gothic Neo', 'Segoe UI', 'Noto Sans KR', system-ui,
+    -apple-system, sans-serif;
+  --font-display: 'Apple SD Gothic Neo', 'Segoe UI', 'Noto Sans KR', system-ui,
+    -apple-system, sans-serif;
+}

@@ -31,61 +31,71 @@ export default function ProgressHeader({
   };
 
   return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <div className="flex justify-between items-center mb-4">
-          <div className="text-lg font-bold text-blue-600">⚽ 플랩풋볼</div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{userName}님</span>
+    <div className="sticky top-0 z-20 border-b border-white/10 bg-slate-950/75 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-emerald-200">
+            <span className="text-base">⚽</span>
+            플랩풋볼 매니저
+          </div>
+          <div className="flex items-center gap-3 text-xs text-slate-200">
+            <span className="rounded-full bg-white/10 px-3 py-1 font-semibold text-emerald-100">
+              {userName}님
+            </span>
             <button
               onClick={handleExit}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="rounded-full border border-white/10 px-3 py-1 font-semibold text-white transition hover:border-emerald-300/50 hover:text-emerald-100"
             >
               나가기
             </button>
           </div>
         </div>
 
-        {/* 진행률 바 */}
-        <div className="mb-2">
-          <div className="flex items-center gap-2">
-            {Array.from({ length: totalChapters }, (_, i) => {
-              const chapterNum = i + 1;
-              const isCompleted = completedChapters.includes(chapterNum);
-              const isCurrent = chapterNum === currentChapterOrder;
+        <div className="flex items-center gap-2">
+          {Array.from({ length: totalChapters }, (_, i) => {
+            const chapterNum = i + 1;
+            const isCompleted = completedChapters.includes(chapterNum);
+            const isCurrent = chapterNum === currentChapterOrder;
 
-              return (
-                <div key={i} className="flex items-center flex-1">
-                  <div className="flex flex-col items-center flex-1">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                        isCompleted
-                          ? 'bg-green-500 text-white'
-                          : isCurrent
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-500'
-                      }`}
-                    >
-                      {isCompleted ? '✓' : chapterNum}
-                    </div>
-                    <div className="text-xs mt-1 text-gray-600">
-                      {chapterNum}장
-                    </div>
+            return (
+              <div key={i} className="flex flex-1 items-center gap-2">
+                <div className="flex flex-col items-center gap-1">
+                  <div
+                    className={`flex h-9 w-9 items-center justify-center rounded-xl border text-sm font-bold ${
+                      isCompleted
+                        ? 'border-emerald-300/60 bg-emerald-500/20 text-emerald-50 shadow-[0_0_0_1px_rgba(16,185,129,0.2)]'
+                        : isCurrent
+                        ? 'border-cyan-300/60 bg-cyan-500/20 text-cyan-50 shadow-[0_0_0_1px_rgba(34,211,238,0.2)]'
+                        : 'border-white/10 bg-white/5 text-slate-300'
+                    }`}
+                  >
+                    {isCompleted ? '✓' : chapterNum}
                   </div>
-                  {i < totalChapters - 1 && (
-                    <div
-                      className={`flex-1 h-1 ${
-                        isCompleted ? 'bg-green-500' : 'bg-gray-200'
-                      }`}
-                    ></div>
-                  )}
+                  <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">
+                    {chapterNum}장
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+                {i < totalChapters - 1 && (
+                  <div className="h-[2px] flex-1 rounded-full bg-white/10">
+                    <div
+                      className={`h-full rounded-full transition ${
+                        isCompleted
+                          ? 'bg-gradient-to-r from-emerald-400 to-cyan-300'
+                          : isCurrent
+                          ? 'bg-gradient-to-r from-cyan-300 to-emerald-300'
+                          : 'bg-white/10'
+                      }`}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        <div className="text-sm text-gray-600">현재: {chapterName}</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-300">
+          현재: <span className="text-emerald-100">{chapterName}</span>
+        </div>
       </div>
     </div>
   );

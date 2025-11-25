@@ -181,10 +181,17 @@ export default function QuizPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">문제를 불러오는 중...</p>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+        </div>
+        <div className="relative flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 px-10 py-8 text-center shadow-2xl backdrop-blur">
+          <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/30 border-t-emerald-300" />
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-100">
+            문제를 불러오는 중...
+          </p>
         </div>
       </div>
     );
@@ -192,15 +199,20 @@ export default function QuizPage() {
 
   if (error || !chapter || !session || questions.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md">
-          <h2 className="text-xl font-bold text-red-600 mb-4">오류</h2>
-          <p className="text-gray-700 mb-4">
+      <div className="relative min-h-screen overflow-hidden bg-slate-950 px-6 py-10">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-xl rounded-3xl border border-white/10 bg-white/5 p-8 text-center text-white shadow-2xl backdrop-blur">
+          <div className="mb-3 text-3xl">⚠️</div>
+          <h2 className="text-xl font-bold mb-2">오류</h2>
+          <p className="mb-6 text-slate-200/80">
             {error || '문제를 불러올 수 없습니다.'}
           </p>
           <button
             onClick={() => router.push(`/learn/chapter/${chapterId}`)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg"
+            className="rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg transition hover:opacity-95"
           >
             돌아가기
           </button>
@@ -213,7 +225,12 @@ export default function QuizPage() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 pb-12">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+      </div>
       <ProgressHeader
         userName={session.userName}
         currentChapterOrder={chapter.fields.Order}
@@ -222,22 +239,27 @@ export default function QuizPage() {
         chapterName={`${chapter.fields.Order}장. ${chapter.fields.Name} - 문제 풀이`}
       />
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">
-              문제 {currentQuestionIndex + 1} / {questions.length}
-            </h1>
-            <div className="flex gap-2">
+      <div className="relative mx-auto max-w-5xl px-6 py-8">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.14em] text-emerald-200">
+                Quiz
+              </p>
+              <h1 className="text-2xl font-bold text-white">
+                문제 {currentQuestionIndex + 1} / {questions.length}
+              </h1>
+            </div>
+            <div className="flex flex-wrap gap-2">
               {questions.map((_, idx) => (
                 <div
                   key={idx}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
+                  className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold ${
                     answers[questions[idx].id]
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-emerald-500/30 text-emerald-50 border border-emerald-300/40'
                       : idx === currentQuestionIndex
-                      ? 'bg-blue-200 text-blue-800'
-                      : 'bg-gray-200 text-gray-600'
+                      ? 'bg-cyan-500/25 text-cyan-50 border border-cyan-300/40'
+                      : 'border border-white/10 bg-white/5 text-slate-200'
                   }`}
                 >
                   {idx + 1}
@@ -246,28 +268,25 @@ export default function QuizPage() {
             </div>
           </div>
 
-          {/* 진행률 바 */}
-          <div className="mb-8">
-            <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="mb-8 mt-4">
+            <div className="w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className="bg-blue-600 h-2 rounded-full transition-all"
+                className="h-2 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 transition-all"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="mt-2 text-sm text-slate-300/80">
               답변 완료: {answeredCount} / {questions.length}
             </p>
           </div>
 
-          {/* 문제 */}
           <div className="mb-8">
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <p className="text-lg font-medium whitespace-pre-wrap">
+            <div className="mb-6 rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+              <p className="text-lg font-semibold text-white whitespace-pre-wrap">
                 {currentQuestion.fields.Question_Text}
               </p>
             </div>
 
-            {/* 선택지 */}
             <div className="space-y-3">
               {(['1', '2', '3', '4'] as const).map((num) => {
                 const optionText =
@@ -278,23 +297,23 @@ export default function QuizPage() {
                   <button
                     key={num}
                     onClick={() => handleAnswerSelect(num)}
-                    className={`w-full text-left p-4 rounded-lg border-2 transition ${
+                    className={`w-full rounded-2xl border px-4 py-4 text-left transition ${
                       isSelected
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 hover:border-blue-300 bg-white'
+                        ? 'border-emerald-300/60 bg-emerald-500/15 text-white shadow-[0_0_0_1px_rgba(16,185,129,0.2)]'
+                        : 'border-white/10 bg-white/5 text-slate-100 hover:border-cyan-300/50 hover:bg-cyan-500/10'
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 ${
+                        className={`flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${
                           isSelected
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-200 text-gray-600'
+                            ? 'bg-emerald-400 text-slate-950'
+                            : 'bg-white/10 text-slate-200'
                         }`}
                       >
                         {num}
                       </div>
-                      <span className="flex-1">{optionText as string}</span>
+                      <span className="flex-1 text-sm">{optionText as string}</span>
                     </div>
                   </button>
                 );
@@ -302,15 +321,14 @@ export default function QuizPage() {
             </div>
           </div>
 
-          {/* 버튼 */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <button
               onClick={handlePrevious}
               disabled={currentQuestionIndex === 0}
-              className={`px-6 py-3 rounded-lg font-semibold transition ${
+              className={`rounded-2xl px-6 py-3 text-sm font-bold transition ${
                 currentQuestionIndex === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-600 hover:bg-gray-700 text-white'
+                  ? 'cursor-not-allowed border border-white/10 bg-white/5 text-slate-500'
+                  : 'border border-white/10 bg-white/5 text-white hover:border-emerald-300/50 hover:text-emerald-100'
               }`}
             >
               ← 이전 문제
@@ -319,7 +337,7 @@ export default function QuizPage() {
             {currentQuestionIndex < questions.length - 1 ? (
               <button
                 onClick={handleNext}
-                className="px-6 py-3 rounded-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white transition"
+                className="rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-6 py-3 text-sm font-bold text-slate-950 shadow-lg transition hover:opacity-95"
               >
                 다음 문제 →
               </button>
@@ -327,10 +345,10 @@ export default function QuizPage() {
               <button
                 onClick={handleSubmit}
                 disabled={submitting || answeredCount < questions.length}
-                className={`px-6 py-3 rounded-lg font-semibold transition ${
+                className={`rounded-2xl px-6 py-3 text-sm font-bold transition ${
                   submitting || answeredCount < questions.length
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 hover:bg-green-700 text-white'
+                    ? 'cursor-not-allowed border border-white/10 bg-white/5 text-slate-500'
+                    : 'bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 text-slate-950 shadow-lg hover:opacity-95'
                 }`}
               >
                 {submitting ? '제출 중...' : '제출하기'}
@@ -339,7 +357,7 @@ export default function QuizPage() {
           </div>
 
           {answeredCount < questions.length && (
-            <p className="text-sm text-gray-500 text-center mt-4">
+            <p className="mt-4 text-center text-sm text-slate-300/80">
               * 모든 문제를 풀고 나면 제출할 수 있습니다
             </p>
           )}

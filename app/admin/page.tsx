@@ -125,10 +125,16 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">로딩 중...</p>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
+        </div>
+        <div className="relative flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/5 px-10 py-8 text-center text-white shadow-2xl backdrop-blur">
+          <div className="h-12 w-12 animate-spin rounded-full border-2 border-white/30 border-t-emerald-300" />
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-100">
+            관리자 데이터 로딩 중...
+          </p>
         </div>
       </div>
     );
@@ -139,49 +145,64 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">
-            ⚽ 플랩풋볼 관리자 대시보드
-          </h1>
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 pb-12 text-white">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-[460px] w-[460px] rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.12),transparent_35%),radial-gradient(circle_at_82%_0%,rgba(34,197,94,0.12),transparent_30%)]" />
+      </div>
+
+      <header className="relative border-b border-white/10 bg-white/5 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-lg">
+              ⚽
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.12em] text-emerald-200">
+                Admin Dashboard
+              </p>
+              <h1 className="text-xl font-bold">플랩풋볼 매니저</h1>
+            </div>
+          </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition font-medium text-sm"
+            className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-emerald-300/40 hover:text-emerald-100"
           >
             로그아웃
           </button>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* 전체 통계 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">
+      <main className="relative mx-auto max-w-7xl px-6 py-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.12em] text-slate-300">
               전체 학습자
-            </h3>
-            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+            </p>
+            <p className="mt-2 text-3xl font-extrabold">{stats.total}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">
+          <div className="rounded-2xl border border-emerald-300/40 bg-emerald-500/10 p-5 shadow-lg backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.12em] text-emerald-100">
               학습 중
-            </h3>
-            <p className="text-3xl font-bold text-blue-600">
+            </p>
+            <p className="mt-2 text-3xl font-extrabold text-emerald-50">
               {stats.inProgress}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">완료</h3>
-            <p className="text-3xl font-bold text-green-600">
+          <div className="rounded-2xl border border-cyan-300/40 bg-cyan-500/10 p-5 shadow-lg backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.12em] text-cyan-100">
+              완료
+            </p>
+            <p className="mt-2 text-3xl font-extrabold text-cyan-50">
               {stats.completed}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.12em] text-slate-300">
               전체 완료율
-            </h3>
-            <p className="text-3xl font-bold text-purple-600">
+            </p>
+            <p className="mt-2 text-3xl font-extrabold text-emerald-100">
               {stats.total > 0
                 ? Math.round((stats.completed / stats.total) * 100)
                 : 0}
@@ -190,156 +211,97 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* 탭 네비게이션 */}
-        <div className="bg-white rounded-lg shadow mb-6">
-          <div className="border-b border-gray-200">
-            <nav className="flex -mb-px">
+        <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur">
+          <div className="flex flex-wrap gap-2 border-b border-white/10 px-4 py-3 text-sm">
+            {[
+              { key: 'users', label: '사용자 목록' },
+              { key: 'chapters', label: '챕터별 통계' },
+              { key: 'questions', label: '문제별 통계' },
+              { key: 'dropoff', label: '이탈 분석' },
+              { key: 'regions', label: '지역별 통계' },
+            ].map((tab) => (
               <button
-                onClick={() => setActiveTab('users')}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition ${
-                  activeTab === 'users'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as TabType)}
+                className={`rounded-2xl px-4 py-2 font-semibold transition ${
+                  activeTab === tab.key
+                    ? 'bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 text-slate-950 shadow'
+                    : 'border border-white/10 bg-white/5 text-slate-200 hover:border-emerald-300/40 hover:text-emerald-100'
                 }`}
               >
-                사용자 목록
+                {tab.label}
               </button>
-              <button
-                onClick={() => setActiveTab('chapters')}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition ${
-                  activeTab === 'chapters'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                챕터별 통계
-              </button>
-              <button
-                onClick={() => setActiveTab('questions')}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition ${
-                  activeTab === 'questions'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                문제별 통계
-              </button>
-              <button
-                onClick={() => setActiveTab('dropoff')}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition ${
-                  activeTab === 'dropoff'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                이탈 분석
-              </button>
-              <button
-                onClick={() => setActiveTab('regions')}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition ${
-                  activeTab === 'regions'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                지역별 통계
-              </button>
-            </nav>
+            ))}
           </div>
 
-          {/* 탭 콘텐츠 */}
-          <div className="p-6">
-            {/* 사용자 목록 탭 */}
+          <div className="p-6 text-slate-100">
             {activeTab === 'users' && (
-              <div>
-                <div className="flex gap-4 mb-6">
-                  <button
-                    onClick={() => setFilter('all')}
-                    className={`px-4 py-2 rounded-lg font-medium transition ${
-                      filter === 'all'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    전체 ({stats.total})
-                  </button>
-                  <button
-                    onClick={() => setFilter('in_progress')}
-                    className={`px-4 py-2 rounded-lg font-medium transition ${
-                      filter === 'in_progress'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    진행 중 ({stats.inProgress})
-                  </button>
-                  <button
-                    onClick={() => setFilter('completed')}
-                    className={`px-4 py-2 rounded-lg font-medium transition ${
-                      filter === 'completed'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    완료 ({stats.completed})
-                  </button>
+              <div className="space-y-6">
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    { key: 'all', label: '전체', count: stats.total },
+                    { key: 'in_progress', label: '진행 중', count: stats.inProgress },
+                    { key: 'completed', label: '완료', count: stats.completed },
+                  ].map((item) => (
+                    <button
+                      key={item.key}
+                      onClick={() =>
+                        setFilter(item.key as 'all' | 'in_progress' | 'completed')
+                      }
+                      className={`rounded-2xl px-4 py-2 text-sm font-semibold transition ${
+                        filter === item.key
+                          ? 'bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 text-slate-950 shadow'
+                          : 'border border-white/10 bg-white/5 text-slate-200 hover:border-emerald-300/40 hover:text-emerald-100'
+                      }`}
+                    >
+                      {item.label} ({item.count})
+                    </button>
+                  ))}
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div className="overflow-hidden rounded-2xl border border-white/10">
+                  <table className="min-w-full divide-y divide-white/10">
+                    <thead className="bg-white/5 text-xs uppercase tracking-[0.08em] text-slate-300">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          이름
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          전화번호
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          상태
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          시작일
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          완료일
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          작업
-                        </th>
+                        {['이름', '전화번호', '상태', '시작일', '완료일', '작업'].map(
+                          (header) => (
+                            <th key={header} className="px-6 py-3 text-left">
+                              {header}
+                            </th>
+                          )
+                        )}
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y divide-white/5 bg-white/5">
                       {filteredUsers.length === 0 ? (
                         <tr>
                           <td
                             colSpan={6}
-                            className="px-6 py-8 text-center text-gray-500"
+                            className="px-6 py-8 text-center text-slate-300"
                           >
                             사용자가 없습니다.
                           </td>
                         </tr>
                       ) : (
                         filteredUsers.map((user) => (
-                          <tr key={user.id} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">
-                                {user.fields.Name}
-                              </div>
+                          <tr
+                            key={user.id}
+                            className="transition hover:bg-white/5"
+                          >
+                            <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-white">
+                              {user.fields.Name}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">
-                                {user.fields.Phone}
-                              </div>
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
+                              {user.fields.Phone}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="whitespace-nowrap px-6 py-4">
                               <span
-                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                                   user.fields.Status === 'Completed'
-                                    ? 'bg-green-100 text-green-800'
+                                    ? 'bg-emerald-500/20 text-emerald-100'
                                     : user.fields.Status === 'In Progress'
-                                    ? 'bg-blue-100 text-blue-800'
-                                    : 'bg-red-100 text-red-800'
+                                    ? 'bg-cyan-500/20 text-cyan-100'
+                                    : 'bg-rose-500/20 text-rose-100'
                                 }`}
                               >
                                 {user.fields.Status === 'Completed'
@@ -349,21 +311,21 @@ export default function AdminPage() {
                                   : '차단'}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">
                               {user.createdTime
                                 ? new Date(user.createdTime).toLocaleDateString(
                                     'ko-KR'
                                   )
                                 : '-'}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">
                               {user.fields.Completed_At
                                 ? new Date(
                                     user.fields.Completed_At
                                   ).toLocaleDateString('ko-KR')
                                 : '-'}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm">
                               {user.fields.Status === 'In Progress' && (
                                 <button
                                   onClick={async () => {
@@ -386,7 +348,7 @@ export default function AdminPage() {
                                       }
                                     }
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 font-medium"
+                                  className="font-semibold text-cyan-200 hover:text-emerald-100"
                                 >
                                   완료 처리
                                 </button>
@@ -401,97 +363,80 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* 챕터별 통계 탭 */}
             {activeTab === 'chapters' && (
-              <div>
-                <h3 className="text-lg font-semibold mb-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-white">
                   챕터별 완료율 및 평균 소요시간
                 </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div className="overflow-hidden rounded-2xl border border-white/10">
+                  <table className="min-w-full divide-y divide-white/10">
+                    <thead className="bg-white/5 text-xs uppercase tracking-[0.08em] text-slate-300">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          챕터
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          총 시도
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          완료율
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          평균 소요시간
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          평균 정답률
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          이탈률
-                        </th>
+                        {['챕터', '총 시도', '완료율', '평균 소요시간', '평균 정답률', '이탈률'].map(
+                          (h) => (
+                            <th key={h} className="px-6 py-3 text-left">
+                              {h}
+                            </th>
+                          )
+                        )}
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y divide-white/5 bg-white/5">
                       {chapterStats.length === 0 ? (
                         <tr>
                           <td
                             colSpan={6}
-                            className="px-6 py-8 text-center text-gray-500"
+                            className="px-6 py-8 text-center text-slate-300"
                           >
                             데이터가 없습니다.
                           </td>
                         </tr>
                       ) : (
                         chapterStats.map((stat) => (
-                          <tr key={stat.chapterId} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">
-                                {stat.order}. {stat.chapterName}
-                              </div>
+                          <tr key={stat.chapterId} className="transition hover:bg-white/5">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-white">
+                              {stat.order}. {stat.chapterName}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
                               {stat.totalAttempts}회
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <div className="text-sm font-medium text-gray-900 mr-2">
+                            <td className="whitespace-nowrap px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <div className="text-sm font-semibold text-white">
                                   {Math.round(stat.completionRate)}%
                                 </div>
-                                <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div className="h-2 w-20 rounded-full bg-white/10">
                                   <div
-                                    className="bg-green-500 h-2 rounded-full"
-                                    style={{
-                                      width: `${stat.completionRate}%`,
-                                    }}
-                                  ></div>
+                                    className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400"
+                                    style={{ width: `${stat.completionRate}%` }}
+                                  />
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {Math.floor(stat.avgTime / 60)}분{' '}
-                              {stat.avgTime % 60}초
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
+                              {Math.floor(stat.avgTime / 60)}분 {stat.avgTime % 60}초
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="whitespace-nowrap px-6 py-4">
                               <span
-                                className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                                className={`rounded-full px-2 py-1 text-xs font-semibold ${
                                   stat.avgCorrectRate >= 80
-                                    ? 'bg-green-100 text-green-800'
+                                    ? 'bg-emerald-500/20 text-emerald-100'
                                     : stat.avgCorrectRate >= 60
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : 'bg-red-100 text-red-800'
+                                    ? 'bg-amber-500/20 text-amber-100'
+                                    : 'bg-rose-500/20 text-rose-100'
                                 }`}
                               >
                                 {stat.avgCorrectRate.toFixed(1)}%
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="whitespace-nowrap px-6 py-4">
                               <span
-                                className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                                className={`rounded-full px-2 py-1 text-xs font-semibold ${
                                   stat.dropoffRate >= 50
-                                    ? 'bg-red-100 text-red-800'
+                                    ? 'bg-rose-500/20 text-rose-100'
                                     : stat.dropoffRate >= 30
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : 'bg-green-100 text-green-800'
+                                    ? 'bg-amber-500/20 text-amber-100'
+                                    : 'bg-emerald-500/20 text-emerald-100'
                                 }`}
                               >
                                 {stat.dropoffRate.toFixed(1)}%
@@ -506,79 +451,66 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* 문제별 통계 탭 */}
             {activeTab === 'questions' && (
-              <div>
-                <h3 className="text-lg font-semibold mb-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-white">
                   문제별 오답률 (높은 순)
                 </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div className="overflow-hidden rounded-2xl border border-white/10">
+                  <table className="min-w-full divide-y divide-white/10">
+                    <thead className="bg-white/5 text-xs uppercase tracking-[0.08em] text-slate-300">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          챕터
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          문제
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          총 시도
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          오답률
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          선택 분포
-                        </th>
+                        {['챕터', '문제', '총 시도', '오답률', '선택 분포'].map((h) => (
+                          <th key={h} className="px-6 py-3 text-left">
+                            {h}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y divide-white/5 bg-white/5">
                       {questionStats.length === 0 ? (
                         <tr>
                           <td
                             colSpan={5}
-                            className="px-6 py-8 text-center text-gray-500"
+                            className="px-6 py-8 text-center text-slate-300"
                           >
                             데이터가 없습니다.
                           </td>
                         </tr>
                       ) : (
                         questionStats.map((stat) => (
-                          <tr key={stat.questionId} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                          <tr key={stat.questionId} className="transition hover:bg-white/5">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
                               {stat.chapterName}
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
+                            <td className="px-6 py-4 text-sm text-white">
                               {stat.questionText}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
                               {stat.totalAttempts}회
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
+                            <td className="whitespace-nowrap px-6 py-4">
+                              <div className="flex items-center gap-2">
                                 <span
-                                  className={`px-2 py-1 text-xs font-semibold rounded-full mr-2 ${
+                                  className={`rounded-full px-2 py-1 text-xs font-semibold ${
                                     stat.incorrectRate >= 70
-                                      ? 'bg-red-100 text-red-800'
+                                      ? 'bg-rose-500/20 text-rose-100'
                                       : stat.incorrectRate >= 50
-                                      ? 'bg-yellow-100 text-yellow-800'
-                                      : 'bg-green-100 text-green-800'
+                                      ? 'bg-amber-500/20 text-amber-100'
+                                      : 'bg-emerald-500/20 text-emerald-100'
                                   }`}
                                 >
                                   {Math.round(stat.incorrectRate)}%
                                 </span>
-                                <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div className="h-2 w-20 rounded-full bg-white/10">
                                   <div
-                                    className="bg-red-500 h-2 rounded-full"
-                                    style={{
-                                      width: `${stat.incorrectRate}%`,
-                                    }}
-                                  ></div>
+                                    className="h-full rounded-full bg-gradient-to-r from-rose-400 to-amber-300"
+                                    style={{ width: `${stat.incorrectRate}%` }}
+                                  />
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600">
+                            <td className="whitespace-nowrap px-6 py-4 text-xs text-slate-300">
                               1:{stat.answerDistribution['1']} | 2:
                               {stat.answerDistribution['2']} | 3:
                               {stat.answerDistribution['3']} | 4:
@@ -593,201 +525,176 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* 이탈 분석 탭 */}
             {activeTab === 'dropoff' && dropoffAnalysis && (
-              <div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  <div className="bg-blue-50 rounded-lg p-6">
-                    <h4 className="text-sm font-medium text-blue-700 mb-2">
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <p className="text-xs uppercase tracking-[0.12em] text-slate-300">
                       총 사용자
-                    </h4>
-                    <p className="text-3xl font-bold text-blue-900">
+                    </p>
+                    <p className="mt-2 text-3xl font-extrabold text-white">
                       {dropoffAnalysis.totalUsers}명
                     </p>
                   </div>
-                  <div className="bg-green-50 rounded-lg p-6">
-                    <h4 className="text-sm font-medium text-green-700 mb-2">
+                  <div className="rounded-2xl border border-emerald-300/40 bg-emerald-500/10 p-5">
+                    <p className="text-xs uppercase tracking-[0.12em] text-emerald-100">
                       완료한 사용자
-                    </h4>
-                    <p className="text-3xl font-bold text-green-900">
+                    </p>
+                    <p className="mt-2 text-3xl font-extrabold text-emerald-50">
                       {dropoffAnalysis.completedUsers}명
                     </p>
                   </div>
-                  <div className="bg-purple-50 rounded-lg p-6">
-                    <h4 className="text-sm font-medium text-purple-700 mb-2">
+                  <div className="rounded-2xl border border-cyan-300/40 bg-cyan-500/10 p-5">
+                    <p className="text-xs uppercase tracking-[0.12em] text-cyan-100">
                       전체 완료율
-                    </h4>
-                    <p className="text-3xl font-bold text-purple-900">
+                    </p>
+                    <p className="mt-2 text-3xl font-extrabold text-cyan-50">
                       {Math.round(dropoffAnalysis.overallCompletionRate)}%
                     </p>
                   </div>
                 </div>
 
-                <h3 className="text-lg font-semibold mb-4">
-                  챕터별 이탈자 수
-                </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          순위
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          챕터
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          이탈자 수
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          시각화
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {dropoffAnalysis.chapterDropoffs.length === 0 ? (
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-3">
+                    챕터별 이탈자 수
+                  </h3>
+                  <div className="overflow-hidden rounded-2xl border border-white/10">
+                    <table className="min-w-full divide-y divide-white/10">
+                      <thead className="bg-white/5 text-xs uppercase tracking-[0.08em] text-slate-300">
                         <tr>
-                          <td
-                            colSpan={4}
-                            className="px-6 py-8 text-center text-gray-500"
-                          >
-                            데이터가 없습니다.
-                          </td>
+                          {['순위', '챕터', '이탈자 수', '시각화'].map((h) => (
+                            <th key={h} className="px-6 py-3 text-left">
+                              {h}
+                            </th>
+                          ))}
                         </tr>
-                      ) : (
-                        dropoffAnalysis.chapterDropoffs.map((chapter, idx) => (
-                          <tr key={chapter.chapterId} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              #{idx + 1}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {chapter.order}. {chapter.chapterName}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {chapter.droppedCount}명
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="w-48 bg-gray-200 rounded-full h-4">
-                                <div
-                                  className={`h-4 rounded-full ${
-                                    idx === 0
-                                      ? 'bg-red-500'
-                                      : idx === 1
-                                      ? 'bg-orange-500'
-                                      : idx === 2
-                                      ? 'bg-yellow-500'
-                                      : 'bg-blue-500'
-                                  }`}
-                                  style={{
-                                    width: `${
-                                      dropoffAnalysis.chapterDropoffs[0]
-                                        .droppedCount > 0
-                                        ? (chapter.droppedCount /
-                                            dropoffAnalysis.chapterDropoffs[0]
-                                              .droppedCount) *
-                                          100
-                                        : 0
-                                    }%`,
-                                  }}
-                                ></div>
-                              </div>
+                      </thead>
+                      <tbody className="divide-y divide-white/5 bg-white/5">
+                        {dropoffAnalysis.chapterDropoffs.length === 0 ? (
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="px-6 py-8 text-center text-slate-300"
+                            >
+                              데이터가 없습니다.
                             </td>
                           </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
+                        ) : (
+                          dropoffAnalysis.chapterDropoffs.map((chapter, idx) => (
+                            <tr key={chapter.chapterId} className="transition hover:bg-white/5">
+                              <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-white">
+                                #{idx + 1}
+                              </td>
+                              <td className="whitespace-nowrap px-6 py-4 text-sm text-white">
+                                {chapter.order}. {chapter.chapterName}
+                              </td>
+                              <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
+                                {chapter.droppedCount}명
+                              </td>
+                              <td className="whitespace-nowrap px-6 py-4">
+                                <div className="h-4 w-52 rounded-full bg-white/10">
+                                  <div
+                                    className={`h-full rounded-full ${
+                                      idx === 0
+                                        ? 'bg-rose-400'
+                                        : idx === 1
+                                        ? 'bg-amber-400'
+                                        : idx === 2
+                                        ? 'bg-yellow-300'
+                                        : 'bg-emerald-400'
+                                    }`}
+                                    style={{
+                                      width: `${
+                                        dropoffAnalysis.chapterDropoffs[0]
+                                          .droppedCount > 0
+                                          ? (chapter.droppedCount /
+                                              dropoffAnalysis.chapterDropoffs[0]
+                                                .droppedCount) *
+                                            100
+                                          : 0
+                                      }%`,
+                                    }}
+                                  />
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* 지역별 통계 탭 */}
             {activeTab === 'regions' && (
-              <div>
-                <h3 className="text-lg font-semibold mb-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-white">
                   지역별 완료율 및 학습 현황
                 </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div className="overflow-hidden rounded-2xl border border-white/10">
+                  <table className="min-w-full divide-y divide-white/10">
+                    <thead className="bg-white/5 text-xs uppercase tracking-[0.08em] text-slate-300">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          지역
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          총 사용자
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          완료자
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          진행 중
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          완료율
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          평균 학습시간
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          이탈률
-                        </th>
+                        {['지역', '총 사용자', '완료자', '진행 중', '완료율', '평균 학습시간', '이탈률'].map(
+                          (h) => (
+                            <th key={h} className="px-6 py-3 text-left">
+                              {h}
+                            </th>
+                          )
+                        )}
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y divide-white/5 bg-white/5">
                       {regionStats.length === 0 ? (
                         <tr>
                           <td
                             colSpan={7}
-                            className="px-6 py-8 text-center text-gray-500"
+                            className="px-6 py-8 text-center text-slate-300"
                           >
                             데이터가 없습니다.
                           </td>
                         </tr>
                       ) : (
                         regionStats.map((stat) => (
-                          <tr key={stat.region} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">
-                                {stat.region}
-                              </div>
+                          <tr key={stat.region} className="transition hover:bg-white/5">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-white">
+                              {stat.region}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
                               {stat.totalUsers}명
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-emerald-100">
                               {stat.completedUsers}명
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-cyan-100">
                               {stat.inProgressUsers}명
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <div className="text-sm font-medium text-gray-900 mr-2">
+                            <td className="whitespace-nowrap px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <div className="text-sm font-semibold text-white">
                                   {Math.round(stat.completionRate)}%
                                 </div>
-                                <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div className="h-2 w-20 rounded-full bg-white/10">
                                   <div
-                                    className="bg-green-500 h-2 rounded-full"
-                                    style={{
-                                      width: `${stat.completionRate}%`,
-                                    }}
-                                  ></div>
+                                    className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400"
+                                    style={{ width: `${stat.completionRate}%` }}
+                                  />
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-200">
                               {Math.floor(stat.avgStudyTime / 60)}분{' '}
                               {stat.avgStudyTime % 60}초
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="whitespace-nowrap px-6 py-4">
                               <span
-                                className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                                className={`rounded-full px-2 py-1 text-xs font-semibold ${
                                   stat.dropoffRate >= 70
-                                    ? 'bg-red-100 text-red-800'
+                                    ? 'bg-rose-500/20 text-rose-100'
                                     : stat.dropoffRate >= 50
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : 'bg-green-100 text-green-800'
+                                    ? 'bg-amber-500/20 text-amber-100'
+                                    : 'bg-emerald-500/20 text-emerald-100'
                                 }`}
                               >
                                 {stat.dropoffRate.toFixed(1)}%
@@ -804,17 +711,16 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* 안내 */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="font-semibold text-blue-900 mb-2">
+        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6 text-slate-200 backdrop-blur">
+          <h3 className="font-semibold text-white mb-2">
             💡 Airtable에서 더 자세한 정보 확인
           </h3>
-          <p className="text-sm text-blue-800">
+          <p className="text-sm text-slate-200/80">
             Airtable에서 개별 사용자의 상세한 학습 기록, 시도별 데이터 등 더
             자세한 정보를 확인할 수 있습니다.
           </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
