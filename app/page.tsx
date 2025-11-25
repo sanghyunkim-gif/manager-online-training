@@ -105,17 +105,7 @@ export default function HomePage() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
         <div className="mb-12 lg:mb-16 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-500 text-3xl shadow-md">
-              ⚽
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-primary-500 font-bold">
-                PLABFOOTBALL
-              </p>
-              <p className="text-base font-bold text-neutral-900">
-                Manager Online Training
-              </p>
-            </div>
+            <img src="/logo.png" alt="PLAB Manager" className="h-10 sm:h-12" />
           </div>
           <div className="flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-700 shadow-sm">
             <span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />
