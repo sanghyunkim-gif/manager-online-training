@@ -95,87 +95,85 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-50">
+    <div className="relative min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(20,184,166,0.15),transparent_40%),radial-gradient(circle_at_80%_20%,rgba(6,182,212,0.15),transparent_35%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:80px_80px]" />
-        <div className="absolute left-0 top-0 h-96 w-96 rounded-full bg-primary-500/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-cyan-500/10 blur-3xl animate-pulse-slow" />
-        <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/5 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
+        <div className="absolute left-0 top-0 h-[600px] w-[600px] rounded-full bg-primary-500/5 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-[700px] w-[700px] rounded-full bg-success-500/3 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
         <div className="mb-12 lg:mb-16 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-primary-400/20 bg-gradient-to-br from-primary-500/10 to-cyan-500/10 text-3xl shadow-glow-sm">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-500 text-3xl shadow-md">
               ⚽
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-primary-300/80 font-medium">
+              <p className="text-xs uppercase tracking-[0.24em] text-primary-500 font-bold">
                 PLABFOOTBALL
               </p>
-              <p className="text-base font-bold text-slate-50">
+              <p className="text-base font-bold text-neutral-900">
                 Manager Online Training
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2.5 rounded-full border border-primary-400/30 bg-gradient-to-r from-primary-500/15 to-emerald-500/15 px-4 py-2 text-xs font-bold text-primary-100 shadow-glow-sm backdrop-blur-sm">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-primary-300 shadow-glow-sm" />
+          <div className="flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-700 shadow-sm">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />
             실습 세션 자동 진행 · 보안 전송
           </div>
         </div>
 
         <div className="grid items-start gap-12 lg:gap-16 lg:grid-cols-[1.1fr_0.9fr]">
           <section className="space-y-10">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-cyan-400/30 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-cyan-100 shadow-glow-cyan backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 animate-pulse" />
-              Night Pitch Edition
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-primary-200 bg-primary-50 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-primary-600">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary-500 animate-pulse" />
+              Online Training
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-4xl font-display font-bold leading-[1.15] text-white sm:text-5xl lg:text-6xl">
+              <h1 className="text-4xl font-display font-bold leading-[1.15] text-neutral-900 sm:text-5xl lg:text-6xl">
                 현장감 넘치는{' '}
-                <span className="bg-gradient-to-r from-primary-300 via-cyan-300 to-accent-400 bg-clip-text text-transparent animate-fade-in">
+                <span className="text-primary-500">
                   매니저 온라인 실습
                 </span>
                 <br />
                 으로 바로 연결되세요.
               </h1>
-              <p className="max-w-2xl text-lg leading-relaxed text-slate-300/90">
+              <p className="max-w-2xl text-lg leading-relaxed text-neutral-600">
                 경기 전/중/후에 필요한 운영 체크리스트, 문제 해결 흐름, 커뮤니케이션 팁을 한 번에 체득하는 집중 과정입니다. 입력한 정보로 맞춤 챕터가 자동 배정됩니다.
               </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="group rounded-2xl border border-primary-400/20 bg-gradient-to-br from-primary-500/5 to-emerald-500/5 p-5 shadow-xl shadow-primary-500/5 transition-all hover:scale-105 hover:shadow-glow-emerald">
-                <p className="text-sm font-medium text-primary-200/70">예상 소요</p>
-                <p className="mt-2 text-4xl font-bold text-white">30-40<span className="text-2xl text-primary-300">분</span></p>
-                <p className="mt-1 text-xs text-slate-300/80">집중 모듈 3개</p>
+              <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
+                <p className="text-sm font-medium text-neutral-500">예상 소요</p>
+                <p className="mt-2 text-4xl font-bold text-neutral-900">30-40<span className="text-2xl text-primary-500">분</span></p>
+                <p className="mt-1 text-xs text-neutral-600">집중 모듈 3개</p>
               </div>
-              <div className="group rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 p-5 shadow-xl shadow-cyan-500/5 transition-all hover:scale-105 hover:shadow-glow-cyan">
-                <p className="text-sm font-medium text-cyan-200/70">학습 방식</p>
-                <p className="mt-2 text-4xl font-bold text-white">실습형</p>
-                <p className="mt-1 text-xs text-slate-300/80">영상 + 체크포인트</p>
+              <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
+                <p className="text-sm font-medium text-neutral-500">학습 방식</p>
+                <p className="mt-2 text-4xl font-bold text-neutral-900">실습형</p>
+                <p className="mt-1 text-xs text-neutral-600">영상 + 체크포인트</p>
               </div>
-              <div className="group rounded-2xl border border-accent-400/20 bg-gradient-to-br from-accent-500/5 to-purple-500/5 p-5 shadow-xl shadow-accent-500/5 transition-all hover:scale-105 hover:shadow-glow-cyan">
-                <p className="text-sm font-medium text-accent-200/70">즉시 시작</p>
-                <p className="mt-2 text-4xl font-bold text-white">자동 인증</p>
-                <p className="mt-1 text-xs text-slate-300/80">지원 후 바로 진입</p>
+              <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
+                <p className="text-sm font-medium text-neutral-500">즉시 시작</p>
+                <p className="mt-2 text-4xl font-bold text-neutral-900">자동 인증</p>
+                <p className="mt-1 text-xs text-neutral-600">지원 후 바로 진입</p>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/15 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-sm">
+            <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between gap-3 mb-6">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-primary-300/70 font-medium mb-1">
+                  <p className="text-xs uppercase tracking-wider text-neutral-500 font-semibold mb-1">
                     Learning Path
                   </p>
-                  <p className="text-lg font-bold text-white">
+                  <p className="text-lg font-bold text-neutral-900">
                     진행 흐름 미리보기
                   </p>
                 </div>
-                <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-primary-500/20 to-emerald-500/20 border border-primary-400/30 px-3.5 py-1.5 text-[11px] font-bold text-primary-100">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-primary-300 shadow-glow-sm" />
+                <div className="flex items-center gap-2 rounded-full border border-success-200 bg-success-50 px-3.5 py-1.5 text-[11px] font-bold text-success-700">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />
                   실시간 체크
                 </div>
               </div>
@@ -183,15 +181,15 @@ export default function HomePage() {
                 {highlightPoints.map((point, index) => (
                   <div
                     key={point.title}
-                    className="group rounded-xl border border-white/10 bg-gradient-to-br from-slate-800/40 to-slate-900/40 p-4 transition-all hover:border-primary-400/30 hover:shadow-glow-sm"
+                    className="group rounded-lg border border-neutral-200 bg-neutral-50 p-4 transition-all hover:border-primary-300 hover:shadow-sm"
                   >
                     <div className="flex items-center gap-2.5 mb-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500/20 to-cyan-500/20 border border-primary-400/30 text-xs font-bold text-primary-200">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-500 text-xs font-bold text-white">
                         0{index + 1}
                       </span>
-                      <p className="text-sm font-bold text-cyan-100">{point.title}</p>
+                      <p className="text-sm font-bold text-neutral-900">{point.title}</p>
                     </div>
-                    <p className="text-sm leading-relaxed text-slate-300/80">
+                    <p className="text-sm leading-relaxed text-neutral-600">
                       {point.desc}
                     </p>
                   </div>
@@ -201,25 +199,19 @@ export default function HomePage() {
           </section>
 
           <section>
-            <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 shadow-2xl backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-10 top-0 h-48 w-48 rounded-full bg-primary-400/15 blur-3xl" />
-                <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-cyan-400/20 blur-3xl" />
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-primary-500/5" />
-              </div>
-
+            <div className="relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-lg">
               <div className="relative p-6 sm:p-8 lg:p-10">
                 <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-primary-200 font-medium mb-1">
+                    <p className="text-xs uppercase tracking-[0.16em] text-neutral-500 font-bold mb-1">
                       지원서
                     </p>
-                    <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
+                    <h2 className="text-2xl sm:text-3xl font-display font-bold text-neutral-900">
                       매니저 등록 정보
                     </h2>
                   </div>
-                  <div className="flex items-center gap-2 rounded-full border border-primary-300/40 bg-gradient-to-r from-primary-500/20 to-emerald-500/20 px-4 py-2 text-[11px] font-bold text-primary-100 shadow-glow-sm">
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary-300 shadow-glow-sm" />
+                  <div className="flex items-center gap-2 rounded-full border border-success-200 bg-success-50 px-4 py-2 text-[11px] font-bold text-success-700">
+                    <span className="h-2 w-2 rounded-full bg-success-500" />
                     암호화 전송
                   </div>
                 </div>
@@ -228,16 +220,16 @@ export default function HomePage() {
                   <div className="space-y-2.5">
                     <label
                       htmlFor="name"
-                      className="block text-sm font-bold text-slate-100"
+                      className="block text-sm font-bold text-neutral-700"
                     >
-                      이름 <span className="text-primary-300">*</span>
+                      이름 <span className="text-accent-500">*</span>
                     </label>
                     <input
                       type="text"
                       id="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-slate-900/70 px-4 py-3.5 text-white shadow-lg shadow-black/10 placeholder:text-slate-400 outline-none transition-all focus:border-primary-400 focus:ring-2 focus:ring-primary-400/40 focus:shadow-glow-sm disabled:opacity-60"
+                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 placeholder:text-neutral-400 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
                       placeholder="홍길동"
                       disabled={loading}
                     />
@@ -246,16 +238,16 @@ export default function HomePage() {
                   <div className="space-y-2.5">
                     <label
                       htmlFor="phone"
-                      className="block text-sm font-bold text-slate-100"
+                      className="block text-sm font-bold text-neutral-700"
                     >
-                      전화번호 <span className="text-primary-300">*</span>
+                      전화번호 <span className="text-accent-500">*</span>
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-slate-900/70 px-4 py-3.5 text-white shadow-lg shadow-black/10 placeholder:text-slate-400 outline-none transition-all focus:border-primary-400 focus:ring-2 focus:ring-primary-400/40 focus:shadow-glow-sm disabled:opacity-60"
+                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 placeholder:text-neutral-400 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
                       placeholder="010-1234-5678"
                       disabled={loading}
                     />
@@ -264,15 +256,15 @@ export default function HomePage() {
                   <div className="space-y-2.5">
                     <label
                       htmlFor="region"
-                      className="block text-sm font-bold text-slate-100"
+                      className="block text-sm font-bold text-neutral-700"
                     >
-                      지역 <span className="text-primary-300">*</span>
+                      지역 <span className="text-accent-500">*</span>
                     </label>
                     <select
                       id="region"
                       value={region}
                       onChange={(e) => setRegion(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-slate-900/70 px-4 py-3.5 text-white shadow-lg shadow-black/10 outline-none transition-all focus:border-primary-400 focus:ring-2 focus:ring-primary-400/40 focus:shadow-glow-sm disabled:opacity-60"
+                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
                       disabled={loading}
                     >
                       <option value="">선택해주세요</option>
@@ -299,15 +291,15 @@ export default function HomePage() {
                   <div className="space-y-2.5">
                     <label
                       htmlFor="applicationReason"
-                      className="block text-sm font-bold text-slate-100"
+                      className="block text-sm font-bold text-neutral-700"
                     >
-                      지원동기 <span className="text-primary-300">*</span>
+                      지원동기 <span className="text-accent-500">*</span>
                     </label>
                     <select
                       id="applicationReason"
                       value={applicationReason}
                       onChange={(e) => setApplicationReason(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-slate-900/70 px-4 py-3.5 text-white shadow-lg shadow-black/10 outline-none transition-all focus:border-primary-400 focus:ring-2 focus:ring-primary-400/40 focus:shadow-glow-sm disabled:opacity-60"
+                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
                       disabled={loading}
                     >
                       <option value="">선택해주세요</option>
@@ -326,22 +318,22 @@ export default function HomePage() {
                     </select>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-xl border border-white/15 bg-gradient-to-br from-slate-900/80 to-slate-800/80 px-4 py-4 shadow-lg backdrop-blur-sm">
+                  <div className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-4">
                     <input
                       type="checkbox"
                       id="agree"
                       checked={agreed}
                       onChange={(e) => setAgreed(e.target.checked)}
-                      className="mt-0.5 h-5 w-5 rounded border-primary-400/40 bg-slate-800 text-primary-500 outline-none transition-all focus:ring-2 focus:ring-primary-500/50 disabled:opacity-60"
+                      className="mt-0.5 h-5 w-5 rounded border-neutral-300 text-primary-500 outline-none transition-all focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60"
                       disabled={loading}
                     />
-                    <label htmlFor="agree" className="text-sm font-medium text-slate-100 leading-relaxed">
+                    <label htmlFor="agree" className="text-sm font-medium text-neutral-700 leading-relaxed">
                       개인정보 수집 및 이용에 동의합니다 (필수)
                     </label>
                   </div>
 
                   {error && (
-                    <div className="rounded-xl border border-rose-400/50 bg-gradient-to-r from-rose-500/15 to-pink-500/15 px-4 py-3.5 text-sm font-medium text-rose-100 shadow-lg">
+                    <div className="rounded-lg border border-accent-200 bg-accent-50 px-4 py-3.5 text-sm font-medium text-accent-700">
                       {error}
                     </div>
                   )}
@@ -349,17 +341,16 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-gradient-to-r from-primary-400 via-cyan-400 to-accent-500 px-6 py-4 text-base font-bold text-slate-950 shadow-xl shadow-primary-500/30 transition-all hover:shadow-glow-md hover:scale-[1.02] focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+                    className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-primary-500 px-6 py-4 text-base font-bold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    <span className="absolute inset-0 bg-white/25 opacity-0 transition duration-300 group-hover:opacity-100" />
-                    <span className="relative font-bold tracking-wide">
+                    <span className="relative font-bold">
                       {loading ? '처리 중...' : '시작하기'}
                     </span>
                     {!loading && <span className="relative text-xl">→</span>}
                   </button>
                 </form>
 
-                <p className="mt-8 text-center text-sm text-slate-300/80 leading-relaxed">
+                <p className="mt-8 text-center text-sm text-neutral-600 leading-relaxed">
                   예상 소요 시간: 약 30-40분 · 모든 정보는 인증 후 학습에만 사용됩니다.
                 </p>
               </div>
