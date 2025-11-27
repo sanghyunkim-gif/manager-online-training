@@ -287,8 +287,8 @@ export default function HomePage() {
                         <option value="축구/풋살에 관심이 많아서" className="bg-neutral-800 text-white">
                           축구/풋살에 관심이 많아서
                         </option>
-                        <option value="플랩풋볼 매니저에 관심이 있어서" className="bg-neutral-800 text-white">
-                          플랩풋볼 매니저에 관심이 있어서
+                        <option value="플랩 매니저에 관심이 있어서" className="bg-neutral-800 text-white">
+                          플랩 매니저에 관심이 있어서
                         </option>
                         <option value="새로운 경험을 해보고 싶어서" className="bg-neutral-800 text-white">
                           새로운 경험을 해보고 싶어서
