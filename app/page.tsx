@@ -95,246 +95,229 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] text-white">
+      {/* Gradient overlay */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
-        <div className="absolute left-0 top-0 h-[600px] w-[600px] rounded-full bg-primary-500/5 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-[700px] w-[700px] rounded-full bg-success-500/3 blur-3xl" />
+        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
-        <div className="mb-12 lg:mb-16 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="PLAB Manager" className="h-10 sm:h-12" />
-          </div>
-          <div className="flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-semibold text-neutral-700 shadow-sm">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />
+      {/* Decorative elements */}
+      <div className="pointer-events-none absolute bottom-20 right-20 h-96 w-96 rounded-full bg-[#5dd9d1]/10 blur-3xl" />
+      <div className="pointer-events-none absolute top-40 left-20 h-80 w-80 rounded-full bg-purple-400/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 min-h-screen flex flex-col justify-center">
+        {/* Header */}
+        <div className="absolute top-6 sm:top-8 lg:top-12 right-4 sm:right-6 lg:right-8">
+          <div className="flex items-center gap-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-xs font-semibold text-white">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-success-400" />
             실습 세션 자동 진행 · 보안 전송
           </div>
         </div>
 
-        <div className="grid items-start gap-12 lg:gap-16 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="space-y-10">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-primary-200 bg-primary-50 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-primary-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary-500 animate-pulse" />
-              Online Training
+        {/* Main Content */}
+        <div className="grid items-start gap-8 lg:gap-12 lg:grid-cols-[1fr_0.85fr]">
+          {/* Left Section - Hero Content */}
+          <section className="space-y-8 lg:space-y-10">
+            <div className="space-y-4">
+              <img src="/logo.png" alt="플랩" className="h-12 sm:h-14 brightness-0 invert" />
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary-400 animate-pulse" />
+                Online Training
+              </div>
             </div>
 
             <div className="space-y-6">
-              <div className="flex items-center gap-8">
-                <div className="flex-1">
-                  <h1 className="text-4xl font-display font-bold leading-[1.15] text-neutral-900 sm:text-5xl lg:text-6xl">
-                    현장감 넘치는{' '}
-                    <span className="text-primary-500">
-                      매니저 온라인 실습
-                    </span>
-                    <br />
-                    으로 바로 연결되세요.
-                  </h1>
-                </div>
-                <div className="hidden lg:block flex-shrink-0">
-                  <img
-                    src="/character.png"
-                    alt="PLAB Character"
-                    className="w-48 h-48 object-contain drop-shadow-xl"
-                  />
-                </div>
-              </div>
-              <p className="max-w-2xl text-lg leading-relaxed text-neutral-600">
-                경기 전/중/후에 필요한 운영 체크리스트, 문제 해결 흐름, 커뮤니케이션 팁을 한 번에 체득하는 집중 과정입니다. 입력한 정보로 맞춤 챕터가 자동 배정됩니다.
+              <h1 className="text-3xl font-display font-bold leading-[1.2] text-white sm:text-4xl lg:text-5xl xl:text-6xl">
+                현장감 넘치는
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5dd9d1] to-[#7bbcff]">
+                  플랩매니저 온라인 실습
+                </span>
+              </h1>
+              <p className="max-w-2xl text-base lg:text-lg leading-relaxed text-white/80">
+                경기 전/중/후에 필요한 운영 체크리스트, 문제 해결 흐름, 커뮤니케이션 팁을 한 번에 체득하는 집중 과정입니다.
               </p>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
-                <p className="text-sm font-medium text-neutral-500">예상 소요</p>
-                <p className="mt-2 text-4xl font-bold text-neutral-900">30-40<span className="text-2xl text-primary-500">분</span></p>
-                <p className="mt-1 text-xs text-neutral-600">집중 모듈 3개</p>
-              </div>
-              <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
-                <p className="text-sm font-medium text-neutral-500">학습 방식</p>
-                <p className="mt-2 text-4xl font-bold text-neutral-900">실습형</p>
-                <p className="mt-1 text-xs text-neutral-600">영상 + 체크포인트</p>
-              </div>
-              <div className="group rounded-xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
-                <p className="text-sm font-medium text-neutral-500">즉시 시작</p>
-                <p className="mt-2 text-4xl font-bold text-neutral-900">자동 인증</p>
-                <p className="mt-1 text-xs text-neutral-600">지원 후 바로 진입</p>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between gap-3 mb-6">
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-neutral-500 font-semibold mb-1">
-                    Learning Path
-                  </p>
-                  <p className="text-lg font-bold text-neutral-900">
-                    진행 흐름 미리보기
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 rounded-full border border-success-200 bg-success-50 px-3.5 py-1.5 text-[11px] font-bold text-success-700">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-success-500" />
-                  실시간 체크
-                </div>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-3">
-                {highlightPoints.map((point, index) => (
-                  <div
-                    key={point.title}
-                    className="group rounded-lg border border-neutral-200 bg-neutral-50 p-4 transition-all hover:border-primary-300 hover:shadow-sm"
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-500 text-xs font-bold text-white">
-                        0{index + 1}
-                      </span>
-                      <p className="text-sm font-bold text-neutral-900">{point.title}</p>
-                    </div>
-                    <p className="text-sm leading-relaxed text-neutral-600">
-                      {point.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
             </div>
           </section>
 
-          <section>
-            <div className="relative overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-lg">
-              <div className="relative p-6 sm:p-8 lg:p-10">
-                <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          {/* Right Section - Form */}
+          <section className="relative">
+            {/* Glassmorphism Card */}
+            <div className="relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
+              <div className="relative p-6 sm:p-8">
+                <div className="mb-6 flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-neutral-500 font-bold mb-1">
+                    <p className="text-xs uppercase tracking-[0.16em] text-white/60 font-bold mb-1">
                       지원서
                     </p>
-                    <h2 className="text-2xl sm:text-3xl font-display font-bold text-neutral-900">
+                    <h2 className="text-xl sm:text-2xl font-display font-bold text-white">
                       매니저 등록 정보
                     </h2>
                   </div>
-                  <div className="flex items-center gap-2 rounded-full border border-success-200 bg-success-50 px-4 py-2 text-[11px] font-bold text-success-700">
-                    <span className="h-2 w-2 rounded-full bg-success-500" />
+                  <div className="flex items-center gap-2 rounded-full bg-success-500/20 backdrop-blur-sm border border-success-400/30 px-3 py-1.5 text-[10px] font-bold text-success-100">
+                    <span className="h-1.5 w-1.5 rounded-full bg-success-400" />
                     암호화 전송
                   </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="space-y-2.5">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
                     <label
                       htmlFor="name"
-                      className="block text-sm font-bold text-neutral-700"
+                      className="block text-sm font-bold text-white/90"
                     >
-                      이름 <span className="text-accent-500">*</span>
+                      이름
                     </label>
-                    <input
-                      type="text"
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 placeholder:text-neutral-400 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
-                      placeholder="홍길동"
-                      disabled={loading}
-                    />
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 pl-12 pr-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all focus:border-white/40 focus:bg-white/15 disabled:opacity-60"
+                        placeholder=""
+                        disabled={loading}
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-2">
                     <label
                       htmlFor="phone"
-                      className="block text-sm font-bold text-neutral-700"
+                      className="block text-sm font-bold text-white/90"
                     >
-                      전화번호 <span className="text-accent-500">*</span>
+                      전화번호
                     </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 placeholder:text-neutral-400 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
-                      placeholder="010-1234-5678"
-                      disabled={loading}
-                    />
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                      </div>
+                      <input
+                        type="tel"
+                        id="phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 pl-12 pr-4 py-3.5 text-white placeholder:text-white/40 outline-none transition-all focus:border-white/40 focus:bg-white/15 disabled:opacity-60"
+                        placeholder=""
+                        disabled={loading}
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-2">
                     <label
                       htmlFor="region"
-                      className="block text-sm font-bold text-neutral-700"
+                      className="block text-sm font-bold text-white/90"
                     >
-                      지역 <span className="text-accent-500">*</span>
+                      지역
                     </label>
-                    <select
-                      id="region"
-                      value={region}
-                      onChange={(e) => setRegion(e.target.value)}
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
-                      disabled={loading}
-                    >
-                      <option value="">선택해주세요</option>
-                      <option value="서울">서울</option>
-                      <option value="경기">경기</option>
-                      <option value="인천">인천</option>
-                      <option value="강원">강원</option>
-                      <option value="충북">충북</option>
-                      <option value="충남">충남</option>
-                      <option value="대전">대전</option>
-                      <option value="세종">세종</option>
-                      <option value="전북">전북</option>
-                      <option value="전남">전남</option>
-                      <option value="광주">광주</option>
-                      <option value="경북">경북</option>
-                      <option value="경남">경남</option>
-                      <option value="대구">대구</option>
-                      <option value="울산">울산</option>
-                      <option value="부산">부산</option>
-                      <option value="제주">제주</option>
-                    </select>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <select
+                        id="region"
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
+                        className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 pl-12 pr-4 py-3.5 text-white outline-none transition-all focus:border-white/40 focus:bg-white/15 disabled:opacity-60 appearance-none cursor-pointer"
+                        disabled={loading}
+                      >
+                        <option value="" className="bg-neutral-800 text-white">선택해주세요</option>
+                        <option value="서울" className="bg-neutral-800 text-white">서울</option>
+                        <option value="경기" className="bg-neutral-800 text-white">경기</option>
+                        <option value="인천" className="bg-neutral-800 text-white">인천</option>
+                        <option value="강원" className="bg-neutral-800 text-white">강원</option>
+                        <option value="충북" className="bg-neutral-800 text-white">충북</option>
+                        <option value="충남" className="bg-neutral-800 text-white">충남</option>
+                        <option value="대전" className="bg-neutral-800 text-white">대전</option>
+                        <option value="세종" className="bg-neutral-800 text-white">세종</option>
+                        <option value="전북" className="bg-neutral-800 text-white">전북</option>
+                        <option value="전남" className="bg-neutral-800 text-white">전남</option>
+                        <option value="광주" className="bg-neutral-800 text-white">광주</option>
+                        <option value="경북" className="bg-neutral-800 text-white">경북</option>
+                        <option value="경남" className="bg-neutral-800 text-white">경남</option>
+                        <option value="대구" className="bg-neutral-800 text-white">대구</option>
+                        <option value="울산" className="bg-neutral-800 text-white">울산</option>
+                        <option value="부산" className="bg-neutral-800 text-white">부산</option>
+                        <option value="제주" className="bg-neutral-800 text-white">제주</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-2">
                     <label
                       htmlFor="applicationReason"
-                      className="block text-sm font-bold text-neutral-700"
+                      className="block text-sm font-bold text-white/90"
                     >
-                      지원동기 <span className="text-accent-500">*</span>
+                      지원동기
                     </label>
-                    <select
-                      id="applicationReason"
-                      value={applicationReason}
-                      onChange={(e) => setApplicationReason(e.target.value)}
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 outline-none transition-all focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60 disabled:bg-neutral-100"
-                      disabled={loading}
-                    >
-                      <option value="">선택해주세요</option>
-                      <option value="친구/지인 추천">친구/지인 추천</option>
-                      <option value="SNS/광고를 보고">SNS/광고를 보고</option>
-                      <option value="금전적 이유">금전적 이유</option>
-                      <option value="축구/풋살에 관심이 많아서">
-                        축구/풋살에 관심이 많아서
-                      </option>
-                      <option value="플랩풋볼 매니저에 관심이 있어서">
-                        플랩풋볼 매니저에 관심이 있어서
-                      </option>
-                      <option value="새로운 경험을 해보고 싶어서">
-                        새로운 경험을 해보고 싶어서
-                      </option>
-                    </select>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                        </svg>
+                      </div>
+                      <select
+                        id="applicationReason"
+                        value={applicationReason}
+                        onChange={(e) => setApplicationReason(e.target.value)}
+                        className="w-full rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 pl-12 pr-4 py-3.5 text-white outline-none transition-all focus:border-white/40 focus:bg-white/15 disabled:opacity-60 appearance-none cursor-pointer"
+                        disabled={loading}
+                      >
+                        <option value="" className="bg-neutral-800 text-white">선택해주세요</option>
+                        <option value="친구/지인 추천" className="bg-neutral-800 text-white">친구/지인 추천</option>
+                        <option value="SNS/광고를 보고" className="bg-neutral-800 text-white">SNS/광고를 보고</option>
+                        <option value="금전적 이유" className="bg-neutral-800 text-white">금전적 이유</option>
+                        <option value="축구/풋살에 관심이 많아서" className="bg-neutral-800 text-white">
+                          축구/풋살에 관심이 많아서
+                        </option>
+                        <option value="플랩풋볼 매니저에 관심이 있어서" className="bg-neutral-800 text-white">
+                          플랩풋볼 매니저에 관심이 있어서
+                        </option>
+                        <option value="새로운 경험을 해보고 싶어서" className="bg-neutral-800 text-white">
+                          새로운 경험을 해보고 싶어서
+                        </option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-4">
+                  <div className="flex items-start gap-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 px-4 py-4">
                     <input
                       type="checkbox"
                       id="agree"
                       checked={agreed}
                       onChange={(e) => setAgreed(e.target.checked)}
-                      className="mt-0.5 h-5 w-5 rounded border-neutral-300 text-primary-500 outline-none transition-all focus:ring-2 focus:ring-primary-500/20 disabled:opacity-60"
+                      className="mt-0.5 h-5 w-5 rounded border-white/30 bg-white/10 text-primary-500 outline-none transition-all focus:ring-2 focus:ring-white/30 disabled:opacity-60 cursor-pointer"
                       disabled={loading}
                     />
-                    <label htmlFor="agree" className="text-sm font-medium text-neutral-700 leading-relaxed">
+                    <label htmlFor="agree" className="text-sm font-medium text-white/80 leading-relaxed cursor-pointer">
                       개인정보 수집 및 이용에 동의합니다 (필수)
                     </label>
                   </div>
 
                   {error && (
-                    <div className="rounded-lg border border-accent-200 bg-accent-50 px-4 py-3.5 text-sm font-medium text-accent-700">
+                    <div className="rounded-xl border border-red-400/30 bg-red-500/10 backdrop-blur-sm px-4 py-3.5 text-sm font-medium text-red-200">
                       {error}
                     </div>
                   )}
@@ -342,7 +325,7 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-primary-500 px-6 py-4 text-base font-bold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] px-6 py-4 text-base font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02] focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
                   >
                     <span className="relative font-bold">
                       {loading ? '처리 중...' : '시작하기'}
@@ -351,10 +334,23 @@ export default function HomePage() {
                   </button>
                 </form>
 
-                <p className="mt-8 text-center text-sm text-neutral-600 leading-relaxed">
-                  예상 소요 시간: 약 30-40분 · 모든 정보는 인증 후 학습에만 사용됩니다.
+                <p className="mt-6 text-center text-xs text-white/60 leading-relaxed">
+                  예상 소요 시간: 약 30-40분 · 모든 정보는 학습에만 사용됩니다.
                 </p>
               </div>
+            </div>
+
+            {/* Decorative sparkle */}
+            <div className="absolute -bottom-4 -right-4 w-20 h-20 opacity-50">
+              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 0L54.5 45.5L100 50L54.5 54.5L50 100L45.5 54.5L0 50L45.5 45.5L50 0Z" fill="url(#sparkle-gradient)"/>
+                <defs>
+                  <linearGradient id="sparkle-gradient" x1="0" y1="0" x2="100" y2="100">
+                    <stop offset="0%" stopColor="#5dd9d1" stopOpacity="0.5"/>
+                    <stop offset="100%" stopColor="#7bbcff" stopOpacity="0.3"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
           </section>
         </div>
