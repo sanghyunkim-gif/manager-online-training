@@ -181,13 +181,14 @@ export default function QuizPage() {
 
   if (loading) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-neutral-50">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8]">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
+          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
         </div>
-        <div className="relative flex flex-col items-center gap-5 rounded-xl border border-neutral-200 bg-white px-12 py-10 text-center shadow-lg">
-          <div className="h-14 w-14 animate-spin rounded-full border-4 border-neutral-200 border-t-primary-500" />
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-600">
+        <div className="relative flex flex-col items-center gap-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-12 py-10 text-center shadow-2xl">
+          <div className="h-14 w-14 animate-spin rounded-full border-4 border-white/20 border-t-white" />
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-white">
             문제를 불러오는 중...
           </p>
         </div>
@@ -197,19 +198,20 @@ export default function QuizPage() {
 
   if (error || !chapter || !session || questions.length === 0) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-neutral-50 px-6 py-10">
+      <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] px-6 py-10">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
+          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
         </div>
-        <div className="relative mx-auto max-w-xl rounded-xl border border-neutral-200 bg-white p-8 text-center shadow-lg">
+        <div className="relative mx-auto max-w-xl rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-8 text-center shadow-2xl">
           <div className="mb-3 text-3xl">⚠️</div>
-          <h2 className="text-xl font-bold mb-2 text-neutral-900">오류</h2>
-          <p className="mb-6 text-neutral-600">
+          <h2 className="text-xl font-bold mb-2 text-white">오류</h2>
+          <p className="mb-6 text-white/80">
             {error || '문제를 불러올 수 없습니다.'}
           </p>
           <button
             onClick={() => router.push(`/learn/chapter/${chapterId}`)}
-            className="rounded-full bg-primary-500 px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-primary-600"
+            className="rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02]"
           >
             돌아가기
           </button>
@@ -222,9 +224,10 @@ export default function QuizPage() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-neutral-50 pb-12">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] pb-12">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
+        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
       </div>
       <ProgressHeader
         userName={session.userName}

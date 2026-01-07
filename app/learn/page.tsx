@@ -69,13 +69,14 @@ export default function LearnPage() {
 
   if (loading) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-neutral-50">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8]">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
+          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
         </div>
-        <div className="relative flex flex-col items-center gap-5 rounded-xl border border-neutral-200 bg-white px-12 py-10 text-center shadow-lg">
-          <div className="h-14 w-14 animate-spin rounded-full border-4 border-neutral-200 border-t-primary-500" />
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-600">
+        <div className="relative flex flex-col items-center gap-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-12 py-10 text-center shadow-2xl">
+          <div className="h-14 w-14 animate-spin rounded-full border-4 border-white/20 border-t-white" />
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-white">
             학습 준비 중...
           </p>
         </div>
@@ -85,53 +86,54 @@ export default function LearnPage() {
 
   if (error) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-neutral-50 px-6 py-10">
+      <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] px-6 py-10">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(21,112,255,0.06),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,204,123,0.04),transparent_50%)]" />
+          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
         </div>
 
-        <div className="relative mx-auto max-w-4xl space-y-8 rounded-xl border border-neutral-200 bg-white p-10 shadow-lg">
+        <div className="relative mx-auto max-w-4xl space-y-8 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-10 shadow-2xl">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.16em] text-neutral-500 font-bold mb-1">
+              <p className="text-xs uppercase tracking-[0.16em] text-white/60 font-bold mb-1">
                 환영합니다
               </p>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-900">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white">
                 {session?.userName}님, 학습을 시작해요
               </h1>
             </div>
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent-50 border border-accent-200 text-3xl">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 border border-white/20 text-3xl">
               ⚠️
             </div>
           </div>
 
-          <div className="rounded-lg border border-accent-200 bg-accent-50 p-6">
-            <h2 className="text-lg font-bold mb-3 text-accent-700">오류</h2>
-            <p className="text-sm text-accent-600 leading-relaxed">{error}</p>
+          <div className="rounded-lg border border-red-400/30 bg-red-500/10 backdrop-blur-sm p-6">
+            <h2 className="text-lg font-bold mb-3 text-red-200">오류</h2>
+            <p className="text-sm text-red-100 leading-relaxed">{error}</p>
           </div>
 
-          <div className="grid gap-5 rounded-lg border border-neutral-200 bg-neutral-50 p-6 sm:grid-cols-3">
-            <div className="rounded-lg border border-neutral-200 bg-white p-5">
-              <p className="text-xs uppercase tracking-[0.12em] text-neutral-500 font-bold mb-2">
+          <div className="grid gap-5 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 p-6 sm:grid-cols-3">
+            <div className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 p-5">
+              <p className="text-xs uppercase tracking-[0.12em] text-white/60 font-bold mb-2">
                 준비 1
               </p>
-              <p className="text-sm font-bold text-neutral-900 leading-relaxed">
+              <p className="text-sm font-bold text-white leading-relaxed">
                 Airtable에 챕터/문제 추가
               </p>
             </div>
-            <div className="rounded-lg border border-neutral-200 bg-white p-5">
-              <p className="text-xs uppercase tracking-[0.12em] text-neutral-500 font-bold mb-2">
+            <div className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 p-5">
+              <p className="text-xs uppercase tracking-[0.12em] text-white/60 font-bold mb-2">
                 준비 2
               </p>
-              <p className="text-sm font-bold text-neutral-900 leading-relaxed">
+              <p className="text-sm font-bold text-white leading-relaxed">
                 .env.local에 API KEY/BASE ID 설정
               </p>
             </div>
-            <div className="rounded-lg border border-neutral-200 bg-white p-5">
-              <p className="text-xs uppercase tracking-[0.12em] text-neutral-500 font-bold mb-2">
+            <div className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 p-5">
+              <p className="text-xs uppercase tracking-[0.12em] text-white/60 font-bold mb-2">
                 준비 3
               </p>
-              <p className="text-sm font-bold text-neutral-900 leading-relaxed">
+              <p className="text-sm font-bold text-white leading-relaxed">
                 챕터 추가 후 새로고침
               </p>
             </div>
@@ -139,7 +141,7 @@ export default function LearnPage() {
 
           <button
             onClick={() => window.location.reload()}
-            className="inline-flex items-center justify-center rounded-full bg-primary-500 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-xl focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02] focus:ring-2 focus:ring-white/50"
           >
             새로고침
           </button>

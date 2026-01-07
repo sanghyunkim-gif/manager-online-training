@@ -4,6 +4,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '플랩풋볼 매니저 온라인 실습',
   description: '플랩풋볼 매니저 지원을 위한 온라인 교육 프로그램',
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({
