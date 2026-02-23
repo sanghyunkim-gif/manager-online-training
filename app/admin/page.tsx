@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { AirtableRecord, User } from '@/types';
+import type { DbUser } from '@/types';
 import type {
   ChapterStats,
   QuestionStats,
   DropoffAnalysis,
   RegionStats,
-} from '@/lib/airtable/stats';
+} from '@/lib/supabase/stats';
 
 type TabType = 'users' | 'chapters' | 'questions' | 'dropoff' | 'regions';
 
 export default function AdminPage() {
   const router = useRouter();
-  const [users, setUsers] = useState<AirtableRecord<User>[]>([]);
+  const [users, setUsers] = useState<DbUser[]>([]);
   const [chapterStats, setChapterStats] = useState<ChapterStats[]>([]);
   const [questionStats, setQuestionStats] = useState<QuestionStats[]>([]);
   const [dropoffAnalysis, setDropoffAnalysis] =
@@ -28,7 +28,6 @@ export default function AdminPage() {
     'all'
   );
 
-  // 인증 체크
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -64,35 +63,30 @@ export default function AdminPage() {
 
     const fetchData = async () => {
       try {
-        // 사용자 목록 가져오기
         const usersRes = await fetch('/api/admin/users');
         const usersData = await usersRes.json();
         if (usersData.success) {
           setUsers(usersData.data);
         }
 
-        // 챕터별 통계 가져오기
         const chapterStatsRes = await fetch('/api/admin/stats/chapters');
         const chapterStatsData = await chapterStatsRes.json();
         if (chapterStatsData.success) {
           setChapterStats(chapterStatsData.data);
         }
 
-        // 문제별 통계 가져오기
         const questionStatsRes = await fetch('/api/admin/stats/questions');
         const questionStatsData = await questionStatsRes.json();
         if (questionStatsData.success) {
           setQuestionStats(questionStatsData.data);
         }
 
-        // 이탈 분석 가져오기
         const dropoffRes = await fetch('/api/admin/stats/dropoff');
         const dropoffData = await dropoffRes.json();
         if (dropoffData.success) {
           setDropoffAnalysis(dropoffData.data);
         }
 
-        // 지역별 통계 가져오기
         const regionStatsRes = await fetch('/api/admin/stats/regions');
         const regionStatsData = await regionStatsRes.json();
         if (regionStatsData.success) {
@@ -110,17 +104,16 @@ export default function AdminPage() {
 
   const filteredUsers = users.filter((user) => {
     if (filter === 'all') return true;
-    if (filter === 'in_progress')
-      return user.fields.Status === 'In Progress';
-    if (filter === 'completed') return user.fields.Status === 'Completed';
+    if (filter === 'in_progress') return user.status === 'In Progress';
+    if (filter === 'completed') return user.status === 'Completed';
     return true;
   });
 
   const stats = {
     total: users.length,
-    inProgress: users.filter((u) => u.fields.Status === 'In Progress').length,
-    completed: users.filter((u) => u.fields.Status === 'Completed').length,
-    blocked: users.filter((u) => u.fields.Status === 'Blocked').length,
+    inProgress: users.filter((u) => u.status === 'In Progress').length,
+    completed: users.filter((u) => u.status === 'Completed').length,
+    blocked: users.filter((u) => u.status === 'Blocked').length,
   };
 
   if (loading) {
@@ -286,47 +279,47 @@ export default function AdminPage() {
                             className="transition hover:bg-white/10"
                           >
                             <td className="whitespace-nowrap px-6 py-4 text-sm font-bold text-white">
-                              {user.fields.Name}
+                              {user.name}
                             </td>
                             <td className="whitespace-nowrap px-6 py-4 text-sm text-white">
-                              {user.fields.Phone}
+                              {user.phone}
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">
                               <span
                                 className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-                                  user.fields.Status === 'Completed'
+                                  user.status === 'Completed'
                                     ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white'
-                                    : user.fields.Status === 'In Progress'
+                                    : user.status === 'In Progress'
                                     ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white'
                                     : 'bg-white/10 backdrop-blur-md border border-white/20 text-white'
                                 }`}
                               >
-                                {user.fields.Status === 'Completed'
+                                {user.status === 'Completed'
                                   ? '완료'
-                                  : user.fields.Status === 'In Progress'
+                                  : user.status === 'In Progress'
                                   ? '진행 중'
                                   : '차단'}
                               </span>
                             </td>
                             <td className="whitespace-nowrap px-6 py-4 text-sm text-white">
-                              {user.createdTime
-                                ? new Date(user.createdTime).toLocaleDateString(
+                              {user.created_at
+                                ? new Date(user.created_at).toLocaleDateString(
                                     'ko-KR'
                                   )
                                 : '-'}
                             </td>
                             <td className="whitespace-nowrap px-6 py-4 text-sm text-white">
-                              {user.fields.Completed_At
+                              {user.completed_at
                                 ? new Date(
-                                    user.fields.Completed_At
+                                    user.completed_at
                                   ).toLocaleDateString('ko-KR')
                                 : '-'}
                             </td>
                             <td className="whitespace-nowrap px-6 py-4 text-sm">
-                              {user.fields.Status === 'In Progress' && (
+                              {user.status === 'In Progress' && (
                                 <button
                                   onClick={async () => {
-                                    if (confirm(`${user.fields.Name} 님을 완료 처리하시겠습니까?`)) {
+                                    if (confirm(`${user.name} 님을 완료 처리하시겠습니까?`)) {
                                       try {
                                         const res = await fetch('/api/admin/users/complete', {
                                           method: 'POST',
@@ -390,7 +383,7 @@ export default function AdminPage() {
                         </tr>
                       ) : (
                         chapterStats.map((stat) => (
-                          <tr key={stat.chapterId} className="transition hover:bg-neutral-50">
+                          <tr key={stat.chapterId} className="transition hover:bg-white/10">
                             <td className="whitespace-nowrap px-6 py-4 text-sm font-bold text-white">
                               {stat.order}. {stat.chapterName}
                             </td>
@@ -476,7 +469,7 @@ export default function AdminPage() {
                         </tr>
                       ) : (
                         questionStats.map((stat) => (
-                          <tr key={stat.questionId} className="transition hover:bg-neutral-50">
+                          <tr key={stat.questionId} className="transition hover:bg-white/10">
                             <td className="whitespace-nowrap px-6 py-4 text-sm text-white">
                               {stat.chapterName}
                             </td>
@@ -555,9 +548,9 @@ export default function AdminPage() {
                   <h3 className="text-lg font-bold text-white mb-3">
                     챕터별 이탈자 수
                   </h3>
-                  <div className="overflow-hidden rounded-lg border border-neutral-200">
-                    <table className="min-w-full divide-y divide-neutral-200">
-                      <thead className="bg-neutral-50 text-xs uppercase tracking-[0.08em] text-neutral-600 font-bold">
+                  <div className="overflow-hidden rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+                    <table className="min-w-full divide-y divide-white/20">
+                      <thead className="bg-white/10 text-xs uppercase tracking-[0.08em] text-white font-bold">
                         <tr>
                           {['순위', '챕터', '이탈자 수', '시각화'].map((h) => (
                             <th key={h} className="px-6 py-3 text-left">
@@ -577,16 +570,16 @@ export default function AdminPage() {
                             </td>
                           </tr>
                         ) : (
-                          dropoffAnalysis.chapterDropoffs.map((chapter, idx) => (
-                            <tr key={chapter.chapterId} className="transition hover:bg-neutral-50">
+                          dropoffAnalysis.chapterDropoffs.map((ch, idx) => (
+                            <tr key={ch.chapterId} className="transition hover:bg-white/10">
                               <td className="whitespace-nowrap px-6 py-4 text-sm font-bold text-white">
                                 #{idx + 1}
                               </td>
                               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">
-                                {chapter.order}. {chapter.chapterName}
+                                {ch.order}. {ch.chapterName}
                               </td>
                               <td className="whitespace-nowrap px-6 py-4 text-sm text-white">
-                                {chapter.droppedCount}명
+                                {ch.droppedCount}명
                               </td>
                               <td className="whitespace-nowrap px-6 py-4">
                                 <div className="h-4 w-52 rounded-full bg-neutral-200">
@@ -604,7 +597,7 @@ export default function AdminPage() {
                                       width: `${
                                         dropoffAnalysis.chapterDropoffs[0]
                                           .droppedCount > 0
-                                          ? (chapter.droppedCount /
+                                          ? (ch.droppedCount /
                                               dropoffAnalysis.chapterDropoffs[0]
                                                 .droppedCount) *
                                             100
@@ -654,7 +647,7 @@ export default function AdminPage() {
                         </tr>
                       ) : (
                         regionStats.map((stat) => (
-                          <tr key={stat.region} className="transition hover:bg-neutral-50">
+                          <tr key={stat.region} className="transition hover:bg-white/10">
                             <td className="whitespace-nowrap px-6 py-4 text-sm font-bold text-white">
                               {stat.region}
                             </td>
@@ -710,10 +703,10 @@ export default function AdminPage() {
 
         <div className="mt-8 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-6">
           <h3 className="font-bold text-white mb-2">
-            💡 Airtable에서 더 자세한 정보 확인
+            Supabase에서 더 자세한 정보 확인
           </h3>
           <p className="text-sm text-white">
-            Airtable에서 개별 사용자의 상세한 학습 기록, 시도별 데이터 등 더
+            Supabase 대시보드에서 개별 사용자의 상세한 학습 기록, 시도별 데이터 등 더
             자세한 정보를 확인할 수 있습니다.
           </p>
         </div>

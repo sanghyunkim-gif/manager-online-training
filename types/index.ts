@@ -1,97 +1,28 @@
-// Airtable 레코드 타입
-export interface AirtableRecord<T> {
-  id: string;
-  fields: T;
-  createdTime: string;
-}
-
-// 챕터 타입
-export interface Chapter {
-  Name: string;
-  Order: number;
-  Video_URL: string;
-  Video_Duration: number;
-  Required_Watch_Percentage?: number;
-  Description?: string;
-  Questions_Count: number;
-  Status: 'Active' | 'Inactive';
-}
-
-// 문제 타입
-export interface Question {
-  Chapter_Category: string[];
-  Question_Text: string;
-  Question_Image?: Array<{ url: string }>;
-  Option_1: string;
-  Option_2: string;
-  Option_3: string;
-  Option_4: string;
-  Correct_Answer: '1' | '2' | '3' | '4';
-  Explanation?: string;
-  Difficulty?: 'Easy' | 'Medium' | 'Hard';
-  Total_Attempts?: number;
-  Correct_Count?: number;
-  Incorrect_Count?: number;
-  Status: 'Active' | 'Inactive';
-}
-
-// 사용자 타입
-export interface User {
-  Name: string;
-  Phone: string;
-  Email?: string;
-  Region?: string;
-  Application_Reason?: string;
-  Status: 'In Progress' | 'Completed' | 'Blocked';
-  Session_Token?: string;
-  Current_Chapter?: string[];
-  Total_Study_Time?: number;
-  Created_At?: string;
-  Completed_At?: string;
-}
-
-// 학습 진행 상황 타입
-export interface UserProgress {
-  User: string[];
-  Chapter: string[];
-  Video_Watched: boolean;
-  Video_Watch_Time: number;
-  Questions_Assigned?: string;
-  Questions_Answered?: number;
-  All_Correct: boolean;
-  Chapter_Completed: boolean;
-  Started_At?: string;
-}
-
-// 챕터 학습 기록 타입
-export interface ChapterHistory {
-  User: string[];
-  Chapter: string[];
-  Attempt_Number: number;
-  Start_Time: string;
-  End_Time?: string;
-  Video_Watch_Time: number;
-  Questions_Correct?: number;
-  Questions_Total?: number;
-  Status: 'In Progress' | 'Completed';
-}
-
-// 문제 풀이 기록 타입
-export interface QuestionAttempt {
-  User: string[];
-  Question: string[];
-  Chapter: string[];
-  User_Answer: '1' | '2' | '3' | '4';
-  Attempt_Number: number;
-  Time_Spent?: number;
-}
+// Supabase DB 타입 re-export
+export type { DbChapter } from '@/lib/supabase/chapters';
+export type { DbUser } from '@/lib/supabase/users';
+export type {
+  DbUserProgress,
+  DbChapterHistory,
+  DbQuestionAttempt,
+} from '@/lib/supabase/progress';
+export type { DbQuestion } from '@/lib/supabase/questions';
+export type {
+  ChapterStats,
+  QuestionStats,
+  DropoffAnalysis,
+  RegionStats,
+} from '@/lib/supabase/stats';
 
 // API 응답 타입
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
+  allCompleted?: boolean;
+  completedChapters?: number;
+  totalChapters?: number;
 }
 
 // 세션 타입

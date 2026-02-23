@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRandomQuestions } from '@/lib/airtable/questions';
-import { getChapterById } from '@/lib/airtable/chapters';
-import {
-  mockChapters,
-  getMockQuestionsByChapter,
-} from '@/lib/mock-data';
+import { getRandomQuestions } from '@/lib/supabase/questions';
+import { getChapterById } from '@/lib/supabase/chapters';
 import type { ApiResponse } from '@/types';
-
-const USE_MOCK = process.env.USE_MOCK_DATA === 'true';
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,50 +18,24 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let questions;
-
-    if (USE_MOCK) {
-      // Mock 데이터 사용
-      const chapter = mockChapters.find((c) => c.id === chapterId);
-      if (!chapter) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: '챕터를 찾을 수 없습니다.',
-          } as ApiResponse,
-          { status: 404 }
-        );
-      }
-
-      const allQuestions = getMockQuestionsByChapter(chapterId);
-      // 랜덤하게 섞기
-      questions = allQuestions
-        .sort(() => Math.random() - 0.5)
-        .slice(0, chapter.fields.Questions_Count);
-    } else {
-      // 실제 Airtable 사용
-      const chapter = await getChapterById(chapterId);
-      if (!chapter) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: '챕터를 찾을 수 없습니다.',
-          } as ApiResponse,
-          { status: 404 }
-        );
-      }
-
-      questions = await getRandomQuestions(
-        chapterId,
-        chapter.fields.Questions_Count
+    const chapter = await getChapterById(chapterId);
+    if (!chapter) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: '챕터를 찾을 수 없습니다.',
+        } as ApiResponse,
+        { status: 404 }
       );
     }
+
+    const questions = await getRandomQuestions(chapterId, chapter.questions_count);
 
     if (questions.length === 0) {
       return NextResponse.json(
         {
           success: false,
-          error: '문제가 없습니다. Airtable에 문제를 추가해주세요.',
+          error: '문제가 없습니다. 문제를 추가해주세요.',
         } as ApiResponse,
         { status: 404 }
       );
@@ -77,13 +45,13 @@ export async function GET(request: NextRequest) {
       success: true,
       data: questions,
     } as ApiResponse);
-  } catch (error: any) {
-    console.error('문제 조회 오류:', error);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '문제를 불러올 수 없습니다.';
 
     return NextResponse.json(
       {
         success: false,
-        error: error.message || '문제를 불러올 수 없습니다.',
+        error: message,
       } as ApiResponse,
       { status: 500 }
     );

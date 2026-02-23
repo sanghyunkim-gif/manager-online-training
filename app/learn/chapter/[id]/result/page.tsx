@@ -5,7 +5,7 @@ import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ProgressHeader from '@/components/layout/ProgressHeader';
-import type { Session, AirtableRecord, Chapter } from '@/types';
+import type { Session, DbChapter, DbUserProgress } from '@/types';
 
 interface ResultData {
   allCorrect: boolean;
@@ -28,15 +28,14 @@ export default function ResultPage() {
   const chapterId = params.id as string;
 
   const [session, setSession] = useState<Session | null>(null);
-  const [chapter, setChapter] = useState<AirtableRecord<Chapter> | null>(null);
-  const [allChapters, setAllChapters] = useState<AirtableRecord<Chapter>[]>([]);
+  const [chapter, setChapter] = useState<DbChapter | null>(null);
+  const [allChapters, setAllChapters] = useState<DbChapter[]>([]);
   const [completedChapters, setCompletedChapters] = useState<number[]>([]);
   const [resultData, setResultData] = useState<ResultData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const init = async () => {
-      // 세션 확인
       const sessionData = localStorage.getItem('session');
       if (!sessionData) {
         router.push('/');
@@ -46,10 +45,8 @@ export default function ResultPage() {
       const parsedSession: Session = JSON.parse(sessionData);
       setSession(parsedSession);
 
-      // 결과 데이터 확인
       const resultStr = sessionStorage.getItem(`result_${chapterId}`);
       if (!resultStr) {
-        // 결과가 없으면 퀴즈 페이지로
         router.push(`/learn/chapter/${chapterId}/quiz`);
         return;
       }
@@ -57,12 +54,11 @@ export default function ResultPage() {
       const result: ResultData = JSON.parse(resultStr);
       setResultData(result);
 
-      // 챕터 정보 가져오기
       const chaptersRes = await fetch('/api/chapters/list');
       const chaptersData = await chaptersRes.json();
 
       if (chaptersData.success) {
-        const chapters: AirtableRecord<Chapter>[] = chaptersData.data;
+        const chapters: DbChapter[] = chaptersData.data;
         setAllChapters(chapters);
 
         const currentChapter = chapters.find((c) => c.id === chapterId);
@@ -70,7 +66,6 @@ export default function ResultPage() {
           setChapter(currentChapter);
         }
 
-        // 진행 상황 가져오기
         const progressRes = await fetch(
           `/api/progress/get?userId=${parsedSession.userId}`
         );
@@ -78,11 +73,10 @@ export default function ResultPage() {
 
         if (progressData.success && progressData.data.length > 0) {
           const completed = progressData.data
-            .filter((p: any) => p.fields.Chapter_Completed)
-            .map((p: any) => {
-              const chapterLink = p.fields.Chapter[0];
-              const chapter = chapters.find((c) => c.id === chapterLink);
-              return chapter?.fields.Order || 0;
+            .filter((p: DbUserProgress) => p.chapter_completed)
+            .map((p: DbUserProgress) => {
+              const ch = chapters.find((c) => c.id === p.chapter_id);
+              return ch?.order || 0;
             });
           setCompletedChapters(completed);
         }
@@ -95,16 +89,13 @@ export default function ResultPage() {
   }, [chapterId, router]);
 
   const handleRetry = () => {
-    // 결과 데이터 삭제
     sessionStorage.removeItem(`result_${chapterId}`);
-    // 챕터 학습 페이지로 (영상은 재시청 불필요)
     router.push(`/learn/chapter/${chapterId}/quiz`);
   };
 
   const handleNext = async () => {
     if (!session || !allChapters.length) return;
 
-    // 챕터 완료 처리
     await fetch('/api/progress/complete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -114,16 +105,13 @@ export default function ResultPage() {
       }),
     });
 
-    // 결과 데이터 삭제
     sessionStorage.removeItem(`result_${chapterId}`);
 
-    // 다음 챕터 찾기
     const currentChapterIndex = allChapters.findIndex((c) => c.id === chapterId);
     if (currentChapterIndex < allChapters.length - 1) {
       const nextChapter = allChapters[currentChapterIndex + 1];
       router.push(`/learn/chapter/${nextChapter.id}`);
     } else {
-      // 마지막 챕터면 완료 페이지로
       router.push('/complete');
     }
   };
@@ -157,10 +145,10 @@ export default function ResultPage() {
       </div>
       <ProgressHeader
         userName={session.userName}
-        currentChapterOrder={chapter.fields.Order}
+        currentChapterOrder={chapter.order}
         totalChapters={allChapters.length}
         completedChapters={completedChapters}
-        chapterName={`${chapter.fields.Order}장. ${chapter.fields.Name} - 결과`}
+        chapterName={`${chapter.order}장. ${chapter.name} - 결과`}
       />
 
       <div className="relative mx-auto max-w-5xl px-6 py-8">
@@ -172,7 +160,7 @@ export default function ResultPage() {
               </div>
               <h1 className="text-3xl font-extrabold mb-2 text-white">축하합니다!</h1>
               <p className="text-lg text-white mb-8">
-                {chapter.fields.Order}장을 완료했습니다.
+                {chapter.order}장을 완료했습니다.
               </p>
 
               <div className="mb-8 inline-flex items-center gap-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-6 py-4">
@@ -249,7 +237,7 @@ export default function ResultPage() {
                       {item.explanation && (
                         <div className="rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-4">
                           <p className="text-xs font-bold text-white mb-2">
-                            💡 해설:
+                            해설:
                           </p>
                           <div className="prose prose-sm max-w-none text-white">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>

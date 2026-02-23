@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateChapter } from '@/lib/airtable/chapters';
+import { updateChapter } from '@/lib/supabase/chapters';
 import type { ApiResponse } from '@/types';
 
 export async function PUT(request: NextRequest) {
@@ -17,19 +17,18 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Airtable 업데이트
     const updated = await updateChapter(chapterId, updates);
     return NextResponse.json({
       success: true,
       data: updated,
     } as ApiResponse);
-  } catch (error: any) {
-    console.error('챕터 수정 오류:', error);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '챕터를 수정할 수 없습니다.';
 
     return NextResponse.json(
       {
         success: false,
-        error: error.message || '챕터를 수정할 수 없습니다.',
+        error: message,
       } as ApiResponse,
       { status: 500 }
     );

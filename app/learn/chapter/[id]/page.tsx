@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import VideoPlayer from '@/components/ui/VideoPlayer';
-import type { Session, AirtableRecord, Chapter } from '@/types';
+import type { Session, DbChapter, DbUserProgress } from '@/types';
 
 export default function ChapterPage() {
   const router = useRouter();
@@ -13,12 +13,8 @@ export default function ChapterPage() {
   const chapterId = params.id as string;
 
   const [session, setSession] = useState<Session | null>(null);
-  const [chapter, setChapter] = useState<AirtableRecord<Chapter> | null>(
-    null
-  );
-  const [allChapters, setAllChapters] = useState<AirtableRecord<Chapter>[]>(
-    []
-  );
+  const [chapter, setChapter] = useState<DbChapter | null>(null);
+  const [allChapters, setAllChapters] = useState<DbChapter[]>([]);
   const [completedChapters, setCompletedChapters] = useState<number[]>([]);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -26,7 +22,6 @@ export default function ChapterPage() {
 
   useEffect(() => {
     const init = async () => {
-      // 세션 확인
       const sessionData = localStorage.getItem('session');
       if (!sessionData) {
         router.push('/');
@@ -37,7 +32,6 @@ export default function ChapterPage() {
       setSession(parsedSession);
 
       try {
-        // 챕터 목록 가져오기
         const chaptersRes = await fetch('/api/chapters/list');
         const chaptersData = await chaptersRes.json();
 
@@ -45,17 +39,15 @@ export default function ChapterPage() {
           throw new Error('챕터 목록을 불러올 수 없습니다.');
         }
 
-        const chapters: AirtableRecord<Chapter>[] = chaptersData.data;
+        const chapters: DbChapter[] = chaptersData.data;
         setAllChapters(chapters);
 
-        // 현재 챕터 찾기
         const currentChapter = chapters.find((c) => c.id === chapterId);
         if (!currentChapter) {
           throw new Error('챕터를 찾을 수 없습니다.');
         }
         setChapter(currentChapter);
 
-        // 진행 상황 가져오기
         const progressRes = await fetch(
           `/api/progress/get?userId=${parsedSession.userId}`
         );
@@ -63,28 +55,26 @@ export default function ChapterPage() {
 
         if (progressData.success && progressData.data.length > 0) {
           const completed = progressData.data
-            .filter((p: any) => p.fields.Chapter_Completed)
-            .map((p: any) => {
-              const chapterLink = p.fields.Chapter[0];
-              const chapter = chapters.find((c) => c.id === chapterLink);
-              return chapter?.fields.Order || 0;
+            .filter((p: DbUserProgress) => p.chapter_completed)
+            .map((p: DbUserProgress) => {
+              const ch = chapters.find((c) => c.id === p.chapter_id);
+              return ch?.order || 0;
             });
           setCompletedChapters(completed);
 
-          // 현재 챕터의 진행 상황 확인
           const currentProgress = progressData.data.find(
-            (p: any) => p.fields.Chapter[0] === chapterId
+            (p: DbUserProgress) => p.chapter_id === chapterId
           );
 
-          if (currentProgress?.fields.Video_Watched) {
+          if (currentProgress?.video_watched) {
             setVideoCompleted(true);
           }
         }
 
         setLoading(false);
-      } catch (err: any) {
-        console.error('초기화 오류:', err);
-        setError(err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : '알 수 없는 오류';
+        setError(message);
         setLoading(false);
       }
     };
@@ -106,7 +96,7 @@ export default function ChapterPage() {
           userId: session.userId,
           chapterId,
           watchTime,
-          isWatched: percentage >= (chapter?.fields.Required_Watch_Percentage || 60),
+          isWatched: percentage >= (chapter?.required_watch_percentage || 60),
         }),
       });
     } catch (err) {
@@ -119,7 +109,6 @@ export default function ChapterPage() {
   };
 
   const handleNext = () => {
-    // 문제 풀이 페이지로 이동
     router.push(`/learn/chapter/${chapterId}/quiz`);
   };
 
@@ -148,7 +137,6 @@ export default function ChapterPage() {
           <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
         </div>
         <div className="relative mx-auto max-w-xl rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-8 text-center shadow-2xl">
-          <div className="mb-3 text-3xl">⚠️</div>
           <h2 className="text-xl font-bold mb-2 text-white">오류</h2>
           <p className="mb-6 text-white/80">
             {error || '페이지를 불러올 수 없습니다.'}
@@ -208,10 +196,10 @@ export default function ChapterPage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.14em] text-primary-600 font-bold">
-                    Chapter {chapter.fields.Order}
+                    Chapter {chapter.order}
                   </p>
                   <h1 className="text-3xl font-bold text-neutral-900">
-                    {chapter.fields.Order}장. {chapter.fields.Name}
+                    {chapter.order}장. {chapter.name}
                   </h1>
                 </div>
                 <span className="rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-neutral-700">
@@ -221,23 +209,23 @@ export default function ChapterPage() {
               <div className="my-6 h-px bg-neutral-200" />
 
               <VideoPlayer
-                url={chapter.fields.Video_URL}
-                videoDuration={chapter.fields.Video_Duration}
+                url={chapter.video_url}
+                videoDuration={chapter.video_duration}
                 requiredPercentage={
-                  chapter.fields.Required_Watch_Percentage || 60
+                  chapter.required_watch_percentage || 60
                 }
                 onProgressUpdate={handleProgressUpdate}
                 onComplete={handleVideoComplete}
               />
 
-              {chapter.fields.Description && (
+              {chapter.description && (
                 <div className="mt-8">
                   <h2 className="text-xl font-bold text-neutral-900 mb-4">
-                    📝 학습 자료
+                    학습 자료
                   </h2>
                   <div className="prose prose-sm max-w-none rounded-lg border border-neutral-200 bg-neutral-50 p-6">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {chapter.fields.Description}
+                      {chapter.description}
                     </ReactMarkdown>
                   </div>
                 </div>
@@ -259,7 +247,7 @@ export default function ChapterPage() {
 
               {!videoCompleted && (
                 <p className="mt-2 text-right text-sm text-neutral-600">
-                  영상을 {chapter.fields.Required_Watch_Percentage || 60}% 이상
+                  영상을 {chapter.required_watch_percentage || 60}% 이상
                   시청해야 다음으로 넘어갈 수 있습니다
                 </p>
               )}
@@ -278,10 +266,10 @@ export default function ChapterPage() {
             </div>
 
             <div className="space-y-3">
-              {allChapters.map((ch, index) => {
-                const chapterNum = ch.fields.Order;
+              {allChapters.map((ch) => {
+                const chapterNum = ch.order;
                 const isCompleted = completedChapters.includes(chapterNum);
-                const isCurrent = chapterNum === chapter.fields.Order;
+                const isCurrent = chapterNum === chapter.order;
 
                 return (
                   <div
@@ -307,7 +295,7 @@ export default function ChapterPage() {
                       <p className={`text-sm font-bold truncate ${
                         isCurrent ? 'text-white' : 'text-white/70'
                       }`}>
-                        {chapterNum}장. {ch.fields.Name}
+                        {chapterNum}장. {ch.name}
                       </p>
                       <p className="text-xs text-white/50">
                         {isCompleted ? '완료' : isCurrent ? '진행 중' : '대기'}

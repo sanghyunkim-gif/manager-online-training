@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Session, AirtableRecord, Chapter } from '@/types';
+import type { Session, DbChapter, DbUserProgress } from '@/types';
 
 export default function LearnPage() {
   const router = useRouter();
@@ -12,7 +12,6 @@ export default function LearnPage() {
 
   useEffect(() => {
     const initLearn = async () => {
-      // 세션 확인
       const sessionData = localStorage.getItem('session');
       if (!sessionData) {
         router.push('/');
@@ -23,41 +22,36 @@ export default function LearnPage() {
       setSession(parsedSession);
 
       try {
-        // 챕터 목록 가져오기
         const chaptersRes = await fetch('/api/chapters/list');
         const chaptersData = await chaptersRes.json();
 
         if (!chaptersData.success || chaptersData.data.length === 0) {
-          setError('챕터가 없습니다. Airtable에 챕터를 추가해주세요.');
+          setError('챕터가 없습니다. 챕터를 추가해주세요.');
           setLoading(false);
           return;
         }
 
-        const chapters: AirtableRecord<Chapter>[] = chaptersData.data;
+        const chapters: DbChapter[] = chaptersData.data;
 
-        // 진행 상황 가져오기
         const progressRes = await fetch(
           `/api/progress/get?userId=${parsedSession.userId}`
         );
         const progressData = await progressRes.json();
 
-        // 완료한 챕터 찾기
         let nextChapter = chapters[0];
 
         if (progressData.success && progressData.data.length > 0) {
           const completedChapterIds = progressData.data
-            .filter((p: any) => p.fields.Chapter_Completed)
-            .map((p: any) => p.fields.Chapter[0]);
+            .filter((p: DbUserProgress) => p.chapter_completed)
+            .map((p: DbUserProgress) => p.chapter_id);
 
-          // 완료하지 않은 첫 번째 챕터 찾기
           nextChapter =
             chapters.find((c) => !completedChapterIds.includes(c.id)) ||
             chapters[chapters.length - 1];
         }
 
-        // 챕터 페이지로 리다이렉트
         router.push(`/learn/chapter/${nextChapter.id}`);
-      } catch (err: any) {
+      } catch (err) {
         console.error('학습 초기화 오류:', err);
         setError('학습을 시작할 수 없습니다. 잠시 후 다시 시도해주세요.');
         setLoading(false);
@@ -102,9 +96,6 @@ export default function LearnPage() {
                 {session?.userName}님, 학습을 시작해요
               </h1>
             </div>
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 border border-white/20 text-3xl">
-              ⚠️
-            </div>
           </div>
 
           <div className="rounded-lg border border-red-400/30 bg-red-500/10 backdrop-blur-sm p-6">
@@ -118,7 +109,7 @@ export default function LearnPage() {
                 준비 1
               </p>
               <p className="text-sm font-bold text-white leading-relaxed">
-                Airtable에 챕터/문제 추가
+                Supabase에 챕터/문제 추가
               </p>
             </div>
             <div className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 p-5">
@@ -126,7 +117,7 @@ export default function LearnPage() {
                 준비 2
               </p>
               <p className="text-sm font-bold text-white leading-relaxed">
-                .env.local에 API KEY/BASE ID 설정
+                .env.local에 Supabase URL/Key 설정
               </p>
             </div>
             <div className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 p-5">

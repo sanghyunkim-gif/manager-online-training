@@ -3,12 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import ProgressHeader from '@/components/layout/ProgressHeader';
-import type {
-  Session,
-  AirtableRecord,
-  Chapter,
-  Question,
-} from '@/types';
+import type { Session, DbChapter, DbQuestion, DbUserProgress } from '@/types';
 
 export default function QuizPage() {
   const router = useRouter();
@@ -16,14 +11,10 @@ export default function QuizPage() {
   const chapterId = params.id as string;
 
   const [session, setSession] = useState<Session | null>(null);
-  const [chapter, setChapter] = useState<AirtableRecord<Chapter> | null>(
-    null
-  );
-  const [allChapters, setAllChapters] = useState<AirtableRecord<Chapter>[]>(
-    []
-  );
+  const [chapter, setChapter] = useState<DbChapter | null>(null);
+  const [allChapters, setAllChapters] = useState<DbChapter[]>([]);
   const [completedChapters, setCompletedChapters] = useState<number[]>([]);
-  const [questions, setQuestions] = useState<AirtableRecord<Question>[]>([]);
+  const [questions, setQuestions] = useState<DbQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
@@ -34,7 +25,6 @@ export default function QuizPage() {
     let mounted = true;
 
     const init = async () => {
-      // 세션 확인
       const sessionData = localStorage.getItem('session');
       if (!sessionData) {
         router.push('/');
@@ -46,7 +36,6 @@ export default function QuizPage() {
       setSession(parsedSession);
 
       try {
-        // 챕터 목록 가져오기
         const chaptersRes = await fetch('/api/chapters/list');
         const chaptersData = await chaptersRes.json();
 
@@ -56,17 +45,15 @@ export default function QuizPage() {
           throw new Error('챕터 목록을 불러올 수 없습니다.');
         }
 
-        const chapters: AirtableRecord<Chapter>[] = chaptersData.data;
+        const chapters: DbChapter[] = chaptersData.data;
         setAllChapters(chapters);
 
-        // 현재 챕터 찾기
         const currentChapter = chapters.find((c) => c.id === chapterId);
         if (!currentChapter) {
           throw new Error('챕터를 찾을 수 없습니다.');
         }
         setChapter(currentChapter);
 
-        // 진행 상황 가져오기
         const progressRes = await fetch(
           `/api/progress/get?userId=${parsedSession.userId}`
         );
@@ -76,16 +63,14 @@ export default function QuizPage() {
 
         if (progressData.success && progressData.data.length > 0) {
           const completed = progressData.data
-            .filter((p: any) => p.fields.Chapter_Completed)
-            .map((p: any) => {
-              const chapterLink = p.fields.Chapter[0];
-              const chapter = chapters.find((c) => c.id === chapterLink);
-              return chapter?.fields.Order || 0;
+            .filter((p: DbUserProgress) => p.chapter_completed)
+            .map((p: DbUserProgress) => {
+              const ch = chapters.find((c) => c.id === p.chapter_id);
+              return ch?.order || 0;
             });
           setCompletedChapters(completed);
         }
 
-        // 문제 가져오기
         const questionsRes = await fetch(
           `/api/questions/random?chapterId=${chapterId}`
         );
@@ -101,10 +86,10 @@ export default function QuizPage() {
 
         setQuestions(questionsData.data);
         setLoading(false);
-      } catch (err: any) {
-        console.error('초기화 오류:', err);
+      } catch (err: unknown) {
         if (!mounted) return;
-        setError(err.message);
+        const message = err instanceof Error ? err.message : '알 수 없는 오류';
+        setError(message);
         setLoading(false);
       }
     };
@@ -138,7 +123,6 @@ export default function QuizPage() {
   };
 
   const handleSubmit = async () => {
-    // 모든 문제에 답했는지 확인
     const unanswered = questions.filter((q) => !answers[q.id]);
     if (unanswered.length > 0) {
       alert(`${unanswered.length}개의 문제가 답변되지 않았습니다.`);
@@ -148,7 +132,6 @@ export default function QuizPage() {
     setSubmitting(true);
 
     try {
-      // 답안 제출
       const response = await fetch('/api/answer/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -165,16 +148,15 @@ export default function QuizPage() {
         throw new Error(data.error);
       }
 
-      // 결과 데이터를 sessionStorage에 저장
       sessionStorage.setItem(
         `result_${chapterId}`,
         JSON.stringify(data.data)
       );
 
-      // 결과 페이지로 이동
       router.push(`/learn/chapter/${chapterId}/result`);
-    } catch (err: any) {
-      alert(err.message || '답안 제출 중 오류가 발생했습니다.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : '답안 제출 중 오류가 발생했습니다.';
+      alert(message);
       setSubmitting(false);
     }
   };
@@ -204,7 +186,6 @@ export default function QuizPage() {
           <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
         </div>
         <div className="relative mx-auto max-w-xl rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-8 text-center shadow-2xl">
-          <div className="mb-3 text-3xl">⚠️</div>
           <h2 className="text-xl font-bold mb-2 text-white">오류</h2>
           <p className="mb-6 text-white/80">
             {error || '문제를 불러올 수 없습니다.'}
@@ -223,6 +204,8 @@ export default function QuizPage() {
   const answeredCount = Object.keys(answers).length;
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
+  const optionKeys = ['option_1', 'option_2', 'option_3', 'option_4'] as const;
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] pb-12">
       <div className="pointer-events-none absolute inset-0">
@@ -231,10 +214,10 @@ export default function QuizPage() {
       </div>
       <ProgressHeader
         userName={session.userName}
-        currentChapterOrder={chapter.fields.Order}
+        currentChapterOrder={chapter.order}
         totalChapters={allChapters.length}
         completedChapters={completedChapters}
-        chapterName={`${chapter.fields.Order}장. ${chapter.fields.Name} - 문제 풀이`}
+        chapterName={`${chapter.order}장. ${chapter.name} - 문제 풀이`}
       />
 
       <div className="relative mx-auto max-w-5xl px-6 py-8">
@@ -281,14 +264,14 @@ export default function QuizPage() {
           <div className="mb-8">
             <div className="mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-6">
               <p className="text-lg font-bold text-neutral-900 whitespace-pre-wrap">
-                {currentQuestion.fields.Question_Text}
+                {currentQuestion.question_text}
               </p>
             </div>
 
             <div className="space-y-3">
-              {(['1', '2', '3', '4'] as const).map((num) => {
-                const optionText =
-                  currentQuestion.fields[`Option_${num}` as keyof Question];
+              {(['1', '2', '3', '4'] as const).map((num, idx) => {
+                const optionText = currentQuestion[optionKeys[idx]];
+                if (!optionText) return null;
                 const isSelected = answers[currentQuestion.id] === num;
 
                 return (
@@ -311,7 +294,7 @@ export default function QuizPage() {
                       >
                         {num}
                       </div>
-                      <span className="flex-1 text-sm font-medium text-neutral-900">{optionText as string}</span>
+                      <span className="flex-1 text-sm font-medium text-neutral-900">{optionText}</span>
                     </div>
                   </button>
                 );

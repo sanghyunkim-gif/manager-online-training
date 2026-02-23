@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getQuestionStats } from '@/lib/airtable/stats';
+import { getQuestionStats } from '@/lib/supabase/stats';
 import type { ApiResponse } from '@/types';
 
 export async function GET(request: NextRequest) {
@@ -10,13 +10,13 @@ export async function GET(request: NextRequest) {
       success: true,
       data: stats,
     } as ApiResponse);
-  } catch (error: any) {
-    console.error('문제별 통계 조회 오류:', error);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '문제별 통계를 불러올 수 없습니다.';
 
     return NextResponse.json(
       {
         success: false,
-        error: error.message || '문제별 통계를 불러올 수 없습니다.',
+        error: message,
       } as ApiResponse,
       { status: 500 }
     );

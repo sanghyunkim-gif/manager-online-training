@@ -2,17 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Session, AirtableRecord, Chapter } from '@/types';
+import type { Session, DbChapter } from '@/types';
 
 export default function CompletePage() {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
-  const [chapters, setChapters] = useState<AirtableRecord<Chapter>[]>([]);
+  const [chapters, setChapters] = useState<DbChapter[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const init = async () => {
-      // 세션 확인
       const sessionData = localStorage.getItem('session');
       if (!sessionData) {
         router.push('/');
@@ -23,16 +22,12 @@ export default function CompletePage() {
       setSession(parsedSession);
 
       try {
-        // 챕터 목록 가져오기
         const chaptersRes = await fetch('/api/chapters/list');
         const chaptersData = await chaptersRes.json();
 
         if (chaptersData.success) {
           setChapters(chaptersData.data);
         }
-
-        // 완료 페이지에 도달하면 사용자를 완료 처리
-        console.log('완료 페이지 도달 - 사용자 완료 처리 시작:', { userId: parsedSession.userId });
 
         const completeRes = await fetch('/api/complete', {
           method: 'POST',
@@ -41,20 +36,13 @@ export default function CompletePage() {
         });
 
         const completeData = await completeRes.json();
-        console.log('완료 처리 응답:', completeData);
 
         if (!completeData.success) {
-          console.error('완료 처리 실패:', completeData.error);
-
-          // 모든 챕터를 완료하지 않았다면 학습 페이지로 리다이렉트
           if (completeRes.status === 403) {
-            console.warn('⚠️  모든 챕터를 완료하지 않음 - /learn으로 리다이렉트');
             alert('모든 챕터를 완료해야 합니다.');
             router.push('/learn');
             return;
           }
-        } else {
-          console.log('✅ 사용자 완료 처리 성공!');
         }
 
         setLoading(false);
@@ -98,9 +86,6 @@ export default function CompletePage() {
 
       <div className="relative mx-auto max-w-5xl space-y-10">
         <div className="flex flex-col items-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-12 lg:p-16 text-center shadow-lg animate-scale-in">
-          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-5xl">
-            🎉
-          </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-3">
             모든 과정을 완료했습니다!
           </h1>
@@ -123,9 +108,9 @@ export default function CompletePage() {
           </div>
 
           <div className="space-y-4">
-            {chapters.map((chapter, index) => (
+            {chapters.map((ch) => (
               <div
-                key={chapter.id}
+                key={ch.id}
                 className="group flex items-center gap-5 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-5 transition-all hover:border-white/30 hover:shadow-sm"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-xl font-bold text-white">
@@ -133,7 +118,7 @@ export default function CompletePage() {
                 </div>
                 <div className="flex-1">
                   <p className="text-base font-bold text-white">
-                    {chapter.fields.Order}장. {chapter.fields.Name}
+                    {ch.order}장. {ch.name}
                   </p>
                 </div>
               </div>
