@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { completeUser } from '@/lib/supabase/users';
 import type { ApiResponse } from '@/types';
+import { isAdminAuthenticated } from '@/lib/auth/admin';
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await isAdminAuthenticated())) {
+      return NextResponse.json(
+        { success: false, error: '관리자 인증이 필요합니다.' } as ApiResponse,
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { userId } = body;
 

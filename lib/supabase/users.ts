@@ -1,4 +1,5 @@
-import { supabase } from './client';
+// 서버 전용 모듈. service_role 클라이언트를 supabase 별칭으로 사용한다.
+import { supabaseAdmin as supabase } from './client';
 import { randomBytes } from 'crypto';
 
 export interface DbUser {
@@ -79,12 +80,14 @@ export async function findUserByPhone(phone: string): Promise<DbUser | null> {
   const normalized = normalizePhoneNumber(phone);
   const original = phone.trim();
 
+  // 사용자 입력을 PostgREST 필터 문자열에 보간하지 않고, 안전한 .in() 파라미터로 조회한다.
+  const candidates = Array.from(new Set([normalized, original]));
   const { data, error } = await supabase
     .from('users')
     .select('*')
-    .or(`phone.eq.${normalized},phone.eq.${original}`)
+    .in('phone', candidates)
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (error || !data) {
     return null;

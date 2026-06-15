@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import ProgressHeader from '@/components/layout/ProgressHeader';
-import type { Session, DbChapter, DbQuestion, DbUserProgress } from '@/types';
+import type { Session, DbChapter, PublicQuestion, DbUserProgress } from '@/types';
 
 export default function QuizPage() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function QuizPage() {
   const [chapter, setChapter] = useState<DbChapter | null>(null);
   const [allChapters, setAllChapters] = useState<DbChapter[]>([]);
   const [completedChapters, setCompletedChapters] = useState<number[]>([]);
-  const [questions, setQuestions] = useState<DbQuestion[]>([]);
+  const [questions, setQuestions] = useState<PublicQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);

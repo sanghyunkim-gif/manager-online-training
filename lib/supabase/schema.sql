@@ -170,7 +170,10 @@ CREATE TRIGGER update_chapter_history_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================
--- RLS Policies (disabled by default for now)
+-- RLS Policies
+-- 서버는 service_role 키(supabaseAdmin)로만 접근한다. anon/authenticated 에는 어떤 권한도
+-- 부여하지 않아, 브라우저에 노출되는 anon 키로 공개 PostgREST 엔드포인트에 직접 접근하는 것을
+-- 차단한다. 모든 데이터 접근은 서버 API 라우트(service_role)를 경유한다.
 -- ============================================
 ALTER TABLE chapters ENABLE ROW LEVEL SECURITY;
 ALTER TABLE questions ENABLE ROW LEVEL SECURITY;
@@ -179,10 +182,10 @@ ALTER TABLE user_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chapter_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE question_attempts ENABLE ROW LEVEL SECURITY;
 
--- Allow all operations via service role key (default policy)
-CREATE POLICY "Allow all for service role" ON chapters FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for service role" ON questions FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for service role" ON users FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for service role" ON user_progress FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for service role" ON chapter_history FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all for service role" ON question_attempts FOR ALL USING (true) WITH CHECK (true);
+-- service_role 전용 전체 권한 (TO service_role 로 명시적 스코프 — anon 은 매칭되는 정책이 없어 거부됨)
+CREATE POLICY "service_role full access" ON chapters FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "service_role full access" ON questions FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "service_role full access" ON users FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "service_role full access" ON user_progress FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "service_role full access" ON chapter_history FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "service_role full access" ON question_attempts FOR ALL TO service_role USING (true) WITH CHECK (true);

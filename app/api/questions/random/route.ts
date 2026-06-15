@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRandomQuestions } from '@/lib/supabase/questions';
+import { getRandomQuestions, toPublicQuestion } from '@/lib/supabase/questions';
 import { getChapterById } from '@/lib/supabase/chapters';
 import type { ApiResponse } from '@/types';
 
@@ -41,9 +41,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // 정답·해설 등 민감 필드를 제거하고 클라이언트로 전송한다.
     return NextResponse.json({
       success: true,
-      data: questions,
+      data: questions.map(toPublicQuestion),
     } as ApiResponse);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : '문제를 불러올 수 없습니다.';

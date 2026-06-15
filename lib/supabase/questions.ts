@@ -1,4 +1,5 @@
-import { supabase } from './client';
+// 서버 전용 모듈. service_role 클라이언트를 supabase 별칭으로 사용한다.
+import { supabaseAdmin as supabase } from './client';
 
 export interface DbQuestion {
   id: string;
@@ -18,6 +19,34 @@ export interface DbQuestion {
   status: 'Active' | 'Inactive';
   created_at: string;
   updated_at: string;
+}
+
+// 클라이언트로 전송 가능한 문제 타입 (정답·해설·통계 컬럼 제외)
+export type PublicQuestion = Omit<
+  DbQuestion,
+  | 'correct_answer'
+  | 'explanation'
+  | 'total_attempts'
+  | 'correct_count'
+  | 'incorrect_count'
+  | 'status'
+>;
+
+// DbQuestion 에서 민감 필드를 제거해 클라이언트 안전 객체로 변환한다.
+export function toPublicQuestion(question: DbQuestion): PublicQuestion {
+  return {
+    id: question.id,
+    chapter_id: question.chapter_id,
+    question_text: question.question_text,
+    question_image: question.question_image,
+    option_1: question.option_1,
+    option_2: question.option_2,
+    option_3: question.option_3,
+    option_4: question.option_4,
+    difficulty: question.difficulty,
+    created_at: question.created_at,
+    updated_at: question.updated_at,
+  };
 }
 
 export async function getQuestionsByChapter(

@@ -6,7 +6,7 @@ export type {
   DbChapterHistory,
   DbQuestionAttempt,
 } from '@/lib/supabase/progress';
-export type { DbQuestion } from '@/lib/supabase/questions';
+export type { DbQuestion, PublicQuestion } from '@/lib/supabase/questions';
 export type {
   ChapterStats,
   QuestionStats,

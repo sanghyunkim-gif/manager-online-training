@@ -155,7 +155,9 @@ export default function VideoPlayer({
         if (currentSeconds > currentMaxWatchedTime) {
           maxWatchedTimeRef.current = currentSeconds; // ref 업데이트
           setMaxWatchedTime(currentSeconds); // state 업데이트
-          onProgressUpdate(currentSeconds, (currentSeconds / videoDuration) * 100);
+          const percentage =
+            videoDuration > 0 ? (currentSeconds / videoDuration) * 100 : 0;
+          onProgressUpdate(currentSeconds, percentage);
         }
       }
     }, 1000);
@@ -168,7 +170,8 @@ export default function VideoPlayer({
     }
   };
 
-  const watchPercentage = (maxWatchedTime / videoDuration) * 100;
+  const watchPercentage =
+    videoDuration > 0 ? (maxWatchedTime / videoDuration) * 100 : 0;
   const isCompleted = watchPercentage >= requiredPercentage;
 
   useEffect(() => {
