@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+vendor/**/node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -36,3 +37,6 @@ next-env.d.ts
 
 # agent-company plugin state
 /.agent-state
+
+# Agent Company: .agent-state/ must be Git tracked for worktree sharing
+!.agent-state/

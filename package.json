@@ -24,7 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.553.0",
     "next": "^16.0.3",
-    "plab-design-system": "github:hodooo/plab-design-system",
+    "plab-design-system": "file:vendor/plab-design-system",
     "pretendard": "^1.3.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

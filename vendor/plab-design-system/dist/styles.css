@@ -1,0 +1,311 @@
+/*
+ * plab-design-system — design tokens & Tailwind theme registration
+ *
+ * How to use in your project:
+ *
+ *   In your globals.css:
+ *     @import "tailwindcss";
+ *     @import "plab-design-system/styles";
+ *
+ * The @source directive below tells Tailwind to scan this package's
+ * compiled output so all component utility classes are included.
+ */
+
+@source ".";
+
+/* ─── Tailwind v4 theme registration ─── */
+
+@theme inline {
+  /* Background */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-primary-hovered: var(--bg-primary-hovered);
+  --color-bg-primary-pressed: var(--bg-primary-pressed);
+  --color-bg-primary-disabled: var(--bg-primary-disabled);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-tertiary-hovered: var(--bg-tertiary-hovered);
+  --color-bg-tertiary-pressed: var(--bg-tertiary-pressed);
+  --color-bg-quaternary: var(--bg-quaternary);
+  --color-bg-quaternary-hovered: var(--bg-quaternary-hovered);
+  --color-bg-quaternary-pressed: var(--bg-quaternary-pressed);
+  --color-bg-negative: var(--bg-negative);
+  --color-bg-negative-hovered: var(--bg-negative-hovered);
+  --color-bg-negative-pressed: var(--bg-negative-pressed);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-secondary: var(--bg-surface-secondary);
+  --color-bg-surface-tertiary: var(--bg-surface-tertiary);
+  --color-bg-overlay: var(--bg-overlay);
+  --color-bg-success: var(--bg-success);
+  --color-bg-warning: var(--bg-warning);
+  --color-bg-error: var(--bg-error);
+  --color-bg-error-hovered: var(--bg-error-hovered);
+  --color-bg-info: var(--bg-info);
+
+  /* Scrim */
+  --color-scrim-default: var(--scrim-default);
+  --color-scrim-strong: var(--scrim-strong);
+
+  /* Text */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-brand: var(--text-brand);
+  --color-text-on-primary: var(--text-on-primary);
+  --color-text-on-primary-disabled: var(--text-on-primary-disabled);
+  --color-text-on-tertiary: var(--text-on-tertiary);
+  --color-text-on-quaternary: var(--text-on-quaternary);
+  --color-text-on-negative: var(--text-on-negative);
+  --color-text-success: var(--text-success);
+  --color-text-warning: var(--text-warning);
+  --color-text-error: var(--text-error);
+  --color-text-info: var(--text-info);
+  --color-text-link: var(--text-link);
+
+  /* Border */
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-border-focused: var(--border-focused);
+  --color-border-error: var(--border-error);
+  --color-border-success: var(--border-success);
+  --color-border-warning: var(--border-warning);
+  --color-border-disabled: var(--border-disabled);
+  --color-border-outlined: var(--border-outlined);
+  --color-border-outlined-hovered: var(--border-outlined-hovered);
+  --color-border-outlined-pressed: var(--border-outlined-pressed);
+  --color-border-subtle: var(--border-subtle);
+
+  /* Icon */
+  --color-icon-primary: var(--icon-primary);
+  --color-icon-secondary: var(--icon-secondary);
+  --color-icon-tertiary: var(--icon-tertiary);
+  --color-icon-disabled: var(--icon-disabled);
+  --color-icon-inverse: var(--icon-inverse);
+  --color-icon-brand: var(--icon-brand);
+  --color-icon-success: var(--icon-success);
+  --color-icon-warning: var(--icon-warning);
+  --color-icon-error: var(--icon-error);
+
+  /* Ring */
+  --color-ring-focus: var(--ring-focus);
+  --color-ring-error: var(--ring-error);
+
+  /* Toggle */
+  --color-bg-toggle-off: var(--bg-toggle-off);
+  --color-bg-toggle-off-hovered: var(--bg-toggle-off-hovered);
+  --color-bg-toggle-on: var(--bg-toggle-on);
+  --color-bg-toggle-on-hovered: var(--bg-toggle-on-hovered);
+  --color-bg-toggle-thumb: var(--bg-toggle-thumb);
+  --color-bg-toggle-subtle-on: var(--bg-toggle-subtle-on);
+  --color-bg-toggle-subtle-on-hovered: var(--bg-toggle-subtle-on-hovered);
+
+  /* Badge */
+  --color-bg-badge-neutral: var(--bg-badge-neutral);
+  --color-text-badge-neutral: var(--text-badge-neutral);
+  --color-bg-success-solid: var(--bg-success-solid);
+  --color-bg-warning-solid: var(--bg-warning-solid);
+
+  /* Static */
+  --color-static-white: #ffffff;
+  --color-static-black: #000000;
+}
+
+/* ─── Light mode CSS variables ─── */
+
+:root {
+  --shadow-level-0: none;
+  --shadow-level-1: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-level-2: 0 4px 12px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-level-3: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-level-4: 0 16px 48px rgba(0, 0, 0, 0.16), 0 8px 16px rgba(0, 0, 0, 0.10);
+  --shadow-level-5: 0 24px 64px rgba(0, 0, 0, 0.20), 0 12px 24px rgba(0, 0, 0, 0.12);
+
+  --blur-level-1: blur(8px);
+  --blur-level-2: blur(20px);
+  --blur-level-3: blur(40px);
+
+  --bg-primary: #1570ff;
+  --bg-primary-hovered: #005ef5;
+  --bg-primary-pressed: #004ecc;
+  --bg-primary-disabled: #e8f7ff;
+  --bg-tertiary: #e8f7ff;
+  --bg-tertiary-hovered: #cfedff;
+  --bg-tertiary-pressed: #b8e1ff;
+  --bg-quaternary: #f0f3f5;
+  --bg-quaternary-hovered: #d4dae2;
+  --bg-quaternary-pressed: #b9becb;
+  --bg-negative: #ff4029;
+  --bg-negative-hovered: #ff3014;
+  --bg-negative-pressed: #db1a00;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f8fafb;
+  --bg-surface-tertiary: #f0f3f5;
+  --bg-overlay: rgba(34, 37, 42, 0.4);
+  --scrim-default: rgba(34, 37, 42, 0.4);
+  --scrim-strong: rgba(34, 37, 42, 0.6);
+  --bg-success: #f7ffe9;
+  --bg-warning: #fff9e5;
+  --bg-error: #fff4ef;
+  --bg-error-hovered: #ffe0d6;
+  --bg-info: #e8f7ff;
+
+  --text-primary: #22252a;
+  --text-secondary: #676d7e;
+  --text-tertiary: #9da2af;
+  --text-disabled: #b9becb;
+  --text-inverse: #ffffff;
+  --text-brand: #1570ff;
+  --text-on-primary: #ffffff;
+  --text-on-primary-disabled: #b8e1ff;
+  --text-on-tertiary: #1570ff;
+  --text-on-quaternary: #22252a;
+  --text-on-negative: #ffffff;
+  --text-success: #00b26b;
+  --text-warning: #e7900a;
+  --text-error: #ff4029;
+  --text-info: #1570ff;
+  --text-link: #1570ff;
+
+  --border-default: #d4dae2;
+  --border-strong: #9da2af;
+  --border-focused: #1570ff;
+  --border-error: #ff4029;
+  --border-success: #00e58a;
+  --border-warning: #ffd21a;
+  --border-disabled: #d4dae2;
+  --border-outlined: #1570ff;
+  --border-outlined-hovered: #005ef5;
+  --border-outlined-pressed: #004ecc;
+  --border-subtle: #f0f3f5;
+
+  --icon-primary: #22252a;
+  --icon-secondary: #676d7e;
+  --icon-tertiary: #9da2af;
+  --icon-disabled: #b9becb;
+  --icon-inverse: #ffffff;
+  --icon-brand: #1570ff;
+  --icon-success: #00e58a;
+  --icon-warning: #ffd21a;
+  --icon-error: #ff4029;
+
+  --ring-focus: rgba(21, 112, 255, 0.3);
+  --ring-error: rgba(255, 64, 41, 0.2);
+
+  --bg-toggle-off: #d4dae2;
+  --bg-toggle-off-hovered: #b9becb;
+  --bg-toggle-on: #1570ff;
+  --bg-toggle-on-hovered: #005ef5;
+  --bg-toggle-thumb: #ffffff;
+  --bg-toggle-subtle-on: #676d7e;
+  --bg-toggle-subtle-on-hovered: #505562;
+
+  --bg-badge-neutral: #22252a;
+  --text-badge-neutral: #ffffff;
+  --bg-success-solid: #00e58a;
+  --bg-warning-solid: #ffd21a;
+}
+
+/* ─── Dark mode CSS variables ─── */
+
+.dark {
+  --bg-primary: #1570ff;
+  --bg-primary-hovered: #539bff;
+  --bg-primary-pressed: #87c3ff;
+  --bg-primary-disabled: #002766;
+  --bg-tertiary: #002766;
+  --bg-tertiary-hovered: #083c91;
+  --bg-tertiary-pressed: #004ecc;
+  --bg-quaternary: #393d46;
+  --bg-quaternary-hovered: #505562;
+  --bg-quaternary-pressed: #676d7e;
+  --bg-negative: #ff4029;
+  --bg-negative-hovered: #ff6955;
+  --bg-negative-pressed: #ff9580;
+  --bg-surface: #22252a;
+  --bg-surface-secondary: #393d46;
+  --bg-surface-tertiary: #505562;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --scrim-default: rgba(0, 0, 0, 0.6);
+  --scrim-strong: rgba(0, 0, 0, 0.8);
+  --bg-success: #0a5c3b;
+  --bg-warning: #5c260a;
+  --bg-error: #730d1e;
+  --bg-error-hovered: #91081f;
+  --bg-info: #002766;
+
+  --text-primary: #f8fafb;
+  --text-secondary: #b9becb;
+  --text-tertiary: #818798;
+  --text-disabled: #676d7e;
+  --text-inverse: #22252a;
+  --text-brand: #539bff;
+  --text-on-primary: #ffffff;
+  --text-on-primary-disabled: #004ecc;
+  --text-on-tertiary: #87c3ff;
+  --text-on-quaternary: #f8fafb;
+  --text-on-negative: #ffffff;
+  --text-success: #00f593;
+  --text-warning: #ffe14c;
+  --text-error: #ff6955;
+  --text-info: #539bff;
+  --text-link: #539bff;
+
+  --border-default: #505562;
+  --border-strong: #818798;
+  --border-focused: #539bff;
+  --border-error: #ff6955;
+  --border-success: #00f593;
+  --border-warning: #ffe14c;
+  --border-disabled: #505562;
+  --border-outlined: #539bff;
+  --border-outlined-hovered: #87c3ff;
+  --border-outlined-pressed: #b8e1ff;
+  --border-subtle: #393d46;
+
+  --icon-primary: #f8fafb;
+  --icon-secondary: #b9becb;
+  --icon-tertiary: #818798;
+  --icon-disabled: #676d7e;
+  --icon-inverse: #22252a;
+  --icon-brand: #539bff;
+  --icon-success: #00f593;
+  --icon-warning: #ffe14c;
+  --icon-error: #ff6955;
+
+  --ring-focus: rgba(83, 155, 255, 0.3);
+  --ring-error: rgba(255, 105, 85, 0.2);
+
+  --bg-toggle-off: #676d7e;
+  --bg-toggle-off-hovered: #818798;
+  --bg-toggle-on: #1570ff;
+  --bg-toggle-on-hovered: #539bff;
+  --bg-toggle-thumb: #ffffff;
+  --bg-toggle-subtle-on: #9da2af;
+  --bg-toggle-subtle-on-hovered: #b9becb;
+
+  --bg-badge-neutral: #f0f3f5;
+  --text-badge-neutral: #22252a;
+  --bg-success-solid: #00cc7b;
+  --bg-warning-solid: #fac000;
+}
+
+/* ─── Base styles ─── */
+
+@layer base {
+  * {
+    @apply border-border-default outline-ring-focus;
+  }
+  body {
+    @apply bg-bg-surface text-text-primary;
+  }
+}
+
+/* ─── Utilities ─── */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
