@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import type { DbUser } from '@/types';
 import type {
   ChapterStats,
@@ -155,12 +156,20 @@ export default function AdminPage() {
               <h1 className="text-xl font-bold text-white">플랩풋볼 매니저</h1>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            로그아웃
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/content"
+              className="rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            >
+              콘텐츠 관리
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              로그아웃
+            </button>
+          </div>
         </div>
       </header>
 
