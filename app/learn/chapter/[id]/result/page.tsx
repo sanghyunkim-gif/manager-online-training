@@ -218,18 +218,22 @@ export default function ResultPage() {
                       {item.questionText}
                     </p>
 
-                    <div className="mb-4 space-y-1 text-sm">
-                      <div className="flex items-start gap-2">
-                        <span className="font-semibold text-text-secondary">당신의 답변:</span>
-                        <span className="text-text-secondary">
+                    <div className="mb-4 space-y-3 text-sm">
+                      <div>
+                        <p className="mb-0.5 text-xs font-semibold text-text-tertiary">
+                          당신의 답변
+                        </p>
+                        <p className="text-text-secondary">
                           {item.userAnswer}. {item.options[item.userAnswer]}
-                        </span>
+                        </p>
                       </div>
-                      <div className="flex items-start gap-2">
-                        <span className="font-semibold text-text-secondary">정답:</span>
-                        <span className="font-semibold text-text-primary">
+                      <div>
+                        <p className="mb-0.5 text-xs font-semibold text-text-tertiary">
+                          정답
+                        </p>
+                        <p className="font-semibold text-text-primary">
                           {item.correctAnswer}. {item.options[item.correctAnswer]}
-                        </span>
+                        </p>
                       </div>
                     </div>
 
