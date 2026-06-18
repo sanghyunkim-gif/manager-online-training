@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { BookOpen, HelpCircle, ArrowLeft, RefreshCw } from 'lucide-react';
+import { BookOpen, HelpCircle, ArrowLeft, RefreshCw, X } from 'lucide-react';
 import type { DbChapter, DbQuestion, ApiResponse } from '@/types';
 import type { QuestionCreateInput } from '@/lib/supabase/questions';
 import { ChapterTable } from '@/components/admin/ChapterTable';
@@ -412,14 +412,10 @@ export default function ContentManagementPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8]">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
-        </div>
-        <div className="relative flex flex-col items-center gap-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-12 py-10 shadow-lg">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/20 border-t-white" />
-          <p className="text-sm font-bold uppercase tracking-widest text-white">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-bg-surface-secondary">
+        <div className="flex flex-col items-center gap-4 rounded-2xl border border-border-subtle bg-bg-surface px-12 py-10">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-border-subtle border-t-bg-primary" />
+          <p className="text-sm font-bold text-text-secondary">
             인증 확인 중...
           </p>
         </div>
@@ -447,64 +443,61 @@ export default function ContentManagementPage() {
   // ──────────────────────────────────────
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] pb-12">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
-      </div>
-
+    <div className="flex min-h-screen flex-col bg-bg-surface-secondary">
       {/* 헤더 */}
-      <header className="relative border-b border-white/20 bg-white/10 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <header className="border-b border-border-subtle bg-bg-surface">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="PLAB Manager" className="h-10" />
+            <img src="/logo.png" alt="PLAB Manager" className="h-8" />
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-white">
+              <p className="text-xs font-bold uppercase tracking-widest text-text-tertiary">
                 Admin
               </p>
-              <h1 className="text-xl font-bold text-white">콘텐츠 관리</h1>
+              <h1 className="text-base font-bold text-text-primary">
+                콘텐츠 관리
+              </h1>
             </div>
           </div>
           <Link
             href="/admin"
-            className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            className="flex items-center gap-1.5 rounded-lg border border-border-subtle bg-bg-surface px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focused)]"
           >
-            <ArrowLeft size={15} aria-hidden="true" />
+            <ArrowLeft size={14} aria-hidden="true" />
             대시보드로
           </Link>
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-7xl px-6 py-8">
+      <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6 py-6 pb-12">
         {/* 인라인 에러 영역 */}
         {actionError && (
           <div
             role="alert"
-            className="mb-6 flex items-center justify-between rounded-lg border border-accent-200 bg-accent-50 px-4 py-3 text-sm font-medium text-accent-700"
+            className="flex items-center justify-between rounded-lg border border-border-error bg-bg-error px-4 py-3 text-sm font-medium text-text-error"
           >
             <span>{actionError}</span>
             <button
               onClick={() => setActionError(null)}
               aria-label="오류 닫기"
-              className="ml-3 rounded p-0.5 text-accent-500 hover:text-accent-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400"
+              className="ml-3 rounded p-0.5 text-text-error hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-error)]"
             >
-              ×
+              <X size={16} aria-hidden="true" />
             </button>
           </div>
         )}
 
         {/* 콘텐츠 카드 */}
-        <div className="rounded-lg bg-neutral-50 shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-bg-surface">
           {/* 탭 */}
-          <div className="flex gap-1 border-b border-neutral-200 px-4 pt-4">
+          <div className="flex gap-1 border-b border-border-subtle px-4 pt-4">
             <button
               onClick={() => setActiveTab('chapters')}
               className={[
                 'flex items-center gap-2 rounded-t-md px-4 py-2.5 text-sm font-semibold transition',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focused)] focus-visible:ring-offset-1',
                 activeTab === 'chapters'
-                  ? 'border-b-2 border-primary-500 text-primary-700 bg-white -mb-px'
-                  : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100',
+                  ? 'border-b-2 border-border-focused text-text-brand -mb-px bg-bg-surface'
+                  : 'text-text-secondary hover:bg-bg-surface-secondary',
               ].join(' ')}
               aria-selected={activeTab === 'chapters'}
               role="tab"
@@ -516,10 +509,10 @@ export default function ContentManagementPage() {
               onClick={() => setActiveTab('questions')}
               className={[
                 'flex items-center gap-2 rounded-t-md px-4 py-2.5 text-sm font-semibold transition',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-focused)] focus-visible:ring-offset-1',
                 activeTab === 'questions'
-                  ? 'border-b-2 border-primary-500 text-primary-700 bg-white -mb-px'
-                  : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100',
+                  ? 'border-b-2 border-border-focused text-text-brand -mb-px bg-bg-surface'
+                  : 'text-text-secondary hover:bg-bg-surface-secondary',
               ].join(' ')}
               aria-selected={activeTab === 'questions'}
               role="tab"
@@ -530,15 +523,15 @@ export default function ContentManagementPage() {
           </div>
 
           {/* 탭 본문 */}
-          <div className="p-6">
+          <div className="p-5">
             {/* ── 챕터 구성 탭 ── */}
             {activeTab === 'chapters' && (
               <section aria-label="챕터 구성">
                 {chaptersState.status === 'loading' && (
                   <div className="flex items-center justify-center py-24">
                     <div className="flex flex-col items-center gap-3">
-                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-neutral-200 border-t-primary-500" />
-                      <p className="text-sm text-neutral-500">
+                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-border-subtle border-t-bg-primary" />
+                      <p className="text-sm text-text-secondary">
                         챕터 목록 로딩 중...
                       </p>
                     </div>
@@ -547,7 +540,7 @@ export default function ContentManagementPage() {
 
                 {chaptersState.status === 'error' && (
                   <div className="flex flex-col items-center gap-4 py-16">
-                    <p className="text-sm text-accent-600">
+                    <p className="text-sm text-text-error">
                       {chaptersState.message}
                     </p>
                     <Button
@@ -589,8 +582,8 @@ export default function ContentManagementPage() {
                 </div>
 
                 {questionsState.status === 'idle' && (
-                  <div className="flex flex-col items-center gap-4 rounded-lg border border-neutral-200 bg-neutral-100 py-16 text-center">
-                    <p className="text-sm text-neutral-500">
+                  <div className="flex flex-col items-center gap-4 rounded-lg border border-border-subtle bg-bg-surface-secondary py-16 text-center">
+                    <p className="text-sm text-text-secondary">
                       위에서 챕터를 선택하거나, 전체 챕터를 선택하면 문제 목록이 표시됩니다.
                     </p>
                   </div>
@@ -599,8 +592,8 @@ export default function ContentManagementPage() {
                 {questionsState.status === 'loading' && (
                   <div className="flex items-center justify-center py-24">
                     <div className="flex flex-col items-center gap-3">
-                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-neutral-200 border-t-primary-500" />
-                      <p className="text-sm text-neutral-500">
+                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-border-subtle border-t-bg-primary" />
+                      <p className="text-sm text-text-secondary">
                         문제 목록 로딩 중...
                       </p>
                     </div>
@@ -609,7 +602,7 @@ export default function ContentManagementPage() {
 
                 {questionsState.status === 'error' && (
                   <div className="flex flex-col items-center gap-4 py-16">
-                    <p className="text-sm text-accent-600">
+                    <p className="text-sm text-text-error">
                       {questionsState.message}
                     </p>
                     <Button

@@ -31,12 +31,12 @@ export function ConfirmDialog({
         <div className="flex items-start gap-3">
           {variant === 'danger' && (
             <AlertTriangle
-              className="mt-0.5 shrink-0 text-accent-500"
+              className="mt-0.5 shrink-0 text-text-error"
               size={20}
               aria-hidden="true"
             />
           )}
-          <p className="text-sm leading-relaxed text-neutral-700">{message}</p>
+          <p className="text-sm leading-relaxed text-text-secondary">{message}</p>
         </div>
 
         <div className="flex justify-end gap-2">

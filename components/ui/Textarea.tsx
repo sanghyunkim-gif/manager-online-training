@@ -1,47 +1,28 @@
 'use client';
 
-import { forwardRef, useId, type TextareaHTMLAttributes } from 'react';
+import { forwardRef, type TextareaHTMLAttributes } from 'react';
+import { Input as DsInput } from 'plab-design-system';
 
-interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
   label?: string;
   error?: string;
   rows?: number;
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, rows = 4, id: idProp, className = '', ...props }, ref) => {
-    const generatedId = useId();
-    const id = idProp ?? generatedId;
-
+  ({ label, error, rows, required, 'aria-label': ariaLabel, ...rest }, ref) => {
     return (
-      <div className="flex flex-col gap-1">
-        {label && (
-          <label htmlFor={id} className="text-sm font-semibold text-neutral-700">
-            {label}
-          </label>
-        )}
-        <textarea
-          ref={ref}
-          id={id}
-          rows={rows}
-          className={[
-            'w-full resize-y rounded-md border px-3 py-2 text-sm text-neutral-800',
-            'bg-neutral-50 placeholder:text-neutral-400',
-            'transition',
-            error
-              ? 'border-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-1'
-              : 'border-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1',
-            'disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400',
-            className,
-          ].join(' ')}
-          {...props}
-        />
-        {error && (
-          <p role="alert" className="text-xs font-medium text-accent-600">
-            {error}
-          </p>
-        )}
-      </div>
+      <DsInput
+        as="textarea"
+        ref={ref as React.RefObject<HTMLInputElement | HTMLTextAreaElement>}
+        label={label}
+        error={!!error}
+        helperText={error}
+        // required는 라벨 별표(DS Input 직속)와 textarea 속성 양쪽에 전달
+        required={required}
+        // DS <label>은 htmlFor로 연결되지 않으므로 aria-label로 보강(명시값 우선).
+        textareaProps={{ rows, required, 'aria-label': ariaLabel ?? label, ...rest }}
+      />
     );
   }
 );

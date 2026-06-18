@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { Check } from 'lucide-react';
 
 interface ProgressHeaderProps {
   userName: string;
@@ -31,17 +32,17 @@ export default function ProgressHeader({
   };
 
   return (
-    <div className="sticky top-0 z-20 border-b border-neutral-200 bg-white/95 backdrop-blur">
+    <div className="sticky top-0 z-20 border-b border-border-subtle bg-bg-surface/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4">
         <div className="flex items-center justify-between">
           <img src="/logo.png" alt="PLAB Manager" className="h-8" />
           <div className="flex items-center gap-3 text-xs">
-            <span className="rounded-full bg-primary-50 border border-primary-200 px-3 py-1 font-semibold text-primary-700">
+            <span className="rounded-full bg-bg-surface-secondary border border-border-subtle px-3 py-1 font-semibold text-text-brand">
               {userName}님
             </span>
             <button
               onClick={handleExit}
-              className="rounded-full border border-neutral-300 bg-white px-3 py-1 font-semibold text-neutral-700 transition hover:border-primary-500 hover:text-primary-600"
+              className="rounded-full border border-border-default bg-bg-surface px-3 py-1 font-semibold text-text-secondary transition hover:border-border-focused hover:text-text-brand"
             >
               나가기
             </button>
@@ -60,27 +61,27 @@ export default function ProgressHeader({
                   <div
                     className={`flex h-9 w-9 items-center justify-center rounded-lg border text-sm font-bold ${
                       isCompleted
-                        ? 'border-success-300 bg-success-50 text-success-700'
+                        ? 'border-border-success bg-bg-success text-text-success'
                         : isCurrent
-                        ? 'border-primary-500 bg-primary-500 text-white'
-                        : 'border-neutral-200 bg-neutral-50 text-neutral-400'
+                        ? 'border-border-focused bg-bg-primary text-text-on-primary'
+                        : 'border-border-subtle bg-bg-surface-secondary text-text-tertiary'
                     }`}
                   >
-                    {isCompleted ? '✓' : chapterNum}
+                    {isCompleted ? <Check size={16} aria-hidden="true" /> : chapterNum}
                   </div>
-                  <div className="text-[10px] uppercase tracking-[0.08em] text-neutral-500">
+                  <div className="text-[10px] uppercase tracking-[0.08em] text-text-tertiary">
                     {chapterNum}장
                   </div>
                 </div>
                 {i < totalChapters - 1 && (
-                  <div className="h-[2px] flex-1 rounded-full bg-neutral-200">
+                  <div className="h-[2px] flex-1 rounded-full bg-bg-surface-tertiary">
                     <div
                       className={`h-full rounded-full transition ${
                         isCompleted
-                          ? 'bg-success-500'
+                          ? 'bg-[var(--text-success)]'
                           : isCurrent
-                          ? 'bg-primary-500'
-                          : 'bg-neutral-200'
+                          ? 'bg-bg-primary'
+                          : 'bg-bg-surface-tertiary'
                       }`}
                     />
                   </div>
@@ -90,8 +91,8 @@ export default function ProgressHeader({
           })}
         </div>
 
-        <div className="text-xs font-semibold uppercase tracking-[0.1em] text-neutral-600">
-          현재: <span className="text-primary-600">{chapterName}</span>
+        <div className="text-xs font-semibold uppercase tracking-[0.1em] text-text-secondary">
+          현재: <span className="text-text-brand">{chapterName}</span>
         </div>
       </div>
     </div>

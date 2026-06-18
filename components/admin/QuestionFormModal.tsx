@@ -179,17 +179,18 @@ export function QuestionFormModal({
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         {/* 챕터 선택 (수정 시 비활성화) */}
         <Select
-          label="챕터 *"
+          label="챕터"
           options={chapterOptions}
           value={form.chapter_id}
           onChange={(e) => setField('chapter_id', e.target.value)}
           placeholder="챕터를 선택하세요"
           error={errors.chapter_id}
           disabled={!!question}
+          required
         />
 
         <Textarea
-          label="문제 내용 *"
+          label="문제 내용"
           placeholder="문제를 입력하세요."
           rows={3}
           value={form.question_text}
@@ -208,7 +209,7 @@ export function QuestionFormModal({
 
         {/* 보기 4개 */}
         <fieldset className="flex flex-col gap-3">
-          <legend className="mb-1 text-sm font-semibold text-neutral-700">
+          <legend className="mb-1 text-sm font-semibold text-text-primary">
             보기 (최소 2개 필수)
           </legend>
           {ANSWER_OPTIONS.map((num) => {
@@ -217,11 +218,12 @@ export function QuestionFormModal({
             return (
               <Input
                 key={num}
-                label={`보기 ${num}${num === '1' || num === '2' ? ' *' : ''}`}
+                label={`보기 ${num}`}
                 placeholder={`보기 ${num}를 입력하세요`}
                 value={form[fieldKey] as string}
                 onChange={(e) => setField(fieldKey, e.target.value)}
                 error={errors[errorKey]}
+                required={num === '1' || num === '2'}
               />
             );
           })}
@@ -229,7 +231,7 @@ export function QuestionFormModal({
 
         {/* 정답 선택 */}
         <fieldset>
-          <legend className="mb-2 text-sm font-semibold text-neutral-700">
+          <legend className="mb-2 text-sm font-semibold text-text-primary">
             정답 선택 *
           </legend>
           <div className="flex flex-wrap gap-3">
@@ -244,10 +246,10 @@ export function QuestionFormModal({
                   className={[
                     'flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition',
                     form.correct_answer === num
-                      ? 'border-primary-400 bg-primary-50 text-primary-700 font-semibold'
+                      ? 'border-border-focused bg-bg-surface-secondary text-text-brand font-semibold'
                       : isEmpty
-                      ? 'cursor-not-allowed border-neutral-200 bg-neutral-100 text-neutral-400'
-                      : 'border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-primary-300',
+                      ? 'cursor-not-allowed border-border-subtle bg-bg-surface-secondary text-text-tertiary'
+                      : 'border-border-default bg-bg-surface text-text-secondary hover:border-border-strong',
                   ].join(' ')}
                 >
                   <input
@@ -258,16 +260,16 @@ export function QuestionFormModal({
                     checked={form.correct_answer === num}
                     onChange={() => setField('correct_answer', num)}
                     disabled={isEmpty}
-                    className="accent-primary-500"
+                    className="accent-[var(--bg-primary)]"
                     aria-label={`정답 ${num}번${isEmpty ? ' (보기 없음)' : `: ${optionText}`}`}
                   />
-                  {num}번{isEmpty ? <span className="text-xs text-neutral-400">(비어있음)</span> : ''}
+                  {num}번{isEmpty ? <span className="text-xs text-text-tertiary">(비어있음)</span> : ''}
                 </label>
               );
             })}
           </div>
           {errors.correct_answer && (
-            <p role="alert" className="mt-1 text-xs font-medium text-accent-600">
+            <p role="alert" className="mt-1 text-xs font-medium text-text-error">
               {errors.correct_answer}
             </p>
           )}
@@ -300,7 +302,7 @@ export function QuestionFormModal({
           />
         </div>
 
-        <div className="flex justify-end gap-2 border-t border-neutral-100 pt-4">
+        <div className="flex justify-end gap-2 border-t border-border-subtle pt-4">
           <Button
             type="button"
             variant="secondary"

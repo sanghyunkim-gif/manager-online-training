@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/Input';
+import { Button } from 'plab-design-system';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -40,76 +42,62 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] px-6 py-10">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
-      </div>
-
-      <div className="relative mx-auto flex max-w-lg flex-col items-center gap-6 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-10 shadow-lg">
-        <img src="/logo.png" alt="PLAB Manager" className="h-12" />
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-[0.14em] text-white font-bold">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-bg-surface-secondary px-5">
+      <div className="w-full max-w-md rounded-2xl border border-border-subtle bg-bg-surface p-8">
+        <div className="mb-6 flex flex-col items-center gap-2">
+          <img src="/logo.png" alt="PLAB Manager" className="h-12" />
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-text-tertiary">
             admin access
           </p>
-          <h1 className="text-3xl font-extrabold text-white">관리자 로그인</h1>
-          <p className="mt-2 text-white">
+          <h1 className="text-2xl font-extrabold text-text-primary">
+            관리자 로그인
+          </h1>
+          <p className="text-sm text-text-secondary">
             관리자 계정으로 로그인해주세요
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="w-full space-y-5">
-          <div className="space-y-2">
-            <label
-              htmlFor="username"
-              className="text-sm font-bold text-white"
-            >
-              아이디
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-white placeholder:text-white/60 outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/20"
-              placeholder="아이디를 입력하세요"
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="아이디"
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="아이디를 입력하세요"
+            required
+            aria-label="아이디"
+          />
 
-          <div className="space-y-2">
-            <label
-              htmlFor="password"
-              className="text-sm font-bold text-white"
-            >
-              비밀번호
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-white placeholder:text-white/60 outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/20"
-              placeholder="비밀번호를 입력하세요"
-              required
-            />
-          </div>
+          <Input
+            label="비밀번호"
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력하세요"
+            required
+            aria-label="비밀번호"
+          />
 
           {error && (
-            <div className="rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-sm font-medium text-white">
+            <div
+              role="alert"
+              className="rounded-lg border border-border-error bg-bg-error px-4 py-3 text-sm font-medium text-text-error"
+            >
               {error}
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
+            variant="solid"
+            size="lg"
             disabled={loading}
-            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-4 py-3 text-base font-bold text-white transition hover:opacity-90 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full"
           >
-            <span className="relative">
-              {loading ? '로그인 중...' : '로그인'}
-            </span>
-          </button>
+            {loading ? '로그인 중...' : '로그인'}
+          </Button>
         </form>
       </div>
     </div>

@@ -1,6 +1,9 @@
 'use client';
 
 import { forwardRef, type ReactNode, type ButtonHTMLAttributes } from 'react';
+import {
+  Button as DsButton,
+} from 'plab-design-system';
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -13,19 +16,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    'bg-primary-500 text-white hover:bg-primary-600 focus-visible:ring-primary-500 disabled:bg-primary-300',
-  secondary:
-    'bg-neutral-100 text-neutral-700 border border-neutral-200 hover:bg-neutral-200 focus-visible:ring-neutral-400 disabled:bg-neutral-50 disabled:text-neutral-400',
-  danger:
-    'bg-accent-500 text-white hover:bg-accent-600 focus-visible:ring-accent-500 disabled:bg-accent-300',
-};
-
-const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-base',
+const variantMap: Record<ButtonVariant, 'solid' | 'soft' | 'danger'> = {
+  primary: 'solid',
+  secondary: 'soft',
+  danger: 'danger',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -36,8 +30,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       leftIcon,
       isLoading = false,
       children,
-      className = '',
       disabled,
+      className,
       ...props
     },
     ref
@@ -45,18 +39,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const isDisabled = disabled || isLoading;
 
     return (
-      <button
+      <DsButton
         ref={ref}
+        variant={variantMap[variant]}
+        size={size}
         disabled={isDisabled}
-        className={[
-          'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-          'disabled:cursor-not-allowed',
-          'shadow-sm hover:shadow-md',
-          variantClasses[variant],
-          sizeClasses[size],
-          className,
-        ].join(' ')}
+        className={className}
         {...props}
       >
         {isLoading ? (
@@ -68,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           leftIcon && <span aria-hidden="true">{leftIcon}</span>
         )}
         {children}
-      </button>
+      </DsButton>
     );
   }
 );

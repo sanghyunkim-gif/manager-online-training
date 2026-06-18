@@ -1,49 +1,41 @@
 'use client';
 
-import { forwardRef, useId, type InputHTMLAttributes } from 'react';
+import { forwardRef, type InputHTMLAttributes } from 'react';
+import { Input as DsInput } from 'plab-design-system';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helperText?: string;
+  /** HTML size 속성 (DS Input의 size와 구분). 필요 시 스타일로 대체하세요. */
+  htmlSize?: number;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, helperText, id: idProp, className = '', ...props }, ref) => {
-    const generatedId = useId();
-    const id = idProp ?? generatedId;
-
+  (
+    {
+      label,
+      error,
+      helperText,
+      'aria-invalid': ariaInvalid,
+      'aria-label': ariaLabel,
+      htmlSize: _htmlSize,
+      ...props
+    },
+    ref
+  ) => {
+    // DS Input의 <label>은 htmlFor로 input과 연결되지 않으므로,
+    // 스크린리더 접근성을 위해 label을 aria-label로 보강한다(명시값 우선).
     return (
-      <div className="flex flex-col gap-1">
-        {label && (
-          <label htmlFor={id} className="text-sm font-semibold text-neutral-700">
-            {label}
-          </label>
-        )}
-        <input
-          ref={ref}
-          id={id}
-          className={[
-            'w-full rounded-md border px-3 py-2 text-sm text-neutral-800',
-            'bg-neutral-50 placeholder:text-neutral-400',
-            'transition',
-            error
-              ? 'border-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-1'
-              : 'border-neutral-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1',
-            'disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400',
-            className,
-          ].join(' ')}
-          {...props}
-        />
-        {error && (
-          <p role="alert" className="text-xs font-medium text-accent-600">
-            {error}
-          </p>
-        )}
-        {!error && helperText && (
-          <p className="text-xs text-neutral-500">{helperText}</p>
-        )}
-      </div>
+      <DsInput
+        ref={ref}
+        label={label}
+        error={!!error}
+        helperText={error ?? helperText}
+        aria-invalid={error ? true : ariaInvalid}
+        aria-label={ariaLabel ?? label}
+        {...props}
+      />
     );
   }
 );

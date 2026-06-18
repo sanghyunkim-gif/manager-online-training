@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Pencil, Trash2, Power, Plus, Search, Filter } from 'lucide-react';
+import { Pencil, Trash2, Power, Plus } from 'lucide-react';
+import { Badge } from 'plab-design-system';
 import type { DbQuestion } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -21,10 +22,10 @@ type DifficultyFilter = 'All' | 'Easy' | 'Medium' | 'Hard';
 type StatusFilter = 'All' | 'Active' | 'Inactive';
 
 function DifficultyBadge({ difficulty }: { difficulty: DbQuestion['difficulty'] }) {
-  const classes: Record<DbQuestion['difficulty'], string> = {
-    Easy: 'bg-success-50 text-success-700 border border-success-200',
-    Medium: 'bg-primary-50 text-primary-700 border border-primary-200',
-    Hard: 'bg-accent-50 text-accent-700 border border-accent-200',
+  const toneMap: Record<DbQuestion['difficulty'], 'success' | 'brand' | 'error'> = {
+    Easy: 'success',
+    Medium: 'brand',
+    Hard: 'error',
   };
   const labels: Record<DbQuestion['difficulty'], string> = {
     Easy: '쉬움',
@@ -32,26 +33,21 @@ function DifficultyBadge({ difficulty }: { difficulty: DbQuestion['difficulty'] 
     Hard: '어려움',
   };
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${classes[difficulty]}`}
-    >
+    <Badge variant="soft" tone={toneMap[difficulty]} size="sm">
       {labels[difficulty]}
-    </span>
+    </Badge>
   );
 }
 
 function StatusBadge({ status }: { status: 'Active' | 'Inactive' }) {
   return (
-    <span
-      className={[
-        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold',
-        status === 'Active'
-          ? 'bg-success-50 text-success-700 border border-success-200'
-          : 'bg-neutral-100 text-neutral-500 border border-neutral-200',
-      ].join(' ')}
+    <Badge
+      variant="soft"
+      tone={status === 'Active' ? 'success' : 'neutral'}
+      size="sm"
     >
       {status === 'Active' ? '활성' : '비활성'}
-    </span>
+    </Badge>
   );
 }
 
@@ -93,8 +89,8 @@ export function QuestionTable({
 
   if (questions.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-lg border border-neutral-200 bg-neutral-50 py-16 text-center">
-        <p className="text-sm text-neutral-500">등록된 문제가 없습니다.</p>
+      <div className="flex flex-col items-center gap-4 rounded-lg border border-border-subtle bg-bg-surface-secondary py-16 text-center">
+        <p className="text-sm text-text-secondary">등록된 문제가 없습니다.</p>
         <Button leftIcon={<Plus size={16} />} onClick={onAdd}>
           첫 번째 문제 추가
         </Button>
@@ -139,23 +135,23 @@ export function QuestionTable({
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-lg border border-neutral-200 bg-neutral-50 py-12 text-center">
-          <p className="text-sm text-neutral-500">
+        <div className="rounded-lg border border-border-subtle bg-bg-surface-secondary py-12 text-center">
+          <p className="text-sm text-text-secondary">
             검색 조건에 맞는 문제가 없습니다.
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-neutral-200 shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-border-subtle shadow-sm">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-neutral-200">
-              <thead className="bg-neutral-100">
+            <table className="min-w-full divide-y divide-[color:var(--border-subtle)]">
+              <thead className="bg-bg-surface-secondary">
                 <tr>
                   {['문제', '난이도', '상태', '정답', '시도/오답률', '관리'].map(
                     (h) => (
                       <th
                         key={h}
                         scope="col"
-                        className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-neutral-600"
+                        className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-text-secondary"
                       >
                         {h}
                       </th>
@@ -163,7 +159,7 @@ export function QuestionTable({
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 bg-neutral-50">
+              <tbody className="divide-y divide-[color:var(--border-subtle)] bg-bg-surface">
                 {filtered.map((question) => {
                   const incorrectRate =
                     question.total_attempts > 0
@@ -180,9 +176,9 @@ export function QuestionTable({
                   return (
                     <tr
                       key={question.id}
-                      className="transition hover:bg-neutral-100"
+                      className="transition hover:bg-bg-surface-secondary"
                     >
-                      <td className="max-w-xs px-4 py-3 text-sm text-neutral-800">
+                      <td className="max-w-xs px-4 py-3 text-sm text-text-primary">
                         <span title={question.question_text}>{truncatedText}</span>
                       </td>
                       <td className="whitespace-nowrap px-4 py-3">
@@ -191,16 +187,16 @@ export function QuestionTable({
                       <td className="whitespace-nowrap px-4 py-3">
                         <StatusBadge status={question.status} />
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-700">
+                      <td className="whitespace-nowrap px-4 py-3 text-sm font-semibold text-text-secondary">
                         {question.correct_answer}번
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-600">
+                      <td className="whitespace-nowrap px-4 py-3 text-sm text-text-secondary">
                         {question.total_attempts}회 /{' '}
                         <span
                           className={
                             incorrectRate >= 50
-                              ? 'text-accent-600 font-semibold'
-                              : 'text-neutral-600'
+                              ? 'text-text-error font-semibold'
+                              : 'text-text-secondary'
                           }
                         >
                           {incorrectRate}%
@@ -211,21 +207,21 @@ export function QuestionTable({
                           <button
                             onClick={() => onEdit(question)}
                             aria-label="문제 수정"
-                            className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                            className="rounded-md p-1.5 text-text-secondary transition hover:bg-bg-surface-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-focus"
                           >
                             <Pencil size={15} aria-hidden="true" />
                           </button>
                           <button
                             onClick={() => onDelete(question)}
                             aria-label="문제 비활성화"
-                            className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                            className="rounded-md p-1.5 text-text-secondary transition hover:bg-bg-surface-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-focus"
                           >
                             <Power size={15} aria-hidden="true" />
                           </button>
                           <button
                             onClick={() => onHardDelete(question)}
                             aria-label="문제 영구 삭제"
-                            className="rounded-md p-1.5 text-accent-500 transition hover:bg-accent-50 hover:text-accent-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+                            className="rounded-md p-1.5 text-text-error transition hover:bg-bg-error hover:text-text-error focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-error"
                           >
                             <Trash2 size={15} aria-hidden="true" />
                           </button>
@@ -237,7 +233,7 @@ export function QuestionTable({
               </tbody>
             </table>
           </div>
-          <p className="border-t border-neutral-100 px-4 py-2 text-xs text-neutral-500">
+          <p className="border-t border-border-subtle px-4 py-2 text-xs text-text-secondary">
             {filtered.length}개 표시 (전체 {questions.length}개)
           </p>
         </div>

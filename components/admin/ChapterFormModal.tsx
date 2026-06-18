@@ -125,7 +125,7 @@ export function ChapterFormModal({
     <Modal open={open} onClose={onClose} title={title} maxWidthClass="max-w-xl">
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <Input
-          label="챕터명 *"
+          label="챕터명"
           placeholder="예: 챕터 1 - 기초 전술 이해"
           value={form.name}
           onChange={(e) => setField('name', e.target.value)}
@@ -134,7 +134,7 @@ export function ChapterFormModal({
         />
 
         <Input
-          label="순서 *"
+          label="순서"
           type="number"
           min={1}
           placeholder="1"
@@ -145,7 +145,7 @@ export function ChapterFormModal({
         />
 
         <Input
-          label="YouTube URL *"
+          label="YouTube URL"
           type="url"
           placeholder="https://www.youtube.com/watch?v=..."
           value={form.video_url}
@@ -156,7 +156,7 @@ export function ChapterFormModal({
 
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="영상 길이 (초) *"
+            label="영상 길이 (초)"
             type="number"
             min={1}
             placeholder="600"
@@ -167,7 +167,7 @@ export function ChapterFormModal({
           />
 
           <Input
-            label="필수 시청률 (%) *"
+            label="필수 시청률 (%)"
             type="number"
             min={1}
             max={100}
@@ -200,7 +200,7 @@ export function ChapterFormModal({
           }
         />
 
-        <div className="flex justify-end gap-2 border-t border-neutral-100 pt-4">
+        <div className="flex justify-end gap-2 border-t border-border-subtle pt-4">
           <Button
             type="button"
             variant="secondary"

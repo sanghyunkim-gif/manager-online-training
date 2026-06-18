@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { AlertCircle, Info, Check } from 'lucide-react';
 
 // YouTube IFrame API 타입 선언
 declare global {
@@ -75,7 +76,6 @@ export default function VideoPlayer({
 
     // API 준비 완료 콜백
     window.onYouTubeIframeAPIReady = () => {
-      console.log('YouTube IFrame API loaded');
       setApiLoaded(true);
     };
   }, []);
@@ -83,8 +83,6 @@ export default function VideoPlayer({
   // YouTube Player 초기화
   useEffect(() => {
     if (!apiLoaded || !videoId || !containerRef.current) return;
-
-    console.log('Initializing YouTube player with video ID:', videoId);
 
     try {
       playerRef.current = new window.YT.Player(containerRef.current, {
@@ -100,8 +98,7 @@ export default function VideoPlayer({
           iv_load_policy: 3,
         },
         events: {
-          onReady: (event: any) => {
-            console.log('YouTube player ready!');
+          onReady: (_event: any) => {
             setReady(true);
             setError(null);
           },
@@ -110,7 +107,6 @@ export default function VideoPlayer({
             setError('영상을 로드할 수 없습니다. URL을 확인해주세요.');
           },
           onStateChange: (event: any) => {
-            console.log('Player state changed:', event.data);
             // 재생 중일 때 진행 추적 시작
             if (event.data === window.YT.PlayerState.PLAYING) {
               startProgressTracking();
@@ -144,7 +140,6 @@ export default function VideoPlayer({
 
         // 스킵 방지: 이미 시청한 부분을 초과하면 되돌리기
         if (currentSeconds > currentMaxWatchedTime + 1.5) {
-          console.log('Skip detected, seeking back to:', currentMaxWatchedTime);
           playerRef.current.seekTo(currentMaxWatchedTime, true);
           return;
         }
@@ -189,9 +184,12 @@ export default function VideoPlayer({
 
   if (!videoId) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-800 font-semibold">⚠️ 유효하지 않은 YouTube URL입니다.</p>
-        <p className="text-sm text-red-600 mt-2">현재 URL: {url}</p>
+      <div className="bg-bg-error border border-border-error rounded-lg p-4">
+        <p className="text-text-error font-semibold flex items-center gap-2">
+          <AlertCircle size={16} aria-hidden="true" />
+          유효하지 않은 YouTube URL입니다.
+        </p>
+        <p className="text-sm text-text-error mt-2">현재 URL: {url}</p>
       </div>
     );
   }
@@ -199,9 +197,12 @@ export default function VideoPlayer({
   return (
     <div className="space-y-4">
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800 font-semibold">⚠️ {error}</p>
-          <p className="text-sm text-red-600 mt-2">
+        <div className="bg-bg-error border border-border-error rounded-lg p-4">
+          <p className="text-text-error font-semibold flex items-center gap-2">
+            <AlertCircle size={16} aria-hidden="true" />
+            {error}
+          </p>
+          <p className="text-sm text-text-error mt-2">
             현재 URL: {url}
           </p>
         </div>
@@ -220,36 +221,39 @@ export default function VideoPlayer({
       </div>
 
       {/* 진행률 표시 */}
-      <div className="bg-gray-50 rounded-lg p-4">
+      <div className="bg-bg-surface-secondary rounded-lg p-4">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium text-text-secondary">
             시청 진행률
           </span>
           <span
             className={`text-sm font-semibold ${
-              isCompleted ? 'text-green-600' : 'text-blue-600'
+              isCompleted ? 'text-text-success' : 'text-text-brand'
             }`}
           >
             {isCompleted ? (
-              <>✓ {Math.round(watchPercentage)}% 완료</>
+              <span className="flex items-center gap-1">
+                <Check size={14} aria-hidden="true" />
+                {Math.round(watchPercentage)}% 완료
+              </span>
             ) : (
               <>{Math.round(watchPercentage)}% (필수 {requiredPercentage}%)</>
             )}
           </span>
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-bg-surface-tertiary rounded-full h-2 overflow-hidden">
           <div
             className={`h-full transition-all duration-300 ${
-              isCompleted ? 'bg-green-500' : 'bg-blue-600'
+              isCompleted ? 'bg-[var(--text-success)]' : 'bg-bg-primary'
             }`}
             style={{ width: `${Math.min(watchPercentage, 100)}%` }}
           ></div>
         </div>
 
-        <div className="mt-2 text-xs text-gray-500">
+        <div className="mt-2 text-xs text-text-tertiary">
           {isCompleted ? (
-            <span className="text-green-600 font-semibold">
+            <span className="text-text-success font-semibold">
               필수 시청을 완료했습니다
             </span>
           ) : (
@@ -262,10 +266,10 @@ export default function VideoPlayer({
       </div>
 
       {/* 안내 메시지 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-        <p className="text-sm text-blue-800">
-          💡 영상은 1배속으로 재생되며, 이미 시청한 부분까지만 탐색할 수
-          있습니다.
+      <div className="bg-bg-surface-secondary border border-border-default rounded-lg p-3">
+        <p className="text-sm text-text-brand flex items-center gap-2">
+          <Info size={14} aria-hidden="true" />
+          영상은 1배속으로 재생되며, 이미 시청한 부분까지만 탐색할 수 있습니다.
         </p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { AlertTriangle, Pencil, Trash2, Power, Plus } from 'lucide-react';
+import { Badge } from 'plab-design-system';
 import type { DbChapter } from '@/types';
 import { Button } from '@/components/ui/Button';
 
@@ -15,16 +16,13 @@ interface ChapterTableProps {
 
 function StatusBadge({ status }: { status: 'Active' | 'Inactive' }) {
   return (
-    <span
-      className={[
-        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold',
-        status === 'Active'
-          ? 'bg-success-50 text-success-700 border border-success-200'
-          : 'bg-neutral-100 text-neutral-500 border border-neutral-200',
-      ].join(' ')}
+    <Badge
+      variant="soft"
+      tone={status === 'Active' ? 'success' : 'neutral'}
+      size="sm"
     >
       {status === 'Active' ? '활성' : '비활성'}
-    </span>
+    </Badge>
   );
 }
 
@@ -38,8 +36,8 @@ export function ChapterTable({
 }: ChapterTableProps) {
   if (chapters.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-lg border border-neutral-200 bg-neutral-50 py-16 text-center">
-        <p className="text-sm text-neutral-500">등록된 챕터가 없습니다.</p>
+      <div className="flex flex-col items-center gap-4 rounded-lg border border-border-subtle bg-bg-surface-secondary py-16 text-center">
+        <p className="text-sm text-text-secondary">등록된 챕터가 없습니다.</p>
         <Button leftIcon={<Plus size={16} />} onClick={onAdd}>
           첫 번째 챕터 추가
         </Button>
@@ -55,10 +53,10 @@ export function ChapterTable({
         </Button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-neutral-200 shadow-sm">
+      <div className="overflow-hidden rounded-lg border border-border-subtle shadow-sm">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-neutral-200">
-            <thead className="bg-neutral-100">
+          <table className="min-w-full divide-y divide-[color:var(--border-subtle)]">
+            <thead className="bg-bg-surface-secondary">
               <tr>
                 {[
                   '순서',
@@ -72,14 +70,14 @@ export function ChapterTable({
                   <th
                     key={h}
                     scope="col"
-                    className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-neutral-600"
+                    className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-text-secondary"
                   >
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100 bg-neutral-50">
+            <tbody className="divide-y divide-[color:var(--border-subtle)] bg-bg-surface">
               {chapters.map((chapter) => {
                 const activeCount = questionCounts[chapter.id] ?? 0;
                 const hasIntegrityIssue =
@@ -89,33 +87,37 @@ export function ChapterTable({
                 return (
                   <tr
                     key={chapter.id}
-                    className="transition hover:bg-neutral-100"
+                    className="transition hover:bg-bg-surface-secondary"
                   >
-                    <td className="whitespace-nowrap px-4 py-3 text-sm font-semibold text-neutral-800">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm font-semibold text-text-primary">
                       {chapter.order}
                     </td>
-                    <td className="px-4 py-3 text-sm font-medium text-neutral-800">
+                    <td className="px-4 py-3 text-sm font-medium text-text-primary">
                       {chapter.name}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <StatusBadge status={chapter.status} />
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-text-secondary">
                       {chapter.questions_count}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-neutral-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-text-secondary">
                       {activeCount}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       {hasIntegrityIssue ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-accent-50 px-2 py-0.5 text-xs font-semibold text-accent-600 border border-accent-200">
-                          <AlertTriangle size={12} aria-hidden="true" />
+                        <Badge
+                          variant="soft"
+                          tone="warning"
+                          size="sm"
+                          leftIcon={<AlertTriangle size={12} aria-hidden="true" />}
+                        >
                           {chapter.questions_count > activeCount
                             ? '출제 수 초과'
                             : '문제 없음'}
-                        </span>
+                        </Badge>
                       ) : (
-                        <span className="text-xs text-neutral-400">정상</span>
+                        <span className="text-xs text-text-tertiary">정상</span>
                       )}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
@@ -123,21 +125,21 @@ export function ChapterTable({
                         <button
                           onClick={() => onEdit(chapter)}
                           aria-label={`${chapter.name} 수정`}
-                          className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                          className="rounded-md p-1.5 text-text-secondary transition hover:bg-bg-surface-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-focus"
                         >
                           <Pencil size={15} aria-hidden="true" />
                         </button>
                         <button
                           onClick={() => onDelete(chapter)}
                           aria-label={`${chapter.name} 비활성화`}
-                          className="rounded-md p-1.5 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                          className="rounded-md p-1.5 text-text-secondary transition hover:bg-bg-surface-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-focus"
                         >
                           <Power size={15} aria-hidden="true" />
                         </button>
                         <button
                           onClick={() => onHardDelete(chapter)}
                           aria-label={`${chapter.name} 영구 삭제`}
-                          className="rounded-md p-1.5 text-accent-500 transition hover:bg-accent-50 hover:text-accent-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500"
+                          className="rounded-md p-1.5 text-text-error transition hover:bg-bg-error hover:text-text-error focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-error"
                         >
                           <Trash2 size={15} aria-hidden="true" />
                         </button>
