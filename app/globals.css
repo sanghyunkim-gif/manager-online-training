@@ -22,3 +22,12 @@ body {
 .animate-scale-in {
   animation: scale-in 280ms ease-out both;
 }
+
+/* 입력 컨트롤 곡률 축소 — plab-design-system 기본(rounded-full, pill)이 과해
+   8px(rounded-lg)로 통일. Button/Card 등 다른 요소의 둥근 형태는 유지.
+   (globals의 unlayered 규칙이 Tailwind utilities 레이어보다 우선) */
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  border-radius: 0.5rem;
+}
