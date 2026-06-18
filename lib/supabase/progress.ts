@@ -1,4 +1,5 @@
-import { supabase } from './client';
+// 서버 전용 모듈. service_role 클라이언트를 supabase 별칭으로 사용한다.
+import { supabaseAdmin as supabase } from './client';
 
 export interface DbUserProgress {
   id: string;
@@ -223,4 +224,31 @@ export async function getChapterAttemptCount(
   }
 
   return count || 0;
+}
+
+// 서버 측 채점 기록(chapter_history)으로 해당 챕터의 퀴즈를 전부 맞혔는지 검증한다.
+// 클라이언트가 보낸 완료 신호를 신뢰하지 않기 위한 진실 공급원이다.
+export async function hasPassedChapterQuiz(
+  userId: string,
+  chapterId: string
+): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('chapter_history')
+    .select('questions_correct, questions_total')
+    .eq('user_id', userId)
+    .eq('chapter_id', chapterId)
+    .eq('status', 'Completed')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error || !data || data.length === 0) {
+    return false;
+  }
+
+  const latest = data[0];
+  return (
+    latest.questions_total !== null &&
+    latest.questions_total > 0 &&
+    latest.questions_correct === latest.questions_total
+  );
 }

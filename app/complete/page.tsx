@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button, Badge } from 'plab-design-system';
+import { CheckCircle2, Check } from 'lucide-react';
 import type { Session, DbChapter } from '@/types';
 
 export default function CompletePage() {
@@ -62,14 +64,10 @@ export default function CompletePage() {
 
   if (loading) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8]">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
-        </div>
-        <div className="relative flex flex-col items-center gap-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-12 py-10 text-center shadow-lg">
-          <div className="h-14 w-14 animate-spin rounded-full border-4 border-white/20 border-t-white" />
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+      <div className="mx-auto flex min-h-screen max-w-[480px] flex-col items-center justify-center bg-bg-surface-secondary px-5">
+        <div className="flex w-full flex-col items-center gap-5 rounded-2xl border border-border-subtle bg-bg-surface px-8 py-10 text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-border-subtle border-t-bg-primary" />
+          <p className="text-sm font-bold text-text-secondary">
             완료 처리 중...
           </p>
         </div>
@@ -78,70 +76,64 @@ export default function CompletePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] px-4 sm:px-6 py-10 lg:py-16">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
+    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-bg-surface-secondary px-5 py-8">
+      {/* 완료 축하 카드 */}
+      <div className="animate-scale-in mb-4 flex flex-col items-center rounded-2xl border border-border-subtle bg-bg-surface px-6 py-8 text-center">
+        <CheckCircle2 className="mb-4 h-14 w-14 text-text-success" />
+        <h1 className="mb-2 text-2xl font-bold text-text-primary">
+          모든 과정을 완료했습니다!
+        </h1>
+        <p className="text-base text-text-secondary">
+          {session?.userName}님, 수고하셨습니다.
+        </p>
       </div>
 
-      <div className="relative mx-auto max-w-5xl space-y-10">
-        <div className="flex flex-col items-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-12 lg:p-16 text-center shadow-lg animate-scale-in">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-3">
-            모든 과정을 완료했습니다!
-          </h1>
-          <p className="text-xl text-white">
-            {session?.userName}님, 수고하셨습니다.
-          </p>
+      {/* 학습 결과 카드 */}
+      <div className="mb-4 rounded-2xl border border-border-subtle bg-bg-surface px-5 py-5">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-text-tertiary">완료 요약</p>
+            <h2 className="mt-0.5 text-xl font-bold text-text-primary">학습 결과</h2>
+          </div>
+          <Badge tone="success" variant="soft" size="md">
+            {chapters.length}개 챕터 완료
+          </Badge>
         </div>
 
-        <div className="rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-8 lg:p-10 shadow-lg">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs uppercase tracking-[0.16em] text-white font-bold mb-1">
-                완료 요약
-              </p>
-              <h2 className="text-3xl font-extrabold text-white">학습 결과</h2>
-            </div>
-            <div className="rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 text-sm font-bold text-white">
-              {chapters.length}개 챕터 완료
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {chapters.map((ch) => (
-              <div
-                key={ch.id}
-                className="group flex items-center gap-5 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-5 transition-all hover:border-white/30 hover:shadow-sm"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-xl font-bold text-white">
-                  ✓
-                </div>
-                <div className="flex-1">
-                  <p className="text-base font-bold text-white">
-                    {ch.order}장. {ch.name}
-                  </p>
-                </div>
+        <div className="space-y-2">
+          {chapters.map((ch) => (
+            <div
+              key={ch.id}
+              className="flex items-center gap-3 rounded-xl border border-border-subtle bg-bg-surface-secondary px-4 py-3"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-bg-surface">
+                <Check className="h-4 w-4 text-text-success" />
               </div>
-            ))}
-          </div>
-
-          <div className="mt-10 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-8">
-            <h3 className="text-2xl font-bold text-white mb-3">다음 단계</h3>
-            <p className="text-white leading-relaxed text-base">
-              온라인 실습을 완료했습니다. 지원 페이지로 돌아가 나머지 과정을 진행해주세요.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex justify-center">
-          <button
-            onClick={handleClose}
-            className="group rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-10 py-4 text-base font-bold text-white transition hover:opacity-90 focus:ring-2 focus:ring-white/50 focus:ring-offset-2"
-          >
-            닫기
-          </button>
+              <p className="text-sm font-semibold text-text-primary">
+                {ch.order}장. {ch.name}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* 다음 단계 카드 */}
+      <div className="mb-6 rounded-2xl border border-border-subtle bg-bg-surface px-5 py-5">
+        <h3 className="mb-2 text-base font-bold text-text-primary">다음 단계</h3>
+        <p className="text-sm leading-relaxed text-text-secondary">
+          온라인 실습을 완료했습니다. 지원 페이지로 돌아가 나머지 과정을 진행해주세요.
+        </p>
+      </div>
+
+      {/* 닫기 버튼 */}
+      <Button
+        variant="solid"
+        size="lg"
+        onClick={handleClose}
+        className="w-full"
+      >
+        닫기
+      </Button>
     </div>
   );
 }

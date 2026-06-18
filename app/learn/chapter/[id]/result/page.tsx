@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Button, Badge } from 'plab-design-system';
 import ProgressHeader from '@/components/layout/ProgressHeader';
 import type { Session, DbChapter, DbUserProgress } from '@/types';
 
@@ -118,16 +120,10 @@ export default function ResultPage() {
 
   if (loading) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8]">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
-        </div>
-        <div className="relative flex flex-col items-center gap-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-12 py-10 text-center shadow-lg">
-          <div className="h-14 w-14 animate-spin rounded-full border-4 border-white/20 border-t-white" />
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-white">
-            결과 확인 중...
-          </p>
+      <div className="flex min-h-screen items-center justify-center bg-bg-surface-secondary">
+        <div className="flex flex-col items-center gap-5 rounded-2xl border border-border-subtle bg-bg-surface px-12 py-10 text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-border-subtle border-t-bg-primary" />
+          <p className="text-sm font-semibold text-text-secondary">결과 확인 중...</p>
         </div>
       </div>
     );
@@ -137,12 +133,12 @@ export default function ResultPage() {
     return null;
   }
 
+  const isLastChapter =
+    allChapters.findIndex((c) => c.id === chapterId) >= allChapters.length - 1;
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#2d1b69] via-[#3b2f87] to-[#4a5ea8] pb-12">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-bl from-[#5dd9d1]/30 via-[#7b9ad9]/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 h-1/2 w-1/2 bg-gradient-to-tr from-[#8b5cbb]/20 to-transparent" />
-      </div>
+    <div className="min-h-screen bg-bg-surface-secondary">
+      {/* ProgressHeader — 수정 금지, max-w-6xl 그대로 */}
       <ProgressHeader
         userName={session.userName}
         currentChapterOrder={chapter.order}
@@ -151,120 +147,124 @@ export default function ResultPage() {
         chapterName={`${chapter.order}장. ${chapter.name} - 결과`}
       />
 
-      <div className="relative mx-auto max-w-5xl px-6 py-8">
-        <div className="rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-8 shadow-lg">
-          {resultData.allCorrect ? (
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-3xl">
-                ✅
-              </div>
-              <h1 className="text-3xl font-extrabold mb-2 text-white">축하합니다!</h1>
-              <p className="text-lg text-white mb-8">
-                {chapter.order}장을 완료했습니다.
-              </p>
+      {/* 콘텐츠 컨테이너: 모바일 폭으로 제한 */}
+      <div className="mx-auto max-w-[480px] px-5 py-5">
+        {resultData.allCorrect ? (
+          /* 전체 정답 */
+          <div className="rounded-2xl border border-border-subtle bg-bg-surface p-6 text-center">
+            <CheckCircle2
+              size={48}
+              className="mx-auto mb-4 text-text-success"
+              aria-hidden="true"
+            />
+            <h1 className="mb-2 text-2xl font-extrabold text-text-primary">
+              축하합니다!
+            </h1>
+            <p className="mb-6 text-base text-text-secondary">
+              {chapter.order}장을 완료했습니다.
+            </p>
 
-              <div className="mb-8 inline-flex items-center gap-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-6 py-4">
-                <span className="text-sm font-bold uppercase tracking-[0.12em] text-white">
-                  정답
-                </span>
-                <span className="text-xl font-bold text-white">
-                  {resultData.correctCount} / {resultData.totalCount}
-                </span>
-              </div>
-
-              <button
-                onClick={handleNext}
-                className="rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-8 py-4 text-lg font-bold text-white transition hover:opacity-90"
-              >
-                {allChapters.findIndex((c) => c.id === chapterId) <
-                allChapters.length - 1
-                  ? '다음 챕터로 →'
-                  : '완료 →'}
-              </button>
+            <div className="mb-8 flex justify-center">
+              <Badge tone="success" variant="soft" size="md">
+                정답 {resultData.correctCount} / {resultData.totalCount}
+              </Badge>
             </div>
-          ) : (
-            <div>
-              <div className="text-center mb-8">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-3xl">
-                  ⚠️
-                </div>
-                <h1 className="text-3xl font-extrabold mb-2 text-white">아쉽습니다!</h1>
-                <p className="text-lg text-white mb-4">
-                  오답이 있습니다
-                </p>
 
-                <div className="inline-flex items-center gap-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-6 py-4">
-                  <span className="text-sm font-bold uppercase tracking-[0.12em] text-white">
-                    정답
-                  </span>
-                  <span className="text-xl font-bold text-white">
-                    {resultData.correctCount} / {resultData.totalCount}
-                  </span>
-                </div>
+            <Button
+              variant="solid"
+              className="w-full"
+              onClick={handleNext}
+            >
+              {isLastChapter ? '완료' : '다음 챕터로'}
+              <ArrowRight size={16} aria-hidden="true" />
+            </Button>
+          </div>
+        ) : (
+          /* 오답 있음 */
+          <div className="flex flex-col gap-4">
+            {/* 결과 헤더 카드 */}
+            <div className="rounded-2xl border border-border-subtle bg-bg-surface p-6 text-center">
+              <AlertTriangle
+                size={48}
+                className="mx-auto mb-4 text-text-error"
+                aria-hidden="true"
+              />
+              <h1 className="mb-2 text-2xl font-extrabold text-text-primary">
+                아쉽습니다!
+              </h1>
+              <p className="mb-6 text-base text-text-secondary">오답이 있습니다</p>
+
+              <div className="flex justify-center">
+                <Badge tone="error" variant="soft" size="md">
+                  정답 {resultData.correctCount} / {resultData.totalCount}
+                </Badge>
               </div>
+            </div>
 
-              <div className="rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-6">
-                <h2 className="text-xl font-bold mb-4 text-white">오답 문제</h2>
+            {/* 오답 목록 */}
+            <div className="rounded-2xl border border-border-subtle bg-bg-surface p-5">
+              <h2 className="mb-4 text-base font-bold text-text-primary">오답 문제</h2>
 
-                <div className="space-y-6">
-                  {resultData.incorrectQuestions.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-6"
-                    >
-                      <h3 className="font-bold text-white mb-2">
-                        문제 {idx + 1}
-                      </h3>
-                      <p className="text-sm text-white font-medium mb-4 whitespace-pre-wrap">
-                        {item.questionText}
-                      </p>
+              <div className="space-y-4">
+                {resultData.incorrectQuestions.map((item, idx) => (
+                  <div
+                    key={item.questionId}
+                    className="rounded-xl border border-border-subtle bg-bg-surface-secondary p-4"
+                  >
+                    <h3 className="mb-2 font-bold text-text-primary">
+                      문제 {idx + 1}
+                    </h3>
+                    <p className="mb-4 text-sm font-medium text-text-primary whitespace-pre-wrap">
+                      {item.questionText}
+                    </p>
 
-                      <div className="space-y-2 mb-4 text-sm">
-                        <div className="flex items-start gap-2 text-white">
-                          <span className="font-bold">당신의 답변:</span>
-                          <span className="font-medium">
-                            {item.userAnswer}. {item.options[item.userAnswer]}
-                          </span>
-                        </div>
-                        <div className="flex items-start gap-2 text-white">
-                          <span className="font-bold">정답:</span>
-                          <span className="font-medium">
-                            {item.correctAnswer}. {item.options[item.correctAnswer]}
-                          </span>
+                    <div className="mb-4 space-y-1 text-sm">
+                      <div className="flex items-start gap-2">
+                        <span className="font-semibold text-text-secondary">당신의 답변:</span>
+                        <span className="text-text-secondary">
+                          {item.userAnswer}. {item.options[item.userAnswer]}
+                        </span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="font-semibold text-text-secondary">정답:</span>
+                        <span className="font-semibold text-text-primary">
+                          {item.correctAnswer}. {item.options[item.correctAnswer]}
+                        </span>
+                      </div>
+                    </div>
+
+                    {item.explanation && (
+                      <div className="rounded-lg border border-border-subtle bg-bg-surface p-4">
+                        <p className="mb-2 text-xs font-bold text-text-secondary">
+                          해설
+                        </p>
+                        <div className="prose prose-sm max-w-none prose-headings:text-text-primary prose-p:text-text-secondary prose-strong:text-text-primary prose-li:text-text-secondary prose-a:text-text-brand">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {item.explanation}
+                          </ReactMarkdown>
                         </div>
                       </div>
-
-                      {item.explanation && (
-                        <div className="rounded-lg bg-white/10 backdrop-blur-md border border-white/20 p-4">
-                          <p className="text-xs font-bold text-white mb-2">
-                            해설:
-                          </p>
-                          <div className="prose prose-sm max-w-none text-white">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {item.explanation}
-                            </ReactMarkdown>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-8 text-center">
-                <p className="text-white mb-6">
-                  학습 자료를 다시 확인하고 문제를 재시도해주세요
-                </p>
-                <button
-                  onClick={handleRetry}
-                  className="rounded-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] shadow-lg shadow-blue-500/25 px-8 py-4 text-lg font-bold text-white transition hover:opacity-90"
-                >
-                  다시 학습하기
-                </button>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-        </div>
+
+            {/* 재시도 버튼 */}
+            <div className="rounded-2xl border border-border-subtle bg-bg-surface p-5 text-center">
+              <p className="mb-4 text-sm text-text-secondary">
+                학습 자료를 다시 확인하고 문제를 재시도해주세요
+              </p>
+              <Button
+                variant="solid"
+                className="w-full"
+                onClick={handleRetry}
+              >
+                다시 학습하기
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

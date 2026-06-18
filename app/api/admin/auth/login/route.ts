@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { sign } from 'jsonwebtoken';
-
-const SECRET_KEY = process.env.ADMIN_JWT_SECRET || 'your-secret-key-change-in-production';
+import { signAdminToken, ADMIN_TOKEN_MAX_AGE } from '@/lib/auth/admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,11 +19,8 @@ export async function POST(request: NextRequest) {
 
     // 로그인 검증
     if (username === adminUsername && password === adminPassword) {
-      // JWT 토큰 생성
-      const token = sign(
-        { username, role: 'admin', exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 }, // 24시간
-        SECRET_KEY
-      );
+      // JWT 토큰 생성 (시크릿 로딩/서명은 lib/auth/admin 으로 단일화)
+      const token = signAdminToken(username);
 
       // 쿠키에 토큰 저장
       const cookieStore = await cookies();
@@ -33,7 +28,7 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24, // 24시간
+        maxAge: ADMIN_TOKEN_MAX_AGE,
         path: '/',
       });
 

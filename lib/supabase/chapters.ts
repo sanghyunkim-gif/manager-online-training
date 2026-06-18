@@ -1,4 +1,5 @@
-import { supabase } from './client';
+// 서버 전용 모듈. service_role 클라이언트를 supabase 별칭으로 사용한다.
+import { supabaseAdmin as supabase } from './client';
 
 export interface DbChapter {
   id: string;
