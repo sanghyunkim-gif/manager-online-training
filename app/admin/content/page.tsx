@@ -39,6 +39,7 @@ type ChapterPayload = {
   video_duration: number;
   required_watch_percentage: number;
   description: string | null;
+  questions_count: number;
   status: 'Active' | 'Inactive';
 };
 
@@ -635,6 +636,11 @@ export default function ContentManagementPage() {
         open={chapterModalOpen}
         onClose={() => setChapterModalOpen(false)}
         chapter={editingChapter}
+        activeQuestionCount={
+          editingChapter && chaptersState.status === 'loaded'
+            ? chaptersState.data.questionCounts[editingChapter.id] ?? 0
+            : undefined
+        }
         onSubmit={handleChapterSubmit}
       />
 

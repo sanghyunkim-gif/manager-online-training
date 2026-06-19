@@ -15,6 +15,7 @@ type ChapterPayload = {
   video_duration: number;
   required_watch_percentage: number;
   description: string | null;
+  questions_count: number;
   status: 'Active' | 'Inactive';
 };
 
@@ -22,6 +23,8 @@ interface ChapterFormModalProps {
   open: boolean;
   onClose: () => void;
   chapter?: DbChapter;
+  /** 수정 대상 챕터의 현재 활성 문제 수. 출제 수 입력 시 가이드/경고에 사용. */
+  activeQuestionCount?: number;
   onSubmit: (payload: ChapterPayload) => Promise<void>;
 }
 
@@ -37,6 +40,7 @@ const DEFAULT_FORM: ChapterPayload = {
   video_duration: 0,
   required_watch_percentage: 60,
   description: null,
+  questions_count: 5,
   status: 'Active',
 };
 
@@ -49,6 +53,7 @@ function buildForm(chapter?: DbChapter): ChapterPayload {
     video_duration: chapter.video_duration,
     required_watch_percentage: chapter.required_watch_percentage,
     description: chapter.description,
+    questions_count: chapter.questions_count,
     status: chapter.status,
   };
 }
@@ -59,12 +64,14 @@ interface FormErrors {
   video_url?: string;
   video_duration?: string;
   required_watch_percentage?: string;
+  questions_count?: string;
 }
 
 export function ChapterFormModal({
   open,
   onClose,
   chapter,
+  activeQuestionCount,
   onSubmit,
 }: ChapterFormModalProps) {
   const [form, setForm] = useState<ChapterPayload>(() => buildForm(chapter));
@@ -91,6 +98,8 @@ export function ChapterFormModal({
       form.required_watch_percentage > 100
     )
       newErrors.required_watch_percentage = '1~100 사이 값을 입력하세요.';
+    if (!Number.isInteger(form.questions_count) || form.questions_count < 1)
+      newErrors.questions_count = '출제 수는 1 이상이어야 합니다.';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -179,6 +188,39 @@ export function ChapterFormModal({
             error={errors.required_watch_percentage}
             required
           />
+        </div>
+
+        <div>
+          <Input
+            label="출제 수"
+            type="number"
+            min={1}
+            placeholder="5"
+            value={String(form.questions_count)}
+            onChange={(e) => setField('questions_count', Number(e.target.value))}
+            error={errors.questions_count}
+            required
+          />
+          {!errors.questions_count && (
+            <p
+              className={
+                chapter &&
+                activeQuestionCount !== undefined &&
+                form.questions_count > activeQuestionCount
+                  ? 'mt-1.5 text-xs text-text-warning'
+                  : 'mt-1.5 text-xs text-text-secondary'
+              }
+            >
+              {chapter && activeQuestionCount !== undefined
+                ? form.questions_count > activeQuestionCount
+                  ? `현재 활성 문제는 ${activeQuestionCount}개입니다. 출제 수가 더 많아 실제로는 ${activeQuestionCount}개만 무작위 출제됩니다.`
+                  : `학습자에게 활성 문제 ${activeQuestionCount}개 중 매번 무작위로 ${Math.min(
+                      form.questions_count,
+                      activeQuestionCount
+                    )}개가 출제됩니다.`
+                : '활성 문제 중 매번 무작위로 이 수만큼 출제됩니다.'}
+            </p>
+          )}
         </div>
 
         <Textarea
