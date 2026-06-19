@@ -202,6 +202,21 @@ async function tryCreateUser(
   throw new Error(message || '사용자 정보를 처리할 수 없습니다.');
 }
 
+/**
+ * 세션 토큰으로 사용자를 조회한다. IDOR 방어용 인증 검증에 사용한다.
+ * 빈 토큰은 즉시 null 반환(DB 쿼리 불필요).
+ */
+export async function getUserBySessionToken(token: string): Promise<DbUser | null> {
+  if (!token) return null;
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('session_token', token)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data;
+}
+
 export async function getUserById(userId: string): Promise<DbUser | null> {
   const { data, error } = await supabase
     .from('users')

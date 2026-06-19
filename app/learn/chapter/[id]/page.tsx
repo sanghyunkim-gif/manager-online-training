@@ -50,9 +50,9 @@ export default function ChapterPage() {
         }
         setChapter(currentChapter);
 
-        const progressRes = await fetch(
-          `/api/progress/get?userId=${parsedSession.userId}`
-        );
+        const progressRes = await fetch('/api/progress/get', {
+          headers: { 'X-Session-Token': parsedSession.sessionToken },
+        });
         const progressData = await progressRes.json();
 
         if (progressData.success && progressData.data.length > 0) {
@@ -84,22 +84,17 @@ export default function ChapterPage() {
     init();
   }, [chapterId, router]);
 
-  const handleProgressUpdate = async (
-    watchTime: number,
-    percentage: number
-  ) => {
+  const handleProgressUpdate = async (watchTime: number) => {
     if (!session) return;
 
     try {
       await fetch('/api/progress/save', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: session.userId,
-          chapterId,
-          watchTime,
-          isWatched: percentage >= (chapter?.required_watch_percentage || 60),
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Session-Token': session.sessionToken,
+        },
+        body: JSON.stringify({ chapterId, watchTime }),
       });
     } catch (err) {
       console.error('진행 상황 저장 오류:', err);

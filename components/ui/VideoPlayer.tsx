@@ -1,12 +1,43 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { AlertCircle, Info, Check } from 'lucide-react';
 
-// YouTube IFrame API 타입 선언
+// YouTube IFrame API 최소 타입 선언 (공식 @types/youtube 없이 수동 정의)
+interface YTPlayerEvent {
+  data: number;
+  target: YTPlayer;
+}
+interface YTPlayer {
+  getCurrentTime(): number;
+  seekTo(seconds: number, allowSeekAhead: boolean): void;
+  destroy(): void;
+}
+interface YTPlayerState {
+  PLAYING: number;
+  PAUSED: number;
+  ENDED: number;
+}
+interface YTNamespace {
+  Player: new (
+    container: HTMLElement,
+    options: {
+      videoId: string;
+      width: string;
+      height: string;
+      playerVars: Record<string, number>;
+      events: {
+        onReady?: (event: { target: YTPlayer }) => void;
+        onError?: (event: YTPlayerEvent) => void;
+        onStateChange?: (event: YTPlayerEvent) => void;
+      };
+    }
+  ) => YTPlayer;
+  PlayerState: YTPlayerState;
+}
 declare global {
   interface Window {
-    YT: any;
+    YT: YTNamespace;
     onYouTubeIframeAPIReady: () => void;
   }
 }
@@ -28,7 +59,7 @@ export default function VideoPlayer({
   onProgressUpdate,
   onComplete,
 }: VideoPlayerProps) {
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const maxWatchedTimeRef = useRef(initialWatchTime); // ref로 최신 값 추적
@@ -57,6 +88,42 @@ export default function VideoPlayer({
   };
 
   const videoId = getVideoId(url);
+
+  // 진행률 추적 (useCallback으로 안정적 참조 확보 — useEffect deps 충족)
+  const stopProgressTracking = useCallback(() => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+  }, []);
+
+  const startProgressTracking = useCallback(() => {
+    if (progressIntervalRef.current) return;
+
+    progressIntervalRef.current = setInterval(() => {
+      if (playerRef.current && playerRef.current.getCurrentTime) {
+        const currentSeconds = playerRef.current.getCurrentTime();
+        const currentMaxWatchedTime = maxWatchedTimeRef.current;
+
+        // 스킵 방지: 이미 시청한 부분을 초과하면 되돌리기
+        if (currentSeconds > currentMaxWatchedTime + 1.5) {
+          playerRef.current.seekTo(currentMaxWatchedTime, true);
+          return;
+        }
+
+        setCurrentTime(currentSeconds);
+
+        // 최대 시청 시간 업데이트
+        if (currentSeconds > currentMaxWatchedTime) {
+          maxWatchedTimeRef.current = currentSeconds; // ref 업데이트
+          setMaxWatchedTime(currentSeconds); // state 업데이트
+          const percentage =
+            videoDuration > 0 ? (currentSeconds / videoDuration) * 100 : 0;
+          onProgressUpdate(currentSeconds, percentage);
+        }
+      }
+    }, 1000);
+  }, [videoDuration, onProgressUpdate]);
 
   // YouTube IFrame API 로드
   useEffect(() => {
@@ -98,15 +165,15 @@ export default function VideoPlayer({
           iv_load_policy: 3,
         },
         events: {
-          onReady: (_event: any) => {
+          onReady: () => {
             setReady(true);
             setError(null);
           },
-          onError: (event: any) => {
+          onError: (event: YTPlayerEvent) => {
             console.error('YouTube player error:', event.data);
             setError('영상을 로드할 수 없습니다. URL을 확인해주세요.');
           },
-          onStateChange: (event: any) => {
+          onStateChange: (event: YTPlayerEvent) => {
             // 재생 중일 때 진행 추적 시작
             if (event.data === window.YT.PlayerState.PLAYING) {
               startProgressTracking();
@@ -127,43 +194,7 @@ export default function VideoPlayer({
         playerRef.current.destroy();
       }
     };
-  }, [apiLoaded, videoId]);
-
-  // 진행률 추적
-  const startProgressTracking = () => {
-    if (progressIntervalRef.current) return;
-
-    progressIntervalRef.current = setInterval(() => {
-      if (playerRef.current && playerRef.current.getCurrentTime) {
-        const currentSeconds = playerRef.current.getCurrentTime();
-        const currentMaxWatchedTime = maxWatchedTimeRef.current;
-
-        // 스킵 방지: 이미 시청한 부분을 초과하면 되돌리기
-        if (currentSeconds > currentMaxWatchedTime + 1.5) {
-          playerRef.current.seekTo(currentMaxWatchedTime, true);
-          return;
-        }
-
-        setCurrentTime(currentSeconds);
-
-        // 최대 시청 시간 업데이트
-        if (currentSeconds > currentMaxWatchedTime) {
-          maxWatchedTimeRef.current = currentSeconds; // ref 업데이트
-          setMaxWatchedTime(currentSeconds); // state 업데이트
-          const percentage =
-            videoDuration > 0 ? (currentSeconds / videoDuration) * 100 : 0;
-          onProgressUpdate(currentSeconds, percentage);
-        }
-      }
-    }, 1000);
-  };
-
-  const stopProgressTracking = () => {
-    if (progressIntervalRef.current) {
-      clearInterval(progressIntervalRef.current);
-      progressIntervalRef.current = null;
-    }
-  };
+  }, [apiLoaded, videoId, startProgressTracking, stopProgressTracking]);
 
   const watchPercentage =
     videoDuration > 0 ? (maxWatchedTime / videoDuration) * 100 : 0;

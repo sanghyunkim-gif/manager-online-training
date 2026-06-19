@@ -9,14 +9,28 @@ import {
   createChapterHistory,
   completeChapterHistory,
 } from '@/lib/supabase/progress';
+import { getUserBySessionToken } from '@/lib/supabase/users';
 import type { ApiResponse } from '@/types';
 
-export async function POST(request: NextRequest) {
+export const runtime = 'nodejs';
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  // X-Session-Token 헤더로 사용자를 식별한다. body.userId는 신뢰하지 않는다(IDOR 방어).
+  const sessionToken = request.headers.get('X-Session-Token') ?? '';
+  const authUser = await getUserBySessionToken(sessionToken);
+  if (!authUser) {
+    return NextResponse.json(
+      { success: false, error: 'unauthorized' } as ApiResponse,
+      { status: 401 }
+    );
+  }
+  const userId = authUser.id;
+
   try {
     const body = await request.json();
-    const { userId, chapterId, answers } = body;
+    const { chapterId, answers } = body;
 
-    if (!userId || !chapterId || !answers) {
+    if (!chapterId || !answers) {
       return NextResponse.json(
         {
           success: false,
@@ -103,13 +117,17 @@ export async function POST(request: NextRequest) {
       success: true,
       data: resultData,
     } as ApiResponse);
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '답안을 제출할 수 없습니다.';
-
+  } catch (err: unknown) {
+    // 내부 오류는 서버 로그에만 기록하고 클라이언트에는 generic 메시지 반환
+    console.error(
+      '[POST /api/answer/submit] 답안 제출 실패:',
+      err instanceof Error ? err.message : err,
+      { userId }
+    );
     return NextResponse.json(
       {
         success: false,
-        error: message,
+        error: '처리 중 오류가 발생했습니다.',
       } as ApiResponse,
       { status: 500 }
     );

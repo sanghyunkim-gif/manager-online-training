@@ -33,7 +33,10 @@ export default function CompletePage() {
 
         const completeRes = await fetch('/api/complete', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Session-Token': parsedSession.sessionToken,
+          },
           body: JSON.stringify({ userId: parsedSession.userId }),
         });
 
