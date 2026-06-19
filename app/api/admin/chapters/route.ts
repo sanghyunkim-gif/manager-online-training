@@ -5,7 +5,7 @@ import { supabaseAdmin as supabase } from '@/lib/supabase/client';
 import type { ApiResponse } from '@/types';
 import type { DbChapter } from '@/lib/supabase/chapters';
 import { isAdminAuthenticated } from '@/lib/auth/admin';
-import { pickChapterFields } from '@/lib/validation/chapter';
+import { pickChapterFields, validateQuestionsCount } from '@/lib/validation/chapter';
 
 interface AdminChaptersResponse {
   chapters: DbChapter[];
@@ -104,6 +104,18 @@ export async function POST(
           success: false,
           error: `status는 'Active', 'Inactive' 중 하나여야 합니다. 현재 값: ${String(input.status)}`,
         } as ApiResponse<DbChapter>,
+        { status: 400 }
+      );
+    }
+
+    // 출제 수가 포함된 경우 값 검증 (1 이상 정수)
+    const qcError =
+      'questions_count' in input
+        ? validateQuestionsCount(input.questions_count)
+        : null;
+    if (qcError) {
+      return NextResponse.json(
+        { success: false, error: qcError } as ApiResponse<DbChapter>,
         { status: 400 }
       );
     }

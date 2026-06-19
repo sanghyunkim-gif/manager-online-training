@@ -3,7 +3,7 @@ import { updateChapter, deleteChapter } from '@/lib/supabase/chapters';
 import type { ApiResponse } from '@/types';
 import type { DbChapter } from '@/lib/supabase/chapters';
 import { isAdminAuthenticated } from '@/lib/auth/admin';
-import { pickChapterFields } from '@/lib/validation/chapter';
+import { pickChapterFields, validateQuestionsCount } from '@/lib/validation/chapter';
 
 export async function PUT(
   request: NextRequest,
@@ -35,8 +35,19 @@ export async function PUT(
       );
     }
 
-    // mass assignment 방지: 허용된 필드만 추출 (id/created_at/updated_at/questions_count 등 차단)
+    // mass assignment 방지: 허용된 필드만 추출 (id/created_at/updated_at 등 차단)
     const updates = pickChapterFields(body);
+
+    // 출제 수가 포함된 경우 값 검증 (1 이상 정수)
+    if ('questions_count' in updates) {
+      const qcError = validateQuestionsCount(updates.questions_count);
+      if (qcError) {
+        return NextResponse.json(
+          { success: false, error: qcError } as ApiResponse<DbChapter>,
+          { status: 400 }
+        );
+      }
+    }
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json(
