@@ -34,9 +34,9 @@ export default function LearnPage() {
 
         const chapters: DbChapter[] = chaptersData.data;
 
-        const progressRes = await fetch(
-          `/api/progress/get?userId=${parsedSession.userId}`
-        );
+        const progressRes = await fetch('/api/progress/get', {
+          headers: { 'X-Session-Token': parsedSession.sessionToken },
+        });
         const progressData = await progressRes.json();
 
         let nextChapter = chapters[0];

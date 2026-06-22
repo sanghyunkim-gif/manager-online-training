@@ -56,9 +56,9 @@ export default function QuizPage() {
         }
         setChapter(currentChapter);
 
-        const progressRes = await fetch(
-          `/api/progress/get?userId=${parsedSession.userId}`
-        );
+        const progressRes = await fetch('/api/progress/get', {
+          headers: { 'X-Session-Token': parsedSession.sessionToken },
+        });
         const progressData = await progressRes.json();
 
         if (!mounted) return;
@@ -136,12 +136,11 @@ export default function QuizPage() {
     try {
       const response = await fetch('/api/answer/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: session?.userId,
-          chapterId,
-          answers,
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Session-Token': session?.sessionToken ?? '',
+        },
+        body: JSON.stringify({ chapterId, answers }),
       });
 
       const data = await response.json();

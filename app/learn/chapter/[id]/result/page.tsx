@@ -100,7 +100,10 @@ export default function ResultPage() {
 
     await fetch('/api/progress/complete', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': session.sessionToken,
+      },
       body: JSON.stringify({
         userId: session.userId,
         chapterId,
