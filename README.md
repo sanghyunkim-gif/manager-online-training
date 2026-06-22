@@ -1,245 +1,143 @@
 # 플랩풋볼 매니저 온라인 실습 플랫폼
 
-플랩풋볼 매니저 지원자를 위한 온라인 교육 및 평가 시스템입니다.
+플랩풋볼 매니저 지원자를 위한 온라인 교육·평가 시스템입니다. 영상 학습과 챕터별 문제 풀이를 통해 매니저 역할을 익히고, 관리자는 콘텐츠 관리와 학습 통계를 한곳에서 운영합니다.
 
-## 🚀 기능
+## 주요 기능
 
-### 학습자 기능
-- ✅ 이름/전화번호로 간편 시작
-- 📹 영상 시청 추적 (60% 이상 시청 강제)
-- 📝 챕터별 랜덤 문제 출제
-- 🔄 오답 시 자동 재학습
-- 📊 학습 진행 상황 자동 저장
-- 🎉 완료 시 결과 요약 및 다음 단계 안내
+### 학습자
+- 이름·전화번호·지역·지원동기 입력 후 간편 시작 (개인정보 동의 필수)
+- 영상 시청 추적 — 챕터별 지정 비율 이상 시청해야 다음 단계 진행
+- 챕터별 랜덤 문제 출제 (4지선다)
+- 오답 시 자동 재학습 유도
+- 학습 진행 상황 자동 저장 (영상 시청 시간·완료 챕터)
+- 전체 완료 시 결과 요약 및 다음 단계 안내
 
-### 관리자 기능
-- 👥 사용자 학습 진행률 모니터링
-- 📈 문제별 정답률 통계
-- 📥 학습 데이터 내보내기 (CSV/Excel)
-- 📚 챕터 및 문제 관리 (Airtable)
+### 관리자
+- 관리자 로그인 (JWT 세션 인증)
+- 대시보드 요약 카드 (전체/진행 중/완료 등)
+- 통계 5종: 사용자 목록·챕터별 완료율·문제별 오답률·이탈 분석·지역별 분포
+- 챕터 CRUD (제목·영상·시청 강제 비율·챕터별 출제 수 등 편집)
+- 문제 CRUD (보기·정답·해설·난이도 편집)
 
-## 🛠️ 기술 스택
+## 기술 스택
 
-- **Frontend**: Next.js 16 (App Router), TypeScript, Tailwind CSS
-- **Database**: Airtable
-- **Video**: React Player
-- **Deployment**: Vercel (권장)
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript
+- **Database**: Supabase (PostgreSQL) — `@supabase/supabase-js`, 서버에서 service_role 키로만 접근 + RLS
+- **Styling**: Tailwind CSS 4, [plab-design-system](vendor/plab-design-system) (vendored), Pretendard 폰트
+- **Icons**: lucide-react
+- **Video**: react-player
+- **Markdown**: react-markdown + remark-gfm (챕터 설명·해설 렌더링)
+- **Auth**: jsonwebtoken (관리자 JWT)
+- **Deployment**: Vercel
 
-## 📋 시작하기
+> `plab-design-system`은 비공개 저장소라 빌드 안정성을 위해 `vendor/`에 dist를 포함(vendored)하고 `package.json`에서 `file:vendor/plab-design-system`으로 참조합니다.
+
+## 시작하기
 
 ### 1. 환경 변수 설정
 
-`.env.local` 파일을 열어 Airtable 정보를 입력하세요:
+`.env.example`을 복사해 `.env.local`을 만들고 값을 채웁니다.
 
-\`\`\`bash
-AIRTABLE_API_KEY=your_api_key_here
-AIRTABLE_BASE_ID=your_base_id_here
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+# 서버 전용 — 절대 NEXT_PUBLIC_ 접두사 금지 (브라우저 노출 시 RLS 우회 위험)
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+
+# 관리자 인증
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your_admin_password_here
+# 관리자 JWT 서명 시크릿 (고엔트로피 랜덤 문자열, 미설정 시 관리자 인증 비활성)
+ADMIN_JWT_SECRET=your_admin_jwt_secret_here
+
+# 앱
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-\`\`\`
+```
 
-### 2. Airtable 설정
+> 배포(Vercel) 시에는 위 환경 변수를 프로젝트 설정의 Environment Variables에 등록합니다. `service_role` 키와 JWT 시크릿은 서버 전용이며 클라이언트에 노출되지 않습니다.
 
-#### Airtable API 키 발급:
-1. https://airtable.com/create/tokens 접속
-2. "Create new token" 클릭
-3. Scopes에서 다음 권한 추가:
-   - `data.records:read`
-   - `data.records:write`
-4. 생성된 API 키를 `.env.local`에 추가
+### 2. Supabase 설정
 
-#### Base 생성:
-1. Airtable에서 새 Base 생성
-2. Base ID 확인 (URL에서 `app...` 부분)
-3. Base ID를 `.env.local`에 추가
-
-#### 테이블 생성:
-
-다음 6개 테이블을 생성하세요:
-
-**1. Chapters**
-- Name (Single line text)
-- Order (Number)
-- Video_URL (URL)
-- Video_Duration (Number)
-- Required_Watch_Percentage (Number, Default: 60)
-- Description (Long text)
-- Questions_Count (Number)
-- Status (Single select: Active/Inactive)
-
-**2. Questions**
-- Chapter_Category (Link to Chapters)
-- Question_Text (Long text)
-- Option_1 (Single line text)
-- Option_2 (Single line text)
-- Option_3 (Single line text)
-- Option_4 (Single line text)
-- Correct_Answer (Single select: 1/2/3/4)
-- Explanation (Long text)
-- Total_Attempts (Number, Default: 0)
-- Correct_Count (Number, Default: 0)
-- Incorrect_Count (Number, Default: 0)
-- Status (Single select: Active/Inactive)
-
-**3. Users**
-- Name (Single line text)
-- Phone (Phone number)
-- Status (Single select: In Progress/Completed/Blocked)
-- Session_Token (Single line text)
-- Total_Study_Time (Number, Default: 0)
-
-**4. User_Progress**
-- User (Link to Users)
-- Chapter (Link to Chapters)
-- Video_Watched (Checkbox)
-- Video_Watch_Time (Number, Default: 0)
-- Questions_Assigned (Long text)
-- All_Correct (Checkbox)
-- Chapter_Completed (Checkbox)
-
-**5. Chapter_History**
-- User (Link to Users)
-- Chapter (Link to Chapters)
-- Attempt_Number (Number, Default: 1)
-- Start_Time (Date, Include time)
-- End_Time (Date, Include time)
-- Video_Watch_Time (Number)
-- Questions_Correct (Number)
-- Questions_Total (Number)
-- Status (Single select: In Progress/Completed)
-
-**6. Question_Attempts**
-- User (Link to Users)
-- Question (Link to Questions)
-- Chapter (Link to Chapters)
-- User_Answer (Single select: 1/2/3/4)
-- Attempt_Number (Number)
-- Time_Spent (Number)
+1. [Supabase](https://supabase.com)에서 프로젝트 생성
+2. **Project Settings → API**에서 URL·anon 키·service_role 키 확인 후 `.env.local`에 입력
+3. **SQL Editor**에서 스키마 생성:
+   - [`lib/supabase/schema.sql`](lib/supabase/schema.sql) 실행 — 테이블 6종 + 인덱스 + `updated_at` 트리거 + RLS 정책(service_role 전용)
+   - (선택) [`lib/supabase/seed.sql`](lib/supabase/seed.sql) 실행 — 샘플 챕터·문제 데이터
 
 ### 3. 개발 서버 실행
 
-\`\`\`bash
+```bash
+npm install
 npm run dev
-\`\`\`
+```
 
 브라우저에서 http://localhost:3000 을 엽니다.
 
 ### 4. 빌드
 
-\`\`\`bash
+```bash
 npm run build
 npm run start
-\`\`\`
+```
 
-## 📂 프로젝트 구조
+## 프로젝트 구조
 
-\`\`\`
+```
 manager-online-training/
-├── app/                      # Next.js App Router
-│   ├── api/                  # API 라우트
-│   │   ├── auth/            # 인증 관련
-│   │   ├── chapters/        # 챕터 관련
-│   │   ├── questions/       # 문제 관련
-│   │   ├── progress/        # 진행 상황
-│   │   └── admin/           # 관리자 기능
-│   ├── learn/               # 학습 페이지
-│   ├── complete/            # 완료 페이지
-│   └── admin/               # 관리자 페이지
-├── components/              # React 컴포넌트
-│   ├── ui/                  # UI 컴포넌트
-│   └── layout/              # 레이아웃 컴포넌트
-├── lib/                     # 유틸리티 및 라이브러리
-│   ├── airtable/           # Airtable 연동
-│   ├── utils/              # 유틸리티 함수
-│   └── hooks/              # 커스텀 훅
-├── types/                   # TypeScript 타입 정의
-└── public/                  # 정적 파일
-\`\`\`
+├── app/
+│   ├── page.tsx                      # 랜딩 (지원 정보 입력)
+│   ├── learn/                        # 학습 플로우
+│   │   ├── page.tsx                  #   학습 홈 (다음 챕터로 이동)
+│   │   └── chapter/[id]/
+│   │       ├── page.tsx              #   영상 시청
+│   │       ├── quiz/page.tsx         #   문제 풀이
+│   │       └── result/page.tsx       #   채점 결과·오답 해설
+│   ├── complete/page.tsx             # 전체 완료
+│   ├── admin/                        # 관리자
+│   │   ├── login/page.tsx            #   로그인
+│   │   ├── page.tsx                  #   대시보드 (통계 5종)
+│   │   └── content/page.tsx          #   챕터·문제 CRUD
+│   └── api/
+│       ├── auth/start                # 학습자 시작(세션 발급)
+│       ├── chapters/list
+│       ├── questions/random          # 정답·해설 제거 후 출제
+│       ├── answer/submit             # 채점
+│       ├── progress/{get,save,complete}
+│       ├── complete
+│       └── admin/                    # 관리자 전용 (auth·chapters·questions·stats·users)
+├── components/
+│   ├── ui/                           # Button, Input, Select, Textarea, Modal, VideoPlayer
+│   ├── layout/                       # ProgressHeader
+│   └── admin/                        # ChapterTable/FormModal, QuestionTable/FormModal, ConfirmDialog
+├── lib/
+│   ├── supabase/                     # client + 데이터 함수(chapters·questions·users·progress·stats) + *.sql
+│   ├── auth/admin.ts                 # 관리자 JWT 발급·검증
+│   ├── validation/                   # 챕터·문제 서버 검증
+│   └── utils/cn.ts
+├── types/                            # 공용 타입
+└── vendor/plab-design-system/        # vendored 디자인 시스템 (dist)
+```
 
-## ✅ 구현 완료 기능
+## 데이터 모델 (Supabase)
 
-### 학습자 기능
-- [x] 랜딩 페이지 (이름/전화번호 입력)
-- [x] 챕터 학습 페이지 (영상 시청)
-  - 60% 이상 시청 강제
-  - 스킵/배속 방지
-  - 실시간 진행률 추적
-- [x] 문제 풀이 페이지 (4지선다)
-- [x] 결과 페이지 (정답/오답 처리)
-- [x] 오답 시 자동 재학습
-- [x] 완료 페이지 (결과 요약)
-- [x] 진행 상황 자동 저장
+| 테이블 | 설명 |
+|--------|------|
+| `chapters` | 챕터(영상 URL, 시청 강제 비율, 출제 수, 상태) |
+| `questions` | 문제(보기 4개, 정답, 해설, 난이도, 정답률 통계) |
+| `users` | 학습자(이름·전화·지역·지원동기, 세션 토큰, 진행 상태) |
+| `user_progress` | 사용자×챕터 진행(영상 시청, 배정 문제, 완료 여부) |
+| `chapter_history` | 챕터 시도 이력(시도 횟수, 정답 수, 소요 시간) |
+| `question_attempts` | 문항별 응답 기록(선택 답, 소요 시간) |
 
-### 관리자 기능
-- [x] 관리자 대시보드
-- [x] 사용자 목록 및 상태 확인
-- [x] 기본 통계 (전체/진행 중/완료)
+전체 정의는 [`lib/supabase/schema.sql`](lib/supabase/schema.sql) 참조.
 
-## 🔧 향후 개선 사항
+## 보안
 
-- [ ] 사용자별 상세 학습 이력 페이지
-- [ ] 문제별 통계 및 정답률 분석
-- [ ] 데이터 내보내기 (CSV/Excel)
-- [ ] 챕터 관리 UI (현재 Airtable에서 직접 관리)
-- [ ] 관리자 인증 시스템
+- **RLS service_role 전용**: 모든 테이블에 Row Level Security를 켜고 `service_role`에만 권한을 부여합니다. 브라우저에 노출되는 anon 키로는 PostgREST 엔드포인트에 직접 접근할 수 없으며, 모든 데이터 접근은 서버 API 라우트(service_role)를 경유합니다.
+- **정답 비노출**: 출제(`/api/questions/random`) 경로는 정답·해설 등 민감 필드를 제거(`toPublicQuestion`)한 뒤 클라이언트로 내려보냅니다. 정답·해설은 채점 후 복습 화면에서만 의도적으로 공개합니다.
+- **관리자 인증**: 관리자 API는 JWT(HMAC) 세션으로 보호합니다. `ADMIN_JWT_SECRET` 미설정 시 관리자 인증이 비활성화됩니다.
 
-## 📝 Airtable 데이터 예시
+## 라이선스
 
-### Chapters 테이블 예시:
-| Name | Order | Video_URL | Video_Duration | Questions_Count | Status |
-|------|-------|-----------|----------------|-----------------|--------|
-| 매치 진행 기본 규칙 | 1 | https://youtube.com/... | 510 | 5 | Active |
-| 팀 구성 및 관리 | 2 | https://youtube.com/... | 375 | 4 | Active |
-
-### Questions 테이블 예시:
-| Question_Text | Chapter_Category | Option_1 | Option_2 | Option_3 | Option_4 | Correct_Answer | Status |
-|---------------|------------------|----------|----------|----------|----------|----------------|--------|
-| 매치 시작 전 가장 먼저 해야 할 일은? | [Chapter ID] | 공기압 확인 | 참가자 명단 확인 | 날씨 확인 | 주차 확인 | 2 | Active |
-
-## 🎯 사용 가이드
-
-### 학습자 페이지 접속
-1. http://localhost:3000 접속
-2. 이름과 전화번호 입력
-3. 개인정보 동의 후 "시작하기" 클릭
-4. 자동으로 첫 번째 챕터로 이동
-
-### 학습 흐름
-1. **영상 시청**: 60% 이상 시청 필수
-2. **문제 풀이**: 챕터별 랜덤 문제 풀이
-3. **결과 확인**:
-   - 전체 정답: 다음 챕터로 이동
-   - 오답 있음: 오답 확인 후 재학습
-4. **완료**: 모든 챕터 완료 시 완료 페이지 표시
-
-### 관리자 대시보드 접속
-- http://localhost:3000/admin 접속
-- 사용자 목록 및 상태 확인
-- 전체/진행 중/완료 필터링
-
-## 🐛 문제 해결
-
-### Airtable 연결 오류
-1. `.env.local` 파일에 API 키와 Base ID가 올바른지 확인
-2. Airtable에서 테이블이 모두 생성되었는지 확인
-3. 필드 이름이 정확히 일치하는지 확인
-
-### 챕터가 없다는 오류
-1. Airtable Chapters 테이블에 챕터를 추가
-2. Status를 'Active'로 설정
-3. 페이지 새로고침
-
-### 문제가 없다는 오류
-1. Airtable Questions 테이블에 문제를 추가
-2. Chapter_Category에 챕터를 링크
-3. Status를 'Active'로 설정
-
-## 📄 라이선스
-
-이 프로젝트는 플랩풋볼 전용 프로젝트입니다.
-
----
-
-## 📞 개발 관련 문의
-
-프로젝트 개발: Claude Code
-문의: README의 내용을 참고하여 Airtable 설정 및 환경 변수 구성
+플랩풋볼 전용 프로젝트입니다.
